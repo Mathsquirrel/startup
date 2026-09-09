@@ -43,7 +43,7 @@ I am going to use the required technologies in the following ways.
 - **React** - Animations when hovering over cards or playing them when goldfishing. Clicking on a card should tap the card. Options to interact with cards in other ways. After logging in to website, you see your personal decks
 - **Service** - Retrieves stored decks and cards from database. Supports logging in and logging out. Generates a link for others to view your decklist. Uses Scryfall API to retrieve images tied to MTG cards so you have visuals
 - **DB/Login** - Allows users to create decks, playtest them, and view cards, but only saves them for later if logged in. May need to store a list of all MTG card names as well.
-- **WebSocket** - Connects users together to be able to "play" a game together when they have completed decklists
+- **WebSocket** - Connects users together to be able to "play" a game together when they have completed decklists. Also displays other decklists created by other users or friends
 
 ## 🚀 Specification Deliverable
 
@@ -56,7 +56,7 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 - [x] Proper use of Markdown
 - [x] A concise and compelling elevator pitch
 - [x] Description of key features
-- [ ] Description of how you will use each technology including your 3rd party API and use of WebSocket
+- [x] Description of how you will use each technology including your 3rd party API and use of WebSocket
 - [ ] One or more rough sketches of your application. Images must be embedded in this file using Markdown image references.
 
 ## 🚀 AWS deliverable
