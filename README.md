@@ -12,7 +12,7 @@ An online MTG deckbuilder/tester. Allows you to view cards, create a deck, and d
 
 ### Elevator pitch
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+A quick and easy website to build, share, and playtest MTG decks with friends. You have access to every card from MTG in one place allowing you to easily find new cards, test them, and edit your deck to improve it. Once you're all done, you can play with friends or just share your decklist with them in a visual manner
 
 ### Design
 
