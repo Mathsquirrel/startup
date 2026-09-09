@@ -40,7 +40,7 @@ I am going to use the required technologies in the following ways.
 - **HTML** - Home page with links to personal and public decks. Page to view your own decks and edit the cards inside of them. Once inside a deck, links to playtesting
 - **CSS** - Images for cards in deck
 - **React** - Animations when hovering over cards or playing them when goldfishing. Clicking on a card should tap the card. Options to interact with cards in other ways. After logging in to website, you see your personal decks
-- **Service** - Description here
+- **Service** - Retrieves stored decks and cards from database. Supports logging in and logging out. Generates a link for others to view your decklist. Uses API to retrieve images tied to MTG cards so you have visuals
 - **DB/Login** - Allows users to create decks, playtest them, and view cards, but only saves them for later if logged in
 - **WebSocket** - Connects users together to be able to "play" a game together
 
@@ -53,7 +53,7 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 - [ ] I completed the prerequisites for this deliverable (Git commit requirement)
 - [ ] Proper use of Markdown
-- [ ] A concise and compelling elevator pitch
+- [x] A concise and compelling elevator pitch
 - [ ] Description of key features
 - [ ] Description of how you will use each technology including your 3rd party API and use of WebSocket
 - [ ] One or more rough sketches of your application. Images must be embedded in this file using Markdown image references.
