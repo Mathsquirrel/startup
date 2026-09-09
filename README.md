@@ -38,11 +38,11 @@ sequenceDiagram
 I am going to use the required technologies in the following ways.
 
 - **HTML** - Home page with links to personal and public decks. Page to view your own decks and edit the cards inside of them. Once inside a deck, links to playtesting
-- **CSS** - Description here
-- **React** - Description here
+- **CSS** - Images for cards in deck
+- **React** - Animations when hovering over cards or playing them when goldfishing. Clicking on a card should tap the card. Options to interact with cards in other ways. After logging in to website, you see your personal decks
 - **Service** - Description here
 - **DB/Login** - Allows users to create decks, playtest them, and view cards, but only saves them for later if logged in
-- **WebSocket** - Description here
+- **WebSocket** - Connects users together to be able to "play" a game together
 
 ## 🚀 Specification Deliverable
 
