@@ -41,7 +41,7 @@ I am going to use the required technologies in the following ways.
 - **HTML** - Home page with links to personal and public decks. Page to view your own decks and edit the cards inside of them. Once inside a deck, links to playtesting
 - **CSS** - Small animations for hovering over cards. Visualing showing the whole deck list laid out as well as the animations for pulling up the card.
 - **React** - Animations when hovering over cards or playing them when goldfishing. Clicking on a card should tap the card. Options to interact with cards in other ways. After logging in to website, you see your personal decks
-- **Service** - Retrieves stored decks and cards from database. Supports logging in and logging out. Generates a link for others to view your decklist. Uses API to retrieve images tied to MTG cards so you have visuals
+- **Service** - Retrieves stored decks and cards from database. Supports logging in and logging out. Generates a link for others to view your decklist. Uses Scryfall API to retrieve images tied to MTG cards so you have visuals
 - **DB/Login** - Allows users to create decks, playtest them, and view cards, but only saves them for later if logged in. May need to store a list of all MTG card names as well.
 - **WebSocket** - Connects users together to be able to "play" a game together when they have completed decklists
 
@@ -52,7 +52,7 @@ I am going to use the required technologies in the following ways.
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] I completed the prerequisites for this deliverable (Git commit requirement)
+- [x] I completed the prerequisites for this deliverable (Git commit requirement)
 - [x] Proper use of Markdown
 - [x] A concise and compelling elevator pitch
 - [x] Description of key features
