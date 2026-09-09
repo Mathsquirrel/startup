@@ -29,9 +29,10 @@ sequenceDiagram
 
 ### Key features
 
-- Describe your key feature
-- Describe your key feature
-- Describe your key feature
+- Able to store deck lists for registered users
+- Able to pull up visuals for each card being used (Scryfall API)
+- Able to easily import and export decklists to share with other people (e.g. Copy to clipboard)
+- Able to Goldfish (AKA Playtest) decks in a solo environment or with others (If complexity and scope allows)
 
 ### Technologies
 
@@ -52,9 +53,9 @@ I am going to use the required technologies in the following ways.
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
 - [ ] I completed the prerequisites for this deliverable (Git commit requirement)
-- [ ] Proper use of Markdown
+- [x] Proper use of Markdown
 - [x] A concise and compelling elevator pitch
-- [ ] Description of key features
+- [x] Description of key features
 - [ ] Description of how you will use each technology including your 3rd party API and use of WebSocket
 - [ ] One or more rough sketches of your application. Images must be embedded in this file using Markdown image references.
 
