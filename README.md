@@ -8,7 +8,7 @@ An online MTG deckbuilder/tester. Allows you to view cards, create a deck, and d
 > This is a template for your startup application. You must modify this `README.md` file for each phase of your development. You only need to fill in the section for each deliverable when that deliverable is submitted in Canvas. Without completing the section for a deliverable, the TA will not know what to look for when grading your submission. Feel free to add additional information to each deliverable description, but make sure you at least have the list of rubric items and a description of what you did for each item.
 
 > [!NOTE]
-> If you are not familiar with Markdown then you should review the [documentation](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax) before continuing.
+> Markdown Reference [documentation](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax)
 
 ### Elevator pitch
 
@@ -51,7 +51,7 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 - [x] A concise and compelling elevator pitch
 - [x] Description of key features
 - [x] Description of how you will use each technology including your 3rd party API and use of WebSocket
-- [ ] One or more rough sketches of your application. Images must be embedded in this file using Markdown image references.
+- [x] One or more rough sketches of your application. Images must be embedded in this file using Markdown image references.
 
 ## 🚀 AWS deliverable
 
