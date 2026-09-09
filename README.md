@@ -26,6 +26,7 @@ The "Main Deck Builder" image shows what will likely be the most common page on 
 - Able to store deck lists for registered users
 - Able to pull up visuals for each card being used (Scryfall API)
 - Able to easily import and export decklists to share with other people (e.g. Copy to clipboard)
+- Able to save "Friends" to view their decklists (base) or easily play a game with (If complexity and scope allows)
 - Able to Goldfish (AKA Playtest) decks in a solo environment or with others (If complexity and scope allows)
 
 ### Technologies
