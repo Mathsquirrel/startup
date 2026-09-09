@@ -38,11 +38,11 @@ sequenceDiagram
 I am going to use the required technologies in the following ways.
 
 - **HTML** - Home page with links to personal and public decks. Page to view your own decks and edit the cards inside of them. Once inside a deck, links to playtesting
-- **CSS** - Images for cards in deck
+- **CSS** - Small animations for hovering over cards. Visualing showing the whole deck list laid out as well as the animations for pulling up the card.
 - **React** - Animations when hovering over cards or playing them when goldfishing. Clicking on a card should tap the card. Options to interact with cards in other ways. After logging in to website, you see your personal decks
 - **Service** - Retrieves stored decks and cards from database. Supports logging in and logging out. Generates a link for others to view your decklist. Uses API to retrieve images tied to MTG cards so you have visuals
-- **DB/Login** - Allows users to create decks, playtest them, and view cards, but only saves them for later if logged in
-- **WebSocket** - Connects users together to be able to "play" a game together
+- **DB/Login** - Allows users to create decks, playtest them, and view cards, but only saves them for later if logged in. May need to store a list of all MTG card names as well.
+- **WebSocket** - Connects users together to be able to "play" a game together when they have completed decklists
 
 ## 🚀 Specification Deliverable
 
