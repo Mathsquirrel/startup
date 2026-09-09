@@ -12,7 +12,7 @@ An online MTG deckbuilder/tester. Allows you to view cards, create a deck, and d
 
 ### Elevator pitch
 
-PDF Decks is a quick and easy website to build, share, and playtest MTG decks with friends. You have access to every card from MTG in one place allowing you to easily find new cards, test them, and edit your deck to improve it. Once you're all done, you can play with friends or just share your decklist with them in a visual manner
+PDF Decks is a quick and easy website to build, share, and playtest MTG decks with friends. You have access to every card from MTG in one place allowing you to easily find new cards, test them, and edit your deck to improve it. Once you're all done, you can play with friends or just share your decklist with them in a visual manner. It also allows you to save your decks in one location to reference later.
 
 ### Design
 
