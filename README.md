@@ -1,8 +1,8 @@
-# Your startup name here
+# PDF Decks (Poison Dart Frog Decks)
 
 [My Notes](notes.md)
 
-A brief description of the application here. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+An online MTG deckbuilder/tester. Allows you to view cards, create a deck, and do simple goldfishing with the deck (depending on complexity). Multiplayer would allow both sides to do the same testing together or at least view decks of friends
 
 > [!NOTE]
 > This is a template for your startup application. You must modify this `README.md` file for each phase of your development. You only need to fill in the section for each deliverable when that deliverable is submitted in Canvas. Without completing the section for a deliverable, the TA will not know what to look for when grading your submission. Feel free to add additional information to each deliverable description, but make sure you at least have the list of rubric items and a description of what you did for each item.
@@ -37,11 +37,11 @@ sequenceDiagram
 
 I am going to use the required technologies in the following ways.
 
-- **HTML** - Description here
+- **HTML** - Home page with links to personal and public decks. Page to view your own decks and edit the cards inside of them. Once inside a deck, links to playtesting
 - **CSS** - Description here
 - **React** - Description here
 - **Service** - Description here
-- **DB/Login** - Description here
+- **DB/Login** - Allows users to create decks, playtest them, and view cards, but only saves them for later if logged in
 - **WebSocket** - Description here
 
 ## 🚀 Specification Deliverable
