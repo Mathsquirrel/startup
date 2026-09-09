@@ -1,5 +1,5 @@
 # PDF Decks (Poison Dart Frog Decks)
-![Website Icon](poisonFrog.png)
+![Website Icon](poisonDart.png)
 [My Notes](notes.md)
 
 An online MTG deckbuilder/tester. Allows you to view cards, create a deck, and do simple goldfishing with the deck (depending on complexity). Multiplayer would allow both sides to do the same testing together or at least view decks of friends
@@ -16,7 +16,7 @@ A quick and easy website to build, share, and playtest MTG decks with friends. Y
 
 ### Design
 
-![Design image](placeholder.png)
+![Design image]
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
