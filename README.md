@@ -16,16 +16,10 @@ PDF Decks is a quick and easy website to build, share, and playtest MTG decks wi
 
 ### Design
 
-![Design image]
+![Design Image 1](MainDeckBuilder.png)
+![Design Image 2](LandingPage.png)
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
-```mermaid
-sequenceDiagram
-    actor You
-    actor Website
-    You->>Website: Replace this with your design
-```
+The "Main Deck Builder" image shows what will likely be the most common page on the site. It's where most of the actual content is. The "Landing Page" is the first page you see when you look at the website. It will likely have a little more text and visuals to describe the website, but this is a rough sketch of what else could be there.
 
 ### Key features
 
