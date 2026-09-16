@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PDF Decks | My Decks</title>
+  <style>
+    :root { --ink: #17202a; --muted: #65727e; --paper: #f7f4ed; --gold: #d99b32; --red: #8f2d28; --line: #ded8cb; }
+    * { box-sizing: border-box; } body { margin: 0; color: var(--ink); background: var(--paper); font-family: Georgia, serif; line-height: 1.5; }
+    header { background: #17202a; color: white; padding: 1.2rem 6vw; } header > div, main, footer { max-width: 1120px; margin: auto; }
+    .brand { display: flex; justify-content: space-between; gap: 1rem; align-items: center; } .brand h1 { margin: 0; letter-spacing: .08em; font-size: 1.35rem; } .user { color: #f5d38b; font-size: .95rem; }
+    nav { border-top: 1px solid #43515c; margin-top: 1rem; padding-top: .8rem; } nav a { color: white; margin-right: 1.4rem; text-decoration: none; font-weight: bold; } nav a[aria-current="page"] { color: #f5d38b; }
+    main { padding: 3rem 6vw; } .intro { display: grid; grid-template-columns: .9fr 1.1fr; gap: 2.5rem; align-items: center; } .eyebrow { color: var(--gold); font-weight: bold; letter-spacing: .12em; text-transform: uppercase; } h2 { color: var(--red); font-size: clamp(2rem, 5vw, 3.8rem); line-height: 1; margin: .3rem 0 1rem; } h3 { margin-top: 0; color: var(--red); }
+    .hero-image { width: 100%; min-height: 270px; object-fit: cover; border: 8px solid white; box-shadow: 0 8px 20px #17202a33; } section { background: white; border-top: 4px solid var(--gold); margin-top: 2.5rem; padding: 1.5rem; } .deck-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; } .deck { border: 1px solid var(--line); padding: 1rem; background: #fffdfa; } .deck h4 { margin: 0; color: var(--red); font-size: 1.2rem; } .meta { color: var(--muted); font-size: .9rem; } .deck a { color: var(--red); font-weight: bold; } .status { color: #31704c; font-weight: bold; } footer { border-top: 1px solid var(--line); padding: 1.5rem 6vw 3rem; color: var(--muted); }
+    @media (max-width: 700px) { .intro, .deck-grid { grid-template-columns: 1fr; } header, main, footer { padding-left: 1.2rem; padding-right: 1.2rem; } nav a { display: inline-block; margin-bottom: .5rem; } }
+  </style>
+</head>
+<body>
+  <header><div><div class="brand"><h1>PDF DECKS</h1><span class="user">Logged in as: PlaneswalkerAlex</span></div><nav aria-label="Primary navigation"><a href="builder.html">Builder</a><a href="public-decks.html">Public Decks</a><a href="personal-decks.html" aria-current="page">My Decks</a></nav></div></header>
+  <main>
+    <div class="intro"><div><p class="eyebrow">Your private vault</p><h2>Keep every brew close at hand.</h2><p>Review your saved lists, return to unfinished ideas, and share a deck when it is ready for the table.</p></div><img class="hero-image" src="https://images.unsplash.com/photo-1566694271355-3e5d4f0b2c1f?auto=format&fit=crop&w=1000&q=80" alt="Organized collection of colorful tabletop cards"></div>
+    <section aria-labelledby="saved-title"><h3 id="saved-title">Saved decklists</h3><div class="deck-grid"><article class="deck"><h4>Izzet Spellcraft</h4><p class="meta">Last edited today | 60 cards</p><p>Fast spells, flexible answers, and a very satisfying stack.</p><a href="builder.html">Continue editing</a></article><article class="deck"><h4>Forest Floor</h4><p class="meta">Last edited 3 days ago | 72 cards</p><p>A creature-heavy experiment still waiting for a cleaner mana base.</p><a href="builder.html">Continue editing</a></article><article class="deck"><h4>Draft Collection</h4><p class="meta">Last edited May 12 | 40 cards</p><p>Cards from the latest limited night, preserved for review.</p><a href="builder.html">Continue editing</a></article></div></section>
+    <section aria-labelledby="account-title"><h3 id="account-title">Account and live status</h3><div class="deck-grid"><article class="deck"><strong>Login placeholder</strong><p>Signed in as <strong>PlaneswalkerAlex</strong></p><p>Account tier: free brewer</p></article><article class="deck"><strong>Database data placeholder</strong><p>Saved decks: 3 | Shared decks: 1 | Favorite cards: 27</p><p>Last database sync: just now</p></article><article class="deck"><strong>WebSocket data placeholder</strong><p><span class="status">Online:</span> friends can see when you enter a playtest room.</p><p>Active rooms: 0</p></article></div></section>
+    <section aria-labelledby="api-title"><h3 id="api-title">Card data integration</h3><p>Third-party API placeholder: Scryfall card image and rules-text requests will populate saved deck details here.</p></section>
+  </main>
+  <footer><p>Your decks, your experiments, your next great game.</p></footer>
+</body>
+</html>

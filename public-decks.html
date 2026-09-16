@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PDF Decks | Public Decks</title>
+  <style>
+    :root { --ink: #17202a; --muted: #65727e; --paper: #f7f4ed; --gold: #d99b32; --red: #8f2d28; --line: #ded8cb; }
+    * { box-sizing: border-box; } body { margin: 0; color: var(--ink); background: var(--paper); font-family: Georgia, serif; line-height: 1.5; }
+    header { background: #17202a; color: white; padding: 1.2rem 6vw; } header > div, main, footer { max-width: 1120px; margin: auto; }
+    .brand { display: flex; justify-content: space-between; gap: 1rem; align-items: center; } .brand h1 { margin: 0; letter-spacing: .08em; font-size: 1.35rem; } .user { color: #f5d38b; font-size: .95rem; }
+    nav { border-top: 1px solid #43515c; margin-top: 1rem; padding-top: .8rem; } nav a { color: white; margin-right: 1.4rem; text-decoration: none; font-weight: bold; } nav a[aria-current="page"] { color: #f5d38b; }
+    main { padding: 3rem 6vw; } .intro { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: center; } .eyebrow { color: var(--gold); font-weight: bold; letter-spacing: .12em; text-transform: uppercase; } h2 { color: var(--red); font-size: clamp(2rem, 5vw, 3.8rem); line-height: 1; margin: .3rem 0 1rem; } h3 { margin-top: 0; color: var(--red); }
+    .hero-image { width: 100%; min-height: 270px; object-fit: cover; border: 8px solid white; box-shadow: 0 8px 20px #17202a33; } section { background: white; border-top: 4px solid var(--gold); margin-top: 2.5rem; padding: 1.5rem; } .deck-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; } article { border: 1px solid var(--line); padding: 1rem; background: #fffdfa; } article h4 { margin: 0; color: var(--red); font-size: 1.2rem; } .meta { color: var(--muted); font-size: .9rem; } button { background: var(--red); color: white; border: 0; padding: .6rem 1rem; cursor: pointer; } .status { color: #31704c; font-weight: bold; } footer { border-top: 1px solid var(--line); padding: 1.5rem 6vw 3rem; color: var(--muted); }
+    @media (max-width: 700px) { .intro, .deck-grid { grid-template-columns: 1fr; } header, main, footer { padding-left: 1.2rem; padding-right: 1.2rem; } nav a { display: inline-block; margin-bottom: .5rem; } }
+  </style>
+</head>
+<body>
+  <header><div><div class="brand"><h1>PDF DECKS</h1><span class="user">Logged in as: PlaneswalkerAlex</span></div><nav aria-label="Primary navigation"><a href="builder.html">Builder</a><a href="public-decks.html" aria-current="page">Public Decks</a><a href="personal-decks.html">My Decks</a></nav></div></header>
+  <main>
+    <div class="intro"><div><p class="eyebrow">The community shelf</p><h2>Find a list worth testing.</h2><p>Browse public decklists from fellow players, inspect their game plan, and save a copy to your own workshop.</p></div><img class="hero-image" src="https://images.unsplash.com/photo-1578303512597-81e6cc155b3e?auto=format&fit=crop&w=1000&q=80" alt="Fantasy trading card game scene with colorful cards"></div>
+    <section aria-labelledby="featured-title"><h3 id="featured-title">Featured public decks</h3><div class="deck-grid"><article><h4>Moonlit Faeries</h4><p class="meta">by MiraVex | Dimir tempo | 60 cards</p><p>Flash threats and clever interaction for patient pilots.</p><button type="button">View deck</button></article><article><h4>Gruul Stampede</h4><p class="meta">by RootAndRuin | Gruul aggro | 60 cards</p><p>Turn big creatures sideways and keep the pressure on.</p><button type="button">View deck</button></article><article><h4>Solar Control</h4><p class="meta">by NikoPrime | Azorius control | 60 cards</p><p>Trade resources early, then win with inevitability.</p><button type="button">View deck</button></article></div></section>
+    <section aria-labelledby="systems-title"><h3 id="systems-title">Community systems</h3><div class="deck-grid"><article><strong>Third-party API placeholder</strong><p>Future Scryfall request will enrich each deck with card images and legality data.</p></article><article><strong>Database data placeholder</strong><p>Public deck records: 1,248 | Most viewed this week: Moonlit Faeries</p></article><article><strong>WebSocket data placeholder</strong><p><span class="status">Live feed online:</span> 14 players are browsing public lists now.</p></article></div></section>
+  </main>
+  <footer><p>Share your brewing discoveries with the table.</p></footer>
+</body>
+</html>
