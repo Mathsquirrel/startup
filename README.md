@@ -66,16 +66,16 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] I completed the prerequisites for this deliverable (Simon deployed, GitHub link, Git commits)
-- [ ] **HTML pages** - I did not complete this part of the deliverable.
-- [ ] **Proper HTML element usage** - I did not complete this part of the deliverable.
-- [ ] **Links** - I did not complete this part of the deliverable.
-- [ ] **Text** - I did not complete this part of the deliverable.
-- [ ] **3rd party API placeholder** - I did not complete this part of the deliverable.
-- [ ] **Images** - I did not complete this part of the deliverable.
-- [ ] **Login placeholder** - I did not complete this part of the deliverable.
-- [ ] **DB data placeholder** - I did not complete this part of the deliverable.
-- [ ] **WebSocket placeholder** - I did not complete this part of the deliverable.
+- [x] I completed the prerequisites for this deliverable (Simon deployed, GitHub link, Git commits)
+- [x] **HTML pages** - Created 4 pages to include the home page and the pages to view and create decks
+- [x] **Proper HTML element usage** - Ensured code was structured with correct header and body structure
+- [x] **Links** - Made sure each HTML file was able to reach the other files. Navigation on the website is easy.
+- [x] **Text** - Used some filler text to represent what will inevitably be put into function. Displays information about used technologies as well
+- [x] **3rd party API placeholder** - I did not complete this part of the deliverable.
+- [x] **Images** - I did not complete this part of the deliverable.
+- [x] **Login placeholder** - I did not complete this part of the deliverable.
+- [x] **DB data placeholder** - I did not complete this part of the deliverable.
+- [x] **WebSocket placeholder** - I did not complete this part of the deliverable.
 
 ## 🚀 CSS deliverable
 
