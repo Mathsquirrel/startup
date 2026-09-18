@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" role="img" aria-labelledby="title description">
+  <title id="title">Open cardboard deck box</title>
+  <description id="description">A simple open-top cardboard box for storing a deck.</description>
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f3f0e8"/>
+      <stop offset="1" stop-color="#d7d0c2"/>
+    </linearGradient>
+    <linearGradient id="cardboard" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#c99558"/>
+      <stop offset="1" stop-color="#9a6738"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="800" fill="url(#background)"/>
+  <ellipse cx="600" cy="650" rx="360" ry="48" fill="#6b5540" opacity=".28"/>
+  <g stroke="#704923" stroke-width="12" stroke-linejoin="round">
+    <path d="M270 280 L600 190 L930 280 L600 390 Z" fill="#704923"/>
+    <path d="M270 280 L600 390 L600 650 L270 535 Z" fill="url(#cardboard)"/>
+    <path d="M600 390 L930 280 L930 535 L600 650 Z" fill="#a8733f"/>
+    <path d="M270 280 L600 190 L930 280 L600 390 Z" fill="#79512d"/>
+    <path d="M300 245 L600 145 L900 245 L600 345 Z" fill="#b9854d"/>
+    <path d="M300 245 L180 155 L500 65 L600 145 Z" fill="#c99558"/>
+    <path d="M900 245 L1020 155 L700 65 L600 145 Z" fill="#ad773f"/>
+    <path d="M500 65 L700 65" fill="none"/>
+  </g>
+  <path d="M595 415 L595 610" stroke="#d7a66a" stroke-width="8" opacity=".65"/>
+</svg>

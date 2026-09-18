@@ -4,13 +4,24 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PDF Decks | Public Decks</title>
+  <style>
+    nav a + a {
+      margin-left: 0.75rem;
+    }
+
+    .hero-image {
+      display: block;
+      height: 2in;
+      width: auto;
+    }
+  </style>
 </head>
 <body>
-  <header><div><div class="brand"><h1>PDF DECKS</h1><span class="user"><a href="#login">Log in</a> or <a href="#register">Register</a></span></div><nav aria-label="Primary navigation"><a href="builder.html">Builder</a><a href="public-decks.html" aria-current="page">Public Decks</a><a href="personal-decks.html">My Decks</a></nav></div></header>
+  <header><div><div class="brand"><h1>PDF DECKS</h1><form class="login-form" action="#" method="post"><label for="public-username">Username</label><input id="public-username" name="username" type="text" placeholder="Username" autocomplete="username"><label for="public-password">Password</label><input id="public-password" name="password" type="password" placeholder="Password" autocomplete="current-password"><button type="submit">Log in</button></form></div><nav aria-label="Primary navigation"><a href="index.html">Home</a><a href="builder.html">Builder</a><a href="public-decks.html" aria-current="page">Public Decks</a><a href="personal-decks.html">My Decks</a></nav></div></header>
   <main>
-    <div class="intro"><div><p class="eyebrow">The community shelf</p><h2>Find a list worth testing.</h2><p>Browse public decklists from fellow players, inspect their game plan, and save a copy to your own workshop.</p></div><img class="hero-image" src="https://images.unsplash.com/photo-1578303512597-81e6cc155b3e?auto=format&fit=crop&w=1000&q=80" alt="Fantasy trading card game scene with colorful cards"></div>
+    <div class="intro"><div><p class="eyebrow">The community shelf</p><h2>Find a list worth testing.</h2><p>Browse public decklists from fellow players, inspect their game plan, and save a copy to your own workshop.</p></div><img class="hero-image" src="images/mtg-card-table.svg" alt="Table with Magic: The Gathering cards"></div>
     <section aria-labelledby="featured-title"><h3 id="featured-title">Featured public decks</h3><div class="deck-grid"><article><h4>Moonlit Faeries</h4><p class="meta">by MiraVex | Dimir tempo | 60 cards</p><p>Flash threats and clever interaction for patient pilots.</p><button type="button">View deck</button></article><article><h4>Gruul Stampede</h4><p class="meta">by RootAndRuin | Gruul aggro | 60 cards</p><p>Turn big creatures sideways and keep the pressure on.</p><button type="button">View deck</button></article><article><h4>Solar Control</h4><p class="meta">by NikoPrime | Azorius control | 60 cards</p><p>Trade resources early, then win with inevitability.</p><button type="button">View deck</button></article></div></section>
-    <section aria-labelledby="systems-title"><h3 id="systems-title">Community systems</h3><div class="deck-grid"><article><strong>Third-party API placeholder</strong><p>Future Scryfall request will enrich each deck with card images and legality data.</p></article><article><strong>Database data placeholder</strong><p>Public deck records: 1,248 | Most viewed this week: Moonlit Faeries</p></article><article><strong>WebSocket data placeholder</strong><p><span class="status">Live feed online:</span> 14 players are browsing public lists now.</p></article></div></section>
+    <section aria-labelledby="systems-title"><h3 id="systems-title">Community systems</h3><div class="deck-grid"><article><strong>Database data placeholder</strong><p>Public deck records: 1,248 | Most viewed this week: Moonlit Faeries</p></article><article><strong>WebSocket data placeholder</strong><p><span class="status">Live feed online:</span> 14 players are browsing public lists now.</p></article></div></section>
   </main>
   <footer><p>Share your brewing discoveries with the table.</p></footer>
 </body>

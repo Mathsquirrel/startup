@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" role="img" aria-labelledby="title description">
+  <title id="title">Table with Magic cards</title>
+  <description id="description">A tabletop with several colorful trading cards spread across it.</description>
+  <defs>
+    <linearGradient id="table" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#6e3d28"/>
+      <stop offset="1" stop-color="#3b2119"/>
+    </linearGradient>
+    <linearGradient id="card-red" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#d85a43"/>
+      <stop offset="1" stop-color="#7e2824"/>
+    </linearGradient>
+    <linearGradient id="card-blue" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#4c9ab5"/>
+      <stop offset="1" stop-color="#1e4c70"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="800" fill="url(#table)"/>
+  <path d="M0 120 C240 70 410 160 640 100 S990 90 1200 145" fill="none" stroke="#8d5638" stroke-width="20" opacity=".35"/>
+  <path d="M0 650 C240 580 440 700 670 625 S1010 600 1200 675" fill="none" stroke="#24150f" stroke-width="30" opacity=".32"/>
+  <g stroke="#f7ead7" stroke-width="10" stroke-linejoin="round">
+    <g transform="translate(120 170) rotate(-12 135 205)">
+      <rect width="270" height="410" rx="22" fill="url(#card-red)"/>
+      <rect x="25" y="28" width="220" height="150" rx="10" fill="#f1c177"/>
+      <path d="M55 145 L112 67 L160 128 L202 85 L235 150 Z" fill="#fff0c7"/>
+      <circle cx="135" cy="262" r="54" fill="#f7ead7" opacity=".9"/>
+      <path d="M135 220 L159 260 L135 305 L111 260 Z" fill="#b43c31"/>
+      <rect x="30" y="345" width="210" height="18" rx="9" fill="#f7ead7" opacity=".9"/>
+    </g>
+    <g transform="translate(470 95) rotate(8 135 205)">
+      <rect width="270" height="410" rx="22" fill="url(#card-blue)"/>
+      <rect x="25" y="28" width="220" height="150" rx="10" fill="#8bd0d1"/>
+      <path d="M35 155 Q135 35 235 155 L205 175 L165 125 L125 165 L85 115 Z" fill="#e7fbf2"/>
+      <circle cx="135" cy="262" r="54" fill="#e7fbf2" opacity=".9"/>
+      <path d="M135 215 C155 250 180 270 135 315 C90 270 115 250 135 215 Z" fill="#2e7896"/>
+      <rect x="30" y="345" width="210" height="18" rx="9" fill="#e7fbf2" opacity=".9"/>
+    </g>
+    <g transform="translate(815 250) rotate(17 135 205)">
+      <rect width="270" height="410" rx="22" fill="#314c38"/>
+      <rect x="25" y="28" width="220" height="150" rx="10" fill="#98b66c"/>
+      <path d="M135 52 L160 115 L220 130 L160 145 L135 170 L110 145 L50 130 L110 115 Z" fill="#f1e8ad"/>
+      <circle cx="135" cy="262" r="54" fill="#f1e8ad" opacity=".9"/>
+      <path d="M135 214 L168 255 L135 315 L102 255 Z" fill="#527348"/>
+      <rect x="30" y="345" width="210" height="18" rx="9" fill="#f1e8ad" opacity=".9"/>
+    </g>
+  </g>
+</svg>

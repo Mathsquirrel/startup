@@ -4,14 +4,24 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PDF Decks | My Decks</title>
+  <style>
+    nav a + a {
+      margin-left: 0.75rem;
+    }
+
+    .hero-image {
+      display: block;
+      height: 2in;
+      width: auto;
+    }
+  </style>
 </head>
 <body>
-  <header><div><div class="brand"><h1>PDF DECKS</h1><span class="user"><a href="#login">Log in</a> or <a href="#register">Register</a></span></div><nav aria-label="Primary navigation"><a href="builder.html">Builder</a><a href="public-decks.html">Public Decks</a><a href="personal-decks.html" aria-current="page">My Decks</a></nav></div></header>
+  <header><div><div class="brand"><h1>PDF DECKS</h1><form class="login-form" action="#" method="post"><label for="personal-username">Username</label><input id="personal-username" name="username" type="text" placeholder="Username" autocomplete="username"><label for="personal-password">Password</label><input id="personal-password" name="password" type="password" placeholder="Password" autocomplete="current-password"><button type="submit">Log in</button></form></div><nav aria-label="Primary navigation"><a href="index.html">Home</a><a href="builder.html">Builder</a><a href="public-decks.html">Public Decks</a><a href="personal-decks.html" aria-current="page">My Decks</a></nav></div></header>
   <main>
-    <div class="intro"><div><p class="eyebrow">Your private vault</p><h2>Keep every brew close at hand.</h2><p>Review your saved lists, return to unfinished ideas, and share a deck when it is ready for the table.</p></div><img class="hero-image" src="https://images.unsplash.com/photo-1566694271355-3e5d4f0b2c1f?auto=format&fit=crop&w=1000&q=80" alt="Organized collection of colorful tabletop cards"></div>
+    <div class="intro"><div><p class="eyebrow">Your private vault</p><h2>Keep every brew close at hand.</h2><p>Review your saved lists, return to unfinished ideas, and share a deck when it is ready for the table.</p></div><img class="hero-image" src="images/deck-box.svg" alt="Deck box for storing Magic: The Gathering cards"></div>
     <section aria-labelledby="saved-title"><h3 id="saved-title">Saved decklists</h3><div class="deck-grid"><article class="deck"><h4>Izzet Spellcraft</h4><p class="meta">Last edited today | 60 cards</p><p>Fast spells, flexible answers, and a very satisfying stack.</p><a href="builder.html">Continue editing</a></article><article class="deck"><h4>Forest Floor</h4><p class="meta">Last edited 3 days ago | 72 cards</p><p>A creature-heavy experiment still waiting for a cleaner mana base.</p><a href="builder.html">Continue editing</a></article><article class="deck"><h4>Draft Collection</h4><p class="meta">Last edited May 12 | 40 cards</p><p>Cards from the latest limited night, preserved for review.</p><a href="builder.html">Continue editing</a></article></div></section>
-    <section aria-labelledby="account-title"><h3 id="account-title">Account and live status</h3><div class="deck-grid"><article class="deck"><strong>Login placeholder</strong><p>You are browsing as a guest.</p><p><a id="login" href="#login-form">Log in</a> or <a id="register" href="#register-form">Register</a> to save decks.</p></article><article class="deck"><strong>Database data placeholder</strong><p>Saved decks will appear here after you log in.</p><p>Last database sync: waiting for account</p></article><article class="deck"><strong>WebSocket data placeholder</strong><p><span class="status">Online:</span> friends can see when you enter a playtest room.</p><p>Active rooms: 0</p></article></div></section>
-    <section aria-labelledby="api-title"><h3 id="api-title">Card data integration</h3><p>Third-party API placeholder: Scryfall card image and rules-text requests will populate saved deck details here.</p></section>
+    <section aria-labelledby="account-title"><h3 id="account-title">Account and live status</h3><div class="deck-grid"><article class="deck"><p>You are browsing as a guest.</p><p><a id="login" href="#login-form">Log in</a> or <a id="register" href="#register-form">Register</a> to save decks.</p></article><article class="deck"><strong>Database data placeholder</strong><p>Saved decks will appear here after you log in.</p><p>Last database sync: waiting for account</p></article><article class="deck"><strong>Online friends</strong><p><span class="status">Online:</span> friends can see when you are active.</p><p>Online friends: 0</p></article></div></section>
   </main>
   <footer><p>Your decks, your experiments, your next great game.</p></footer>
 </body>
