@@ -71,11 +71,11 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 - [x] **Proper HTML element usage** - Ensured code was structured with correct header and body structure
 - [x] **Links** - Made sure each HTML file was able to reach the other files. Navigation on the website is easy.
 - [x] **Text** - Used some filler text to represent what will inevitably be put into function. Displays information about used technologies as well
-- [x] **3rd party API placeholder** - I did not complete this part of the deliverable.
-- [x] **Images** - I did not complete this part of the deliverable.
-- [x] **Login placeholder** - I did not complete this part of the deliverable.
-- [x] **DB data placeholder** - I did not complete this part of the deliverable.
-- [x] **WebSocket placeholder** - I did not complete this part of the deliverable.
+- [x] **3rd party API placeholder** - Showed images that would be obtained using the API call. Text written to show where and how it's used
+- [x] **Images** - Used images to help identify how the website would be used. Worked in tandem with API for card images.
+- [x] **Login placeholder** - Implemented a placeholder at the top of the pages where a user can log in to the website in order to fully utilize the DB.
+- [x] **DB data placeholder** - Various textual areas that represent information that would be stored in the database if a user chooses to login and save that data.
+- [x] **WebSocket placeholder** - Small textual elements used to show websocket related information such as active users (particularly friends)
 
 ## 🚀 CSS deliverable
 
