@@ -81,13 +81,13 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] I completed the prerequisites for this deliverable (Simon deployed, GitHub link, Git commits)
-- [ ] **Visually appealing colors and layout. No overflowing elements.** - I did not complete this part of the deliverable.
-- [ ] **Use of a CSS framework** - I did not complete this part of the deliverable.
-- [ ] **All visual elements styled using CSS** - I did not complete this part of the deliverable.
-- [ ] **Responsive to window resizing using flexbox and/or grid display** - I did not complete this part of the deliverable.
-- [ ] **Use of a imported font** - I did not complete this part of the deliverable.
-- [ ] **Use of different types of selectors including element, class, ID, and pseudo selectors** - I did not complete this part of the deliverable.
+- [x] I completed the prerequisites for this deliverable (Simon deployed, GitHub link, Git commits)
+- [x] **Visually appealing colors and layout. No overflowing elements.** - I completed this section with a teal colorscheme and an easily usable sidebar.
+- [x] **Use of a CSS framework** - I completed this section by use my site.css file
+- [x] **All visual elements styled using CSS** - I completed this section within the site.css file
+- [x] **Responsive to window resizing using flexbox and/or grid display** - All pages shift with the resizing of the window. Additionally, the builder page shifts if you choose to condense the sidebar
+- [x] **Use of a imported font** - Not everything has been converted into the imported font, but a lot of the important text has been.
+- [x] **Use of different types of selectors including element, class, ID, and pseudo selectors** - I ensured that the css files use all of these elements.
 
 ## 🚀 React part 1: Routing deliverable
 
