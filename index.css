@@ -1,16 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap');
 
 :root {
-	--burgundy: #5b1f2a;
-	--burgundy-dark: #35141d;
-	--burgundy-soft: #8b4650;
-	--brown: #8a5a44;
-	--brown-light: #c7a18b;
+	--burgundy: #980002;
+	--burgundy-dark: #260b12;
+	--burgundy-soft: #680006;
+	--brown: #3f241d;
+	--brown-light: #a47763;
 	--cream: #f7f0e8;
 	--paper: #fffaf4;
 	--ink: #2f2020;
 	--muted: #765f58;
-	--line: rgba(91, 31, 42, 0.16);
+	--line: rgba(63, 36, 29, 0.2);
 }
 
 * {
@@ -27,6 +27,7 @@ body {
 	color: var(--ink);
 	font-family: 'DM Sans', sans-serif;
 	line-height: 1.6;
+	overflow-x: hidden;
 }
 
 header {
@@ -34,7 +35,7 @@ header {
 	inset: 0 auto 0 0;
 	width: 290px;
 	padding: 42px 30px;
-	background: var(--burgundy-dark);
+	background: linear-gradient(155deg, var(--burgundy-dark) 0%, var(--brown) 100%);
 	color: var(--cream);
 	z-index: 2;
 }
@@ -93,8 +94,8 @@ header {
 .hero-actions .button {
 	border: 0;
 	border-radius: 3px;
-	background: var(--brown-light);
-	color: var(--burgundy-dark);
+	background: var(--burgundy);
+	color: var(--cream);
 	font-weight: 700;
 	cursor: pointer;
 }
@@ -106,7 +107,7 @@ header {
 
 .login-form button:hover,
 .hero-actions .button:hover {
-	background: #e1c7b6;
+	background: var(--burgundy-soft);
 }
 
 nav.btn-group {
@@ -130,8 +131,8 @@ nav.btn-group .btn {
 
 nav.btn-group .btn-primary,
 nav.btn-group .btn:hover {
-	background: var(--brown);
-	border-color: var(--brown);
+	background: var(--burgundy);
+	border-color: var(--burgundy);
 	color: var(--paper);
 }
 
@@ -200,6 +201,10 @@ main a {
 	font-family: 'Fraunces', Georgia, serif;
 	font-size: clamp(3rem, 7vw, 6.5rem);
 	line-height: 0.98;
+}
+
+#hero-title {
+	text-wrap: balance;
 }
 
 .hero-copy > p:not(.kicker) {
