@@ -10,8 +10,8 @@
 <body>
   <header><div class="header-inner"><div class="brand"><img class="brand-logo" src="images/poisonDart.png" alt="Poison dart frog logo"><h1>PDF DECKS</h1><form class="login-form" action="#" method="post"><label for="personal-username">Username</label><input id="personal-username" name="username" type="text" placeholder="Username" autocomplete="username"><label for="personal-password">Password</label><input id="personal-password" name="password" type="password" placeholder="Password" autocomplete="current-password"><button type="submit">Log in</button></form></div><nav class="btn-group" aria-label="Primary navigation"><a class="btn btn-primary" href="index.html">Home</a><a class="btn btn-primary" href="builder.html">Builder</a><a class="btn btn-primary" href="public-decks.html">Public Decks</a><a class="btn btn-primary" href="personal-decks.html" aria-current="page">My Decks</a></nav></div></header>
   <main>
-    <div class="intro"><div><p class="eyebrow">Your private vault</p><h2>Keep every brew close at hand.</h2><p>Review your saved lists, return to unfinished ideas, and share a deck when it is ready for the table.</p></div><img class="hero-image" src="images/deck-box.svg" alt="Deck box for storing Magic: The Gathering cards"></div>
-      <section aria-labelledby="saved-title"><h3 id="saved-title">Saved decklists</h3><div class="deck-grid saved-deck-grid"><article class="deck" data-card-name="Lightning Bolt" data-creatures="18" data-lands="24" data-spells="18" tabindex="0" role="button" aria-label="View details for Izzet Spellcraft"><h4>Izzet Spellcraft</h4><p class="meta">60 cards</p></article><article class="deck" data-card-name="Opt" data-creatures="28" data-lands="26" data-spells="18" tabindex="0" role="button" aria-label="View details for Forest Floor"><h4>Forest Floor</h4><p class="meta">72 cards</p></article><article class="deck" data-card-name="Counterspell" data-creatures="8" data-lands="24" data-spells="28" tabindex="0" role="button" aria-label="View details for Draft Collection"><h4>Draft Collection</h4><p class="meta">40 cards</p></article></div></section>
+    <div class="intro"><div><p class="eyebrow">Your private vault</p><h2>Keep every brew close at hand.</h2><p>Review your saved lists, return to unfinished ideas, and share a deck when it is ready for the table.</p></div></div>
+      <section aria-labelledby="saved-title"><h3 id="saved-title">Saved decklists</h3><div class="deck-grid saved-deck-grid"><article class="deck" data-card-name="Lightning Bolt" data-creatures="18" data-lands="24" data-spells="18" tabindex="0" role="button" aria-label="View details for Izzet Spellcraft"><h4>Izzet Spellcraft</h4><p class="meta">60 cards</p></article><article class="deck" data-card-name="Opt" data-creatures="28" data-lands="26" data-spells="18" tabindex="0" role="button" aria-label="View details for Forest Floor"><h4>Forest Floor</h4><p class="meta">72 cards</p></article><article class="deck" data-card-name="Counterspell" data-creatures="8" data-lands="24" data-spells="28" tabindex="0" role="button" aria-label="View details for Draft Collection"><h4>Draft Collection</h4><p class="meta">40 cards</p></article><article class="deck create-deck" data-create="true" tabindex="0" role="button" aria-label="Create a new deck"><span aria-hidden="true">+</span><h4>Create deck</h4></article></div></section>
     <section aria-labelledby="account-title"><h3 id="account-title">Account and live status</h3><div class="deck-grid"><article class="deck"><p>You are browsing as a guest.</p><p><a id="login" href="#login-form">Log in</a> or <a id="register" href="#register-form">Register</a> to save decks.</p></article><article class="deck"><strong>Database data placeholder</strong><p>Saved decks will appear here after you log in.</p><p>Last database sync: waiting for account</p></article><article class="deck"><strong>Online friends</strong><p><span class="status">Online:</span> friends can see when you are active.</p><p>Online friends: 0</p></article></div></section>
   </main>
   <footer><p>Your decks, your experiments, your next great game.</p></footer>
@@ -23,14 +23,17 @@
     <a id="edit-deck" class="modal-action" href="builder.html">Edit deck</a>
   </dialog>
   <script>
-    const deckTiles = document.querySelectorAll('[data-card-name]');
+    const deckTiles = document.querySelectorAll('.saved-deck-grid .deck');
     const deckDialog = document.querySelector('#deck-details');
 
     const openDeckDetails = (deck) => {
-      document.querySelector('#deck-details-title').textContent = deck.querySelector('h4').textContent;
-      document.querySelector('#creature-count').textContent = deck.dataset.creatures;
-      document.querySelector('#land-count').textContent = deck.dataset.lands;
-      document.querySelector('#spell-count').textContent = deck.dataset.spells;
+        const isCreateDeck = deck.dataset.create === 'true';
+        deckDialog.querySelector('.eyebrow').textContent = isCreateDeck ? 'Start a new list' : 'Deck details';
+        document.querySelector('#deck-details-title').textContent = isCreateDeck ? 'Create a new deck' : deck.querySelector('h4').textContent;
+        document.querySelector('#creature-count').textContent = isCreateDeck ? '-' : deck.dataset.creatures;
+        document.querySelector('#land-count').textContent = isCreateDeck ? '-' : deck.dataset.lands;
+        document.querySelector('#spell-count').textContent = isCreateDeck ? '-' : deck.dataset.spells;
+        document.querySelector('#edit-deck').textContent = isCreateDeck ? 'Create deck' : 'Edit deck';
       deckDialog.showModal();
     };
 
@@ -49,7 +52,7 @@
       if (event.target === deckDialog) deckDialog.close();
     });
 
-    deckTiles.forEach(async (deck) => {
+    document.querySelectorAll('[data-card-name]').forEach(async (deck) => {
       try {
         const response = await fetch(`https://api.scryfall.com/cards/named?exact=${encodeURIComponent(deck.dataset.cardName)}`);
         if (!response.ok) return;

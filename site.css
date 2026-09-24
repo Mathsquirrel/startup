@@ -316,6 +316,25 @@ main a {
 	outline-offset: 2px;
 }
 
+.saved-deck-grid .create-deck {
+	align-items: center;
+	justify-content: center;
+	background: var(--teal-dark);
+	text-align: center;
+}
+
+.create-deck span {
+	position: relative;
+	font-size: 3.5rem;
+	font-weight: 300;
+	line-height: 1;
+}
+
+.create-deck h4 {
+	position: relative;
+	margin: 8px 0 0;
+}
+
 .deck-grid .deck::before {
 	position: absolute;
 	inset: 0;
