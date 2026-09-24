@@ -34,9 +34,10 @@ header {
 	position: fixed;
 	inset: 0 auto 0 0;
 	width: 260px;
-	padding: 38px 24px;
+	padding: 26px 20px;
 	background: var(--mint);
 	color: var(--cream);
+	overflow-y: auto;
 	z-index: 2;
 }
 
@@ -47,17 +48,17 @@ header {
 }
 
 .brand h1 {
-	margin: 14px 0 26px;
+	margin: 8px 0 16px;
 	color: var(--teal-dark);
 	font-family: 'Fraunces', Georgia, serif;
-	font-size: 1.7rem;
+	font-size: 1.5rem;
 	letter-spacing: 0.08em;
 }
 
 .brand-logo {
 	display: block;
-	width: 72px;
-	height: 72px;
+	width: 60px;
+	height: 60px;
 	margin: 0 auto;
 	border-radius: 50%;
 	object-fit: cover;
@@ -67,13 +68,13 @@ header {
 .login-form {
 	display: flex;
 	flex-direction: column;
-	gap: 8px;
-	padding-bottom: 20px;
-	border-bottom: 1px solid rgba(247, 240, 232, 0.22);
+	gap: 5px;
+	padding-bottom: 14px;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.72);
 }
 
 .login-form label {
-	margin-top: 5px;
+	margin-top: 3px;
 	color: var(--mint-light);
 	font-size: 0.75rem;
 	font-weight: 700;
@@ -84,12 +85,16 @@ header {
 .login-form input,
 #card-search {
 	width: 100%;
-	padding: 10px 12px;
+	padding: 8px 10px;
 	border: 1px solid rgba(247, 240, 232, 0.28);
 	border-radius: 3px;
 	background: rgba(255, 250, 244, 0.28);
 	color: var(--teal-dark);
 	font: inherit;
+}
+
+.login-form input {
+	font-size: 0.9rem;
 }
 
 .login-form input::placeholder {
@@ -114,8 +119,8 @@ main button {
 }
 
 .login-form button {
-	margin-top: 10px;
-	padding: 10px;
+	margin-top: 6px;
+	padding: 8px;
 }
 
 .login-form button:hover,
@@ -126,13 +131,13 @@ main button:hover {
 nav.btn-group {
 	display: flex;
 	flex-direction: column;
-	gap: 8px;
-	margin-top: 20px;
+	gap: 5px;
+	margin-top: 14px;
 }
 
 nav.btn-group .btn {
 	width: 100%;
-	padding: 11px 13px;
+	padding: 10px 11px;
 	border: 1px solid var(--teal);
 	border-radius: 3px;
 	background: var(--teal);
@@ -147,6 +152,51 @@ nav.btn-group .btn {
 nav.btn-group .btn:hover {
 	background: var(--teal-soft);
 	border-color: var(--teal-soft);
+}
+
+.friend-list {
+	margin-top: 14px;
+	padding-top: 12px;
+	border-top: 1px solid rgba(255, 255, 255, 0.72);
+}
+
+.friend-list h2 {
+	margin: 0 0 10px;
+	color: var(--teal-dark);
+	font-family: 'Fraunces', Georgia, serif;
+	font-size: 1.15rem;
+}
+
+.friend-list ul {
+	max-height: 150px;
+	margin: 0;
+	padding: 0 5px 0 0;
+	overflow-y: auto;
+	list-style: none;
+}
+
+.friend-list li {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 5px 0;
+	color: var(--teal-dark);
+	font-size: 0.86rem;
+}
+
+.status-dot {
+	width: 8px;
+	height: 8px;
+	flex: 0 0 8px;
+	border-radius: 50%;
+}
+
+.status-dot.online {
+	background: #2d805d;
+}
+
+.status-dot.offline {
+	background: #8b8f88;
 }
 
 main,
@@ -437,8 +487,8 @@ dialog h2 {
 
 .modal-close {
 	position: absolute;
-	top: 12px;
-	right: 14px;
+	top: 7px;
+	right: 8px;
 	border: 0;
 	background: transparent;
 	color: var(--teal-dark);
@@ -537,6 +587,10 @@ dialog h2 {
 	nav.btn-group .btn {
 		width: auto;
 		flex: 1 1 120px;
+	}
+
+	.friend-list {
+		max-width: 360px;
 	}
 
 	main,
