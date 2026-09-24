@@ -197,10 +197,14 @@ main a {
 	background-size: cover;
 }
 
+.hero-copy {
+	padding-left: clamp(12px, 3vw, 42px);
+}
+
 .kicker,
 .tool-number {
 	margin: 0 0 14px;
-	color: var(--mint);
+	color: var(--burgundy);
 	font-size: 0.75rem;
 	font-weight: 700;
 	letter-spacing: 0.14em;
@@ -340,6 +344,7 @@ footer {
 footer p {
 	margin: 0;
 	font-size: 0.9rem;
+	text-align: center;
 }
 
 @media (max-width: 800px) {
