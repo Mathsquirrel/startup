@@ -43,6 +43,7 @@ header {
 
 .collapsible-sidebar {
 	overflow: visible;
+	transition: transform 260ms ease;
 }
 
 .header-inner {
@@ -189,18 +190,15 @@ nav.btn-group .btn:hover {
 	background: #252525;
 }
 
-.collapsible-sidebar .btn-group {
-	max-height: 220px;
-	overflow: hidden;
-	transition: max-height 240ms ease, opacity 240ms ease, transform 240ms ease, margin 240ms ease;
+.collapsible-sidebar.nav-collapsed .btn-group {
+	max-height: none;
+	opacity: 1;
+	transform: none;
+	pointer-events: auto;
 }
 
-.collapsible-sidebar.nav-collapsed .btn-group {
-	max-height: 0;
-	margin-top: 0;
-	opacity: 0;
-	transform: translateX(-16px);
-	pointer-events: none;
+.collapsible-sidebar.nav-collapsed {
+	transform: translateX(calc(-100% + 14px));
 }
 
 .friend-list {
