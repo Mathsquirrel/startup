@@ -335,7 +335,13 @@ section {
 
 .builder-workspace {
 	padding: 28px;
-	border: 1px solid var(--line);
+	border: 0;
+	background: transparent;
+}
+
+.builder-page main {
+	max-width: none;
+	min-height: 100vh;
 	background-color: var(--cream);
 	background-image: linear-gradient(rgba(111, 159, 138, 0.13) 1px, transparent 1px), linear-gradient(90deg, rgba(111, 159, 138, 0.13) 1px, transparent 1px);
 	background-size: 24px 24px;
