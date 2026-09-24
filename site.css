@@ -477,10 +477,36 @@ dialog h2 {
 .modal-action {
 	display: inline-block;
 	padding: 11px 16px;
+	border: 0;
 	border-radius: 3px;
 	background: var(--teal);
 	color: var(--cream) !important;
+	font: inherit;
+	font-weight: 700;
+	cursor: pointer;
 	text-decoration: none;
+}
+
+.modal-actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+}
+
+.modal-action:hover {
+	background: var(--teal-soft);
+}
+
+.modal-action.delete-action {
+	background: #b86f73;
+}
+
+.modal-action.delete-action:hover {
+	background: #9f555b;
+}
+
+.modal-action[hidden] {
+	display: none;
 }
 
 @media (max-width: 520px) {

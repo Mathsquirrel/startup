@@ -21,7 +21,7 @@
     <p class="eyebrow">Deck details</p>
     <h2 id="deck-details-title">Deck name</h2>
     <dl class="deck-stats"><div><dt>Creatures</dt><dd id="creature-count">0</dd></div><div><dt>Lands</dt><dd id="land-count">0</dd></div><div><dt>Spells</dt><dd id="spell-count">0</dd></div></dl>
-    <a id="edit-deck" class="modal-action" href="builder.html">Edit deck</a>
+    <div class="modal-actions"><a id="edit-deck" class="modal-action" href="builder.html">Edit deck</a><button id="share-deck" class="modal-action" type="button">Share</button><button id="delete-deck" class="modal-action delete-action" type="button">Delete</button></div>
   </dialog>
   <script>
     const deckTiles = document.querySelectorAll('.saved-deck-grid .deck');
@@ -39,6 +39,9 @@
         document.querySelector('#land-count').textContent = isCreateDeck ? '-' : deck.dataset.lands;
         document.querySelector('#spell-count').textContent = isCreateDeck ? '-' : deck.dataset.spells;
         document.querySelector('#edit-deck').textContent = isCreateDeck ? 'Create deck' : 'Edit deck';
+  	      document.querySelector('#share-deck').hidden = isCreateDeck;
+  	      document.querySelector('#delete-deck').hidden = isCreateDeck;
+  	      document.querySelector('#share-deck').textContent = 'Share';
       deckDialog.showModal();
     };
 
@@ -53,6 +56,22 @@
     });
 
     document.querySelector('.modal-close').addEventListener('click', () => deckDialog.close());
+    document.querySelector('#share-deck').addEventListener('click', async () => {
+      const deckName = document.querySelector('#deck-details-title').textContent;
+      const shareText = `${deckName} on PDF Decks - ${window.location.href}`;
+      try {
+        await navigator.clipboard.writeText(shareText);
+        document.querySelector('#share-deck').textContent = 'Copied';
+      } catch {
+        document.querySelector('#share-deck').textContent = 'Copy unavailable';
+      }
+    });
+    document.querySelector('#delete-deck').addEventListener('click', () => {
+      const deckName = document.querySelector('#deck-details-title').textContent;
+      const deck = [...deckTiles].find((tile) => tile.querySelector('h4').textContent === deckName);
+      if (deck) deck.remove();
+      deckDialog.close();
+    });
     deckDialog.addEventListener('click', (event) => {
       if (event.target === deckDialog) deckDialog.close();
     });
