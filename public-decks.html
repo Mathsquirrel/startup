@@ -11,9 +11,22 @@
   <header><div class="header-inner"><div class="brand"><img class="brand-logo" src="images/poisonDart.png" alt="Poison dart frog logo"><h1>PDF DECKS</h1><form class="login-form" action="#" method="post"><label for="public-username">Username</label><input id="public-username" name="username" type="text" placeholder="Username" autocomplete="username"><label for="public-password">Password</label><input id="public-password" name="password" type="password" placeholder="Password" autocomplete="current-password"><button type="submit">Log in</button></form></div><section class="friend-list" aria-labelledby="friends-title"><h2 id="friends-title">Friends</h2><ul></ul><p class="friend-login-note">No Friends Have Been Added Yet</p></section><nav class="btn-group" aria-label="Primary navigation"><a class="btn btn-primary" href="index.html">Home</a><a class="btn btn-primary" href="builder.html">Builder</a><a class="btn btn-primary" href="public-decks.html" aria-current="page">Public Decks</a><a class="btn btn-primary" href="personal-decks.html">My Decks</a></nav></div></header>
   <main>
     <div class="intro"><div><p class="eyebrow">The community shelf</p><h2>Find a list worth testing.</h2><p>Browse public decklists from fellow players, inspect their game plan, and save a copy to your own workshop.</p></div><img class="hero-image" src="images/mtg-card-table.svg" alt="Table with Magic: The Gathering cards"></div>
-    <section aria-labelledby="featured-title"><h3 id="featured-title">Featured public decks</h3><div class="deck-grid"><article><h4>Moonlit Faeries</h4><p class="meta">by MiraVex | Dimir tempo | 60 cards</p><p>Flash threats and clever interaction for patient pilots.</p><button type="button">View deck</button></article><article><h4>Gruul Stampede</h4><p class="meta">by RootAndRuin | Gruul aggro | 60 cards</p><p>Turn big creatures sideways and keep the pressure on.</p><button type="button">View deck</button></article><article><h4>Solar Control</h4><p class="meta">by NikoPrime | Azorius control | 60 cards</p><p>Trade resources early, then win with inevitability.</p><button type="button">View deck</button></article></div></section>
+    <section aria-labelledby="featured-title"><h3 id="featured-title">Public decks</h3><div class="public-deck-list"><article class="public-deck-row" data-card-name="Spellstutter Sprite"><h4>Moonlit Faeries</h4><span class="deck-publisher">MiraVex</span><time datetime="2026-09-21">Sep 21, 2026</time><span>428 views</span><button type="button">View deck</button></article><article class="public-deck-row" data-card-name="Llanowar Elves"><h4>Gruul Stampede</h4><span class="deck-publisher">RootAndRuin</span><time datetime="2026-09-18">Sep 18, 2026</time><span>311 views</span><button type="button">View deck</button></article><article class="public-deck-row" data-card-name="Counterspell"><h4>Solar Control</h4><span class="deck-publisher">NikoPrime</span><time datetime="2026-09-14">Sep 14, 2026</time><span>267 views</span><button type="button">View deck</button></article></div></section>
     <section aria-labelledby="systems-title"><h3 id="systems-title">Community systems</h3><div class="deck-grid"><article><strong>Database data placeholder</strong><p>Public deck records: 1,248 | Most viewed this week: Moonlit Faeries</p></article><article><strong>WebSocket data placeholder</strong><p><span class="status">Live feed online:</span> 14 players are browsing public lists now.</p></article></div></section>
   </main>
   <footer><p>Share your brewing discoveries with the table.</p></footer>
+  <script>
+    document.querySelectorAll('[data-card-name]').forEach(async (deck) => {
+      try {
+        const response = await fetch(`https://api.scryfall.com/cards/named?exact=${encodeURIComponent(deck.dataset.cardName)}`);
+        if (!response.ok) return;
+        const card = await response.json();
+        const artwork = card.image_uris.art_crop || card.image_uris.normal;
+        deck.style.backgroundImage = `url('${artwork}')`;
+      } catch {
+        // Keep the local artwork fallback when the API is unavailable.
+      }
+    });
+  </script>
 </body>
 </html>

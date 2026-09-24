@@ -299,6 +299,89 @@ section h3 {
 	gap: 18px;
 }
 
+.public-deck-list {
+	display: grid;
+	gap: 1px;
+	border: 1px solid var(--line);
+	background: var(--line);
+}
+
+.public-deck-list article {
+	position: relative;
+	display: grid;
+	grid-template-columns: minmax(180px, 1.5fr) repeat(3, minmax(110px, 1fr)) auto;
+	align-items: center;
+	gap: 18px;
+	min-width: 0;
+	padding: 18px 20px;
+	background: var(--paper);
+	background-position: center;
+	background-size: cover;
+}
+
+.public-deck-list article::before {
+	position: absolute;
+	inset: 0;
+	background: rgba(18, 51, 59, 0.78);
+	content: '';
+}
+
+.public-deck-list article:nth-child(1) {
+	background-image: url('images/cardsOnTable.png');
+}
+
+.public-deck-list article:nth-child(2) {
+	background-image: url('images/mtg-card-table.svg');
+}
+
+.public-deck-list article:nth-child(3) {
+	background-image: url('images/deck-box.svg');
+}
+
+.public-deck-list article > * {
+	position: relative;
+	z-index: 1;
+	color: var(--cream);
+}
+
+.public-deck-list h4,
+.public-deck-list span,
+.public-deck-list time {
+	margin: 0;
+	min-width: 0;
+	overflow-wrap: anywhere;
+}
+
+.public-deck-list h4 {
+	color: var(--cream);
+	font-family: 'Fraunces', Georgia, serif;
+	font-size: 1.2rem;
+}
+
+.public-deck-list span,
+.public-deck-list time {
+	color: var(--mint-light);
+	font-size: 0.86rem;
+}
+
+.public-deck-list .deck-publisher::before {
+	content: 'By ';
+	color: var(--cream);
+	font-weight: 700;
+}
+
+@media (max-width: 1100px) and (min-width: 801px) {
+	.public-deck-list article {
+		grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+		gap: 8px 16px;
+	}
+
+	.public-deck-list h4,
+	.public-deck-list button {
+		grid-column: 1 / -1;
+	}
+}
+
 .saved-deck-grid {
 	grid-template-columns: repeat(4, minmax(0, 1fr));
 	gap: 14px;
@@ -627,6 +710,19 @@ dialog h2 {
 	.grid,
 	.deck-grid {
 		grid-template-columns: 1fr;
+	}
+
+	.public-deck-list article {
+		grid-template-columns: 1fr 1fr;
+		gap: 8px 16px;
+	}
+
+	.public-deck-list h4 {
+		grid-column: 1 / -1;
+	}
+
+	.public-deck-list button {
+		grid-column: 1 / -1;
 	}
 
 	.saved-deck-grid {
