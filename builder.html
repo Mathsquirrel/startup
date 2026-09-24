@@ -19,10 +19,52 @@
     <div class="header-inner"><div class="brand"><img class="brand-logo" src="images/poisonDart.png" alt="Poison dart frog logo"><h1>PDF DECKS</h1><form class="login-form" action="#" method="post"><label for="builder-username">Username</label><input id="builder-username" name="username" type="text" placeholder="Username" autocomplete="username"><label for="builder-password">Password</label><input id="builder-password" name="password" type="password" placeholder="Password" autocomplete="current-password"><button type="submit">Log in</button></form></div><section class="friend-list" aria-labelledby="friends-title"><h2 id="friends-title">Friends</h2><ul></ul><p class="friend-login-note">No Friends Have Been Added Yet</p></section><nav id="builder-navigation" class="btn-group" aria-label="Primary navigation"><a class="btn btn-primary" href="index.html">Home</a><a class="btn btn-primary" href="public-decks.html">Public Decks</a><a class="btn btn-primary" href="personal-decks.html">My Decks</a></nav><button class="nav-toggle" type="button" aria-controls="builder-navigation" aria-expanded="true" aria-label="Close navigation">-</button></div>
   </header>
   <main>
-    <section class="builder-workspace" aria-labelledby="deck-editor-title"><h3 id="deck-editor-title">Deck editor: Izzet Spellcraft</h3><div class="grid"><div class="panel"><strong>Main deck</strong><p>Card images load from Scryfall as the deck list is rendered.</p><p><code>GET https://api.scryfall.com/cards/named?exact={cardName}</code></p><div class="card-groups"><section class="card-group"><h4>Creatures</h4><ul class="card-list"><li data-card-name="Snapcaster Mage"><span>2x Snapcaster Mage</span><img class="card-image" alt="" loading="lazy"></li><li data-card-name="Delver of Secrets"><span>4x Delver of Secrets</span><img class="card-image" alt="" loading="lazy"></li></ul></section><section class="card-group"><h4>Instants &amp; Sorceries</h4><ul class="card-list"><li data-card-name="Lightning Bolt"><span>4x Lightning Bolt</span><img class="card-image" alt="" loading="lazy"></li><li data-card-name="Opt"><span>4x Opt</span><img class="card-image" alt="" loading="lazy"></li><li data-card-name="Counterspell"><span>3x Counterspell</span><img class="card-image" alt="" loading="lazy"></li></ul></section><section class="card-group"><h4>Lands</h4><ul class="card-list"><li data-card-name="Island"><span>12x Island</span><img class="card-image" alt="" loading="lazy"></li><li data-card-name="Mountain"><span>12x Mountain</span><img class="card-image" alt="" loading="lazy"></li></ul></section></div><p id="deck-image-status" class="status" aria-live="polite">Loading card images...</p></div><div class="panel"><strong>Card search</strong><p>Search results will appear here after the card catalog loads.</p><label for="card-search">Find a card</label><input id="card-search" type="search" placeholder="e.g. Sol Ring"></div></div></section>
+    <form class="builder-toolbar" role="search">
+      <label for="sort-mana">Mana value</label>
+      <select id="sort-mana"><option value="none">Any</option><option value="low">Low to high</option><option value="high">High to low</option></select>
+      <label for="sort-color">Color</label>
+      <select id="sort-color"><option value="all">All colors</option><option value="blue">Blue</option><option value="red">Red</option><option value="colorless">Colorless</option></select>
+      <label for="sort-type">Card type</label>
+      <select id="sort-type"><option value="all">All types</option><option value="creature">Creature</option><option value="instant">Instant</option><option value="sorcery">Sorcery</option><option value="land">Land</option></select>
+    </form>
+    <section class="builder-workspace" aria-labelledby="deck-editor-title"><h3 id="deck-editor-title">Deck editor: Izzet Spellcraft</h3><div class="card-groups"><section class="card-group"><h4>Creatures</h4><ul class="card-list"><li data-card-name="Snapcaster Mage"><span>2x Snapcaster Mage</span><img class="card-image" alt="" loading="lazy"></li><li data-card-name="Delver of Secrets"><span>4x Delver of Secrets</span><img class="card-image" alt="" loading="lazy"></li></ul></section><section class="card-group"><h4>Instants &amp; Sorceries</h4><ul class="card-list"><li data-card-name="Lightning Bolt"><span>4x Lightning Bolt</span><img class="card-image" alt="" loading="lazy"></li><li data-card-name="Opt"><span>4x Opt</span><img class="card-image" alt="" loading="lazy"></li><li data-card-name="Counterspell"><span>3x Counterspell</span><img class="card-image" alt="" loading="lazy"></li></ul></section><section class="card-group"><h4>Lands</h4><ul class="card-list"><li data-card-name="Island"><span>12x Island</span><img class="card-image" alt="" loading="lazy"></li><li data-card-name="Mountain"><span>12x Mountain</span><img class="card-image" alt="" loading="lazy"></li></ul></section></div><p id="deck-image-status" class="status" aria-live="polite">Loading card images...</p></section>
   </main>
   <footer><p>PDF Decks helps you turn ideas into playable lists.</p></footer>
   <script>
+    const manaSort = document.querySelector('#sort-mana');
+    const colorSort = document.querySelector('#sort-color');
+    const typeSort = document.querySelector('#sort-type');
+    const builderCards = [...document.querySelectorAll('.card-list li')];
+
+    builderCards.forEach((card) => {
+      const cardName = card.dataset.cardName;
+      const cardData = {
+        'Snapcaster Mage': ['2', 'blue', 'creature'],
+        'Delver of Secrets': ['1', 'blue', 'creature'],
+        'Lightning Bolt': ['1', 'red', 'instant'],
+        Opt: ['1', 'blue', 'instant'],
+        Counterspell: ['2', 'blue', 'instant'],
+        Island: ['0', 'blue', 'land'],
+        Mountain: ['0', 'red', 'land']
+      }[cardName];
+      [card.dataset.manaValue, card.dataset.color, card.dataset.cardType] = cardData;
+    });
+
+    const updateBuilderCards = () => {
+      const color = colorSort.value;
+      const type = typeSort.value;
+      builderCards.forEach((card) => {
+        card.hidden = false;
+      });
+      if (manaSort.value !== 'none') {
+        builderCards.sort((first, second) => Number(first.dataset.manaValue) - Number(second.dataset.manaValue));
+        if (manaSort.value === 'high') builderCards.reverse();
+        builderCards.forEach((card) => card.parentElement.append(card));
+      }
+    };
+
+    [manaSort, colorSort, typeSort].forEach((control) => control.addEventListener('input', updateBuilderCards));
+
     const builderSidebar = document.querySelector('.collapsible-sidebar');
     const navigationToggle = document.querySelector('.nav-toggle');
 

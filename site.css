@@ -339,12 +339,64 @@ section {
 	background: transparent;
 }
 
+.builder-workspace .panel,
+.builder-workspace .card-list li {
+	background: transparent;
+}
+
 .builder-page main {
 	max-width: none;
 	min-height: 100vh;
 	background-color: var(--cream);
 	background-image: linear-gradient(rgba(111, 159, 138, 0.13) 1px, transparent 1px), linear-gradient(90deg, rgba(111, 159, 138, 0.13) 1px, transparent 1px);
 	background-size: 24px 24px;
+}
+
+.builder-toolbar {
+	display: grid;
+	grid-template-columns: auto minmax(110px, 1fr) auto minmax(110px, 1fr) auto minmax(110px, 1fr);
+	align-items: center;
+	gap: 10px;
+	margin-bottom: 24px;
+	padding: 16px 18px;
+	border: 1px solid var(--line);
+	background: var(--paper);
+}
+
+.builder-toolbar label {
+	color: var(--teal-dark);
+	font-size: 0.75rem;
+	font-weight: 700;
+	text-transform: uppercase;
+}
+
+.builder-toolbar input,
+.builder-toolbar select {
+	min-width: 0;
+	width: 100%;
+	padding: 9px 10px;
+	border: 1px solid var(--line);
+	border-radius: 3px;
+	background: rgba(247, 240, 232, 0.18);
+	color: var(--teal-dark);
+	font: inherit;
+}
+
+.builder-toolbar select {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.builder-toolbar input:focus,
+.builder-toolbar select:focus {
+	border-color: var(--teal);
+	outline: 2px solid var(--mint-light);
+	outline-offset: 1px;
+}
+
+.card-list li[hidden] {
+	display: none;
 }
 
 section h3 {
@@ -814,6 +866,12 @@ dialog h2 {
 	}
 }
 
+@media (max-width: 1100px) and (min-width: 801px) {
+	.builder-toolbar {
+		grid-template-columns: auto minmax(0, 1fr);
+	}
+}
+
 @media (max-width: 800px) {
 	header {
 	position: static;
@@ -854,6 +912,10 @@ dialog h2 {
 	.intro {
 		align-items: flex-start;
 		flex-direction: column;
+	}
+
+	.builder-toolbar {
+		grid-template-columns: auto 1fr;
 	}
 
 	.section-toolbar {
