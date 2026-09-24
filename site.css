@@ -34,7 +34,7 @@ header {
 	position: fixed;
 	inset: 0 auto 0 0;
 	width: 260px;
-	padding: 26px 20px;
+	padding: 36px 20px 16px;
 	background: var(--mint);
 	color: var(--cream);
 	overflow: hidden;
@@ -137,7 +137,7 @@ nav.btn-group {
 	display: flex;
 	flex-direction: column;
 	gap: 5px;
-	margin-top: 8px;
+	margin-top: 18px;
 }
 
 nav.btn-group .btn {
