@@ -1,16 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap');
 
 :root {
-	--burgundy: #980002;
+	--burgundy: #7A2E32;
 	--burgundy-dark: #260b12;
-	--burgundy-soft: #680006;
-	--brown: #3f241d;
-	--brown-light: #a47763;
+	--burgundy-soft: #5D2026;
+	--mint: #6f9f8a;
+	--mint-light: #b8d5c5;
 	--cream: #f7f0e8;
 	--paper: #fffaf4;
 	--ink: #2f2020;
 	--muted: #765f58;
-	--line: rgba(63, 36, 29, 0.2);
+	--line: rgba(47, 91, 72, 0.2);
 }
 
 * {
@@ -33,9 +33,9 @@ body {
 header {
 	position: fixed;
 	inset: 0 auto 0 0;
-	width: 290px;
-	padding: 42px 30px;
-	background: linear-gradient(155deg, var(--burgundy-dark) 0%, var(--brown) 100%);
+	width: 260px;
+	padding: 38px 24px;
+	background: var(--mint);
 	color: var(--cream);
 	z-index: 2;
 }
@@ -47,11 +47,21 @@ header {
 }
 
 .brand h1 {
-	margin: 0 0 42px;
-	color: var(--brown-light);
+	margin: 14px 0 34px;
+	color: var(--burgundy-dark);
 	font-family: 'Fraunces', Georgia, serif;
 	font-size: 1.7rem;
 	letter-spacing: 0.08em;
+}
+
+.brand-logo {
+	display: block;
+	width: 72px;
+	height: 72px;
+	margin: 0 auto;
+	border-radius: 50%;
+	object-fit: cover;
+	box-shadow: 0 5px 14px rgba(38, 11, 18, 0.2);
 }
 
 .login-form {
@@ -59,12 +69,12 @@ header {
 	flex-direction: column;
 	gap: 8px;
 	padding-bottom: 28px;
-	border-bottom: 1px solid rgba(247, 240, 232, 0.2);
+	border-bottom: 1px solid rgba(247, 240, 232, 0.22);
 }
 
 .login-form label {
 	margin-top: 5px;
-	color: #d9b9aa;
+	color: #e5cfc3;
 	font-size: 0.75rem;
 	font-weight: 700;
 	letter-spacing: 0.08em;
@@ -76,17 +86,17 @@ header {
 	padding: 10px 12px;
 	border: 1px solid rgba(247, 240, 232, 0.28);
 	border-radius: 3px;
-	background: rgba(255, 250, 244, 0.08);
-	color: var(--cream);
+	background: rgba(255, 250, 244, 0.28);
+	color: var(--burgundy-dark);
 	font: inherit;
 }
 
 .login-form input::placeholder {
-	color: #c7a6a0;
+	color: #513a31;
 }
 
 .login-form input:focus {
-	outline: 2px solid var(--brown-light);
+	outline: 2px solid var(--mint-light);
 	outline-offset: 1px;
 }
 
@@ -130,25 +140,25 @@ nav.btn-group .btn {
 }
 
 nav.btn-group .btn-primary,
-nav.btn-group .btn:hover {
+	nav.btn-group .btn-outline-primary {
 	background: var(--burgundy);
 	border-color: var(--burgundy);
-	color: var(--paper);
+	color: var(--cream);
 }
 
-nav.btn-group .btn-outline-primary {
-	border-color: transparent;
-	background: transparent;
-	color: #e3c9bb;
+nav.btn-group .btn:hover {
+	background: var(--burgundy-soft);
+	border-color: var(--burgundy-soft);
+	color: var(--cream);
 }
 
 nav.btn-group .btn-outline-primary:hover {
-	background: rgba(199, 161, 139, 0.16);
+	background: rgba(38, 11, 18, 0.12);
 }
 
 main,
 footer {
-	margin-left: 290px;
+	margin-left: 260px;
 }
 
 main {
@@ -187,7 +197,7 @@ main a {
 .kicker,
 .tool-number {
 	margin: 0 0 14px;
-	color: var(--brown);
+	color: var(--mint);
 	font-size: 0.75rem;
 	font-weight: 700;
 	letter-spacing: 0.14em;
@@ -234,7 +244,7 @@ main a {
 
 .text-link:hover,
 main > section:first-child a:hover {
-	color: var(--brown);
+	color: var(--mint);
 }
 
 .section-heading {
@@ -308,7 +318,7 @@ main > section:first-child a:hover {
 }
 
 .news-date {
-	color: var(--brown);
+	color: var(--mint);
 	font-size: 0.8rem;
 	font-weight: 700;
 	text-transform: uppercase;
