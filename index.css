@@ -37,7 +37,7 @@ header {
 	padding: 26px 20px;
 	background: var(--mint);
 	color: var(--cream);
-	overflow-y: auto;
+	overflow: hidden;
 	z-index: 2;
 }
 
@@ -275,6 +275,13 @@ main > section:first-child a:hover {
 	padding: 0;
 	overflow-y: auto;
 	list-style: none;
+}
+
+.friend-login-note {
+	margin: 10px 0 0;
+	color: var(--burgundy-dark);
+	font-size: 0.72rem;
+	line-height: 1.35;
 }
 
 .section-heading {
