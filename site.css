@@ -333,6 +333,14 @@ section {
 	border-bottom: 1px solid var(--line);
 }
 
+.builder-workspace {
+	padding: 28px;
+	border: 1px solid var(--line);
+	background-color: var(--cream);
+	background-image: linear-gradient(rgba(111, 159, 138, 0.13) 1px, transparent 1px), linear-gradient(90deg, rgba(111, 159, 138, 0.13) 1px, transparent 1px);
+	background-size: 24px 24px;
+}
+
 section h3 {
 	margin: 0 0 24px;
 	color: var(--teal);
@@ -551,6 +559,24 @@ section h3 {
 	padding: 12px;
 	border: 1px solid var(--line);
 	background: var(--cream);
+}
+
+.card-groups {
+	display: grid;
+	gap: 22px;
+	margin-top: 22px;
+}
+
+.card-group {
+	padding-top: 16px;
+	border-top: 1px solid var(--line);
+}
+
+.card-group h4 {
+	margin: 0 0 12px;
+	color: var(--teal);
+	font-family: 'Fraunces', Georgia, serif;
+	font-size: 1.2rem;
 }
 
 .card-image {
