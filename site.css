@@ -41,6 +41,10 @@ header {
 	z-index: 2;
 }
 
+.collapsible-sidebar {
+	overflow: visible;
+}
+
 .header-inner {
 	display: flex;
 	flex-direction: column;
@@ -152,6 +156,51 @@ nav.btn-group .btn {
 nav.btn-group .btn:hover {
 	background: var(--teal-soft);
 	border-color: var(--teal-soft);
+}
+
+.nav-toggle {
+	position: absolute;
+	top: 50%;
+	right: -14px;
+	display: grid;
+	width: 28px;
+	height: 24px;
+	transform: translateY(-50%);
+	place-items: center;
+	border: 0;
+	border-radius: 4px;
+	background: #090909;
+	color: #fff;
+	font-size: 0;
+	font-weight: 700;
+	cursor: pointer;
+	transition: background 160ms ease;
+	z-index: 3;
+}
+
+.nav-toggle::before {
+	width: 12px;
+	height: 14px;
+	background: linear-gradient(#fff 0 0) center top / 12px 2px no-repeat, linear-gradient(#fff 0 0) center / 12px 2px no-repeat, linear-gradient(#fff 0 0) center bottom / 12px 2px no-repeat;
+	content: '';
+}
+
+.nav-toggle:hover {
+	background: #252525;
+}
+
+.collapsible-sidebar .btn-group {
+	max-height: 220px;
+	overflow: hidden;
+	transition: max-height 240ms ease, opacity 240ms ease, transform 240ms ease, margin 240ms ease;
+}
+
+.collapsible-sidebar.nav-collapsed .btn-group {
+	max-height: 0;
+	margin-top: 0;
+	opacity: 0;
+	transform: translateX(-16px);
+	pointer-events: none;
 }
 
 .friend-list {

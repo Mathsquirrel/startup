@@ -8,8 +8,8 @@
   <title>PDF Decks | Builder</title>
 </head>
 <body>
-  <header>
-    <div class="header-inner"><div class="brand"><img class="brand-logo" src="images/poisonDart.png" alt="Poison dart frog logo"><h1>PDF DECKS</h1><form class="login-form" action="#" method="post"><label for="builder-username">Username</label><input id="builder-username" name="username" type="text" placeholder="Username" autocomplete="username"><label for="builder-password">Password</label><input id="builder-password" name="password" type="password" placeholder="Password" autocomplete="current-password"><button type="submit">Log in</button></form></div><section class="friend-list" aria-labelledby="friends-title"><h2 id="friends-title">Friends</h2><ul></ul><p class="friend-login-note">No Friends Have Been Added Yet</p></section><nav class="btn-group" aria-label="Primary navigation"><a class="btn btn-primary" href="index.html">Home</a><a class="btn btn-primary" href="builder.html" aria-current="page">Builder</a><a class="btn btn-primary" href="public-decks.html">Public Decks</a><a class="btn btn-primary" href="personal-decks.html">My Decks</a></nav></div>
+  <header class="collapsible-sidebar">
+    <div class="header-inner"><div class="brand"><img class="brand-logo" src="images/poisonDart.png" alt="Poison dart frog logo"><h1>PDF DECKS</h1><form class="login-form" action="#" method="post"><label for="builder-username">Username</label><input id="builder-username" name="username" type="text" placeholder="Username" autocomplete="username"><label for="builder-password">Password</label><input id="builder-password" name="password" type="password" placeholder="Password" autocomplete="current-password"><button type="submit">Log in</button></form></div><section class="friend-list" aria-labelledby="friends-title"><h2 id="friends-title">Friends</h2><ul></ul><p class="friend-login-note">No Friends Have Been Added Yet</p></section><nav id="builder-navigation" class="btn-group" aria-label="Primary navigation"><a class="btn btn-primary" href="index.html">Home</a><a class="btn btn-primary" href="builder.html" aria-current="page">Builder</a><a class="btn btn-primary" href="public-decks.html">Public Decks</a><a class="btn btn-primary" href="personal-decks.html">My Decks</a></nav><button class="nav-toggle" type="button" aria-controls="builder-navigation" aria-expanded="true" aria-label="Close navigation">-</button></div>
   </header>
   <main>
     <div class="intro">
@@ -21,6 +21,16 @@
   </main>
   <footer><p>PDF Decks helps you turn ideas into playable lists.</p></footer>
   <script>
+    const builderSidebar = document.querySelector('.collapsible-sidebar');
+    const navigationToggle = document.querySelector('.nav-toggle');
+
+    navigationToggle.addEventListener('click', () => {
+      const isCollapsed = builderSidebar.classList.toggle('nav-collapsed');
+      navigationToggle.setAttribute('aria-expanded', String(!isCollapsed));
+      navigationToggle.setAttribute('aria-label', isCollapsed ? 'Open navigation' : 'Close navigation');
+      navigationToggle.textContent = isCollapsed ? '+' : '-';
+    });
+
     const cardItems = document.querySelectorAll('[data-card-name]');
     const status = document.querySelector('#deck-image-status');
 
