@@ -192,6 +192,9 @@ main a {
 
 .hero {
 	padding: clamp(58px, 10vw, 120px) 0 !important;
+	background-image: linear-gradient(rgba(247, 240, 232, 0.65), rgba(247, 240, 232, 0.65)), url('images/cardsOnTable.png');
+	background-position: center;
+	background-size: cover;
 }
 
 .kicker,
