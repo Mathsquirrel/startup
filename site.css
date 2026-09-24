@@ -262,6 +262,12 @@ nav.btn-group .btn:hover {
 main,
 footer {
 	margin-left: 260px;
+	transition: margin-left 260ms ease;
+}
+
+body.builder-nav-collapsed main,
+body.builder-nav-collapsed footer {
+	margin-left: 0;
 }
 
 main {

@@ -26,6 +26,7 @@
 
     navigationToggle.addEventListener('click', () => {
       const isCollapsed = builderSidebar.classList.toggle('nav-collapsed');
+      document.body.classList.toggle('builder-nav-collapsed', isCollapsed);
       navigationToggle.setAttribute('aria-expanded', String(!isCollapsed));
       navigationToggle.setAttribute('aria-label', isCollapsed ? 'Open navigation' : 'Close navigation');
       navigationToggle.textContent = isCollapsed ? '+' : '-';
