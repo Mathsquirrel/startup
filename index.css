@@ -62,7 +62,7 @@ header {
 	margin: 0 auto;
 	border-radius: 50%;
 	object-fit: cover;
-	box-shadow: 0 5px 14px rgba(38, 11, 18, 0.2);
+	box-shadow: 0 5px 14px rgba(18, 51, 59, 0.2);
 }
 
 .login-form {
@@ -126,14 +126,16 @@ nav.btn-group {
 	display: flex;
 	flex-direction: column;
 	gap: 5px;
-	margin-top: 14px;
+	margin-top: 8px;
 }
 
 nav.btn-group .btn {
 	width: 100%;
 	padding: 10px 11px;
-	border: 1px solid transparent;
+	border: 1px solid var(--burgundy);
 	border-radius: 3px;
+	background: var(--burgundy);
+	color: var(--cream);
 	text-align: left;
 	font-size: 0.92rem;
 	font-weight: 600;
@@ -152,10 +154,6 @@ nav.btn-group .btn:hover {
 	background: var(--burgundy-soft);
 	border-color: var(--burgundy-soft);
 	color: var(--cream);
-}
-
-nav.btn-group .btn-outline-primary:hover {
-	background: rgba(38, 11, 18, 0.12);
 }
 
 main,
@@ -257,9 +255,11 @@ main > section:first-child a:hover {
 }
 
 .friend-list {
-	margin-top: 14px;
-	padding-top: 12px;
+	margin-top: 10px;
+	padding-top: 10px;
+	padding-bottom: 10px;
 	border-top: 1px solid rgba(255, 255, 255, 0.72);
+	border-bottom: 1px solid rgba(255, 255, 255, 0.72);
 }
 
 .friend-list h2 {
@@ -277,11 +277,39 @@ main > section:first-child a:hover {
 	list-style: none;
 }
 
+.friend-list li {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 5px 0;
+	color: var(--burgundy-dark);
+	font-size: 0.86rem;
+}
+
+.status-dot {
+	width: 8px;
+	height: 8px;
+	flex: 0 0 8px;
+	border-radius: 50%;
+}
+
+.status-dot.online {
+	background: #2d805d;
+}
+
+.status-dot.offline {
+	background: #8b8f88;
+}
+
 .friend-login-note {
-	margin: 10px 0 0;
+	margin: 6px 0 0;
 	color: var(--burgundy-dark);
 	font-size: 0.72rem;
 	line-height: 1.35;
+}
+
+.friend-list + nav.btn-group {
+	margin-top: 8px;
 }
 
 .section-heading {
