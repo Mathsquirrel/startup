@@ -354,7 +354,7 @@ section {
 
 .builder-toolbar {
 	display: grid;
-	grid-template-columns: auto minmax(110px, 1fr) auto minmax(110px, 1fr) auto minmax(110px, 1fr);
+	grid-template-columns: auto minmax(150px, 1.4fr) auto minmax(110px, 1fr) auto minmax(110px, 1fr) auto minmax(110px, 1fr);
 	align-items: center;
 	gap: 10px;
 	margin-bottom: 24px;
