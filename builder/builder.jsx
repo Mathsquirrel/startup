@@ -75,7 +75,6 @@ export default function BuilderPage() {
                 const cardData = cards[card.name];
                 const imageUrl = cardData?.image_uris?.normal || cardData?.card_faces?.[0]?.image_uris?.normal;
                 return <li key={card.name}>
-                  <div className="card-summary"><span className="card-count">{card.count}x</span><strong>{card.name}</strong></div>
                   {imageUrl && <img className="card-image" src={imageUrl} alt={`${card.name} card image`} loading="lazy" />}
                 </li>;
               })}

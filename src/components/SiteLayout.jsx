@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
+import poisonDartLogo from '../../images/poisonDart.png';
 
 const imageUrl = (name) => `/images/${name}`;
 
@@ -15,7 +16,7 @@ export function Header({ builder = false }) {
   return <header className={builder ? `collapsible-sidebar${collapsed ? ' nav-collapsed' : ''}` : ''}>
     <div className="header-inner">
       <div className="brand">
-        <img className="brand-logo" src={imageUrl('poisonDart.png')} alt="Poison dart frog logo" />
+        <img className="brand-logo" src={poisonDartLogo} alt="Poison dart frog logo" />
         <h1>PDF DECKS</h1>
         <form className="login-form" onSubmit={(event) => event.preventDefault()}>
           <label htmlFor={`${builder ? 'builder' : location.pathname.slice(1) || 'index'}-username`}>Username</label>
