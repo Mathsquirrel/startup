@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import './site.css';
+import './personal-decks.css';
 import { Layout } from '../src/components/SiteLayout.jsx';
 import useScryfallImages from '../src/hooks/useScryfallImages.js';
 

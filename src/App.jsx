@@ -1,8 +1,8 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
-import BuilderPage from '../builder/BuilderPage.jsx';
-import HomePage from './pages/HomePage.jsx';
-import PersonalDecksPage from '../personal-decks/PersonalDecksPage.jsx';
-import PublicDecksPage from '../public-decks/PublicDecksPage.jsx';
+import BuilderPage from '../builder/builder.jsx';
+import HomePage from '../index/index.jsx';
+import PersonalDecksPage from '../personal-decks/personal-decks.jsx';
+import PublicDecksPage from '../public-decks/public-decks.jsx';
 
 export default function App() {
   return <Routes>

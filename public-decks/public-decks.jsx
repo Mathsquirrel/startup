@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import './site.css';
+import './public-decks.css';
 import { imageUrl, Layout } from '../src/components/SiteLayout.jsx';
 import useScryfallImages from '../src/hooks/useScryfallImages.js';
 

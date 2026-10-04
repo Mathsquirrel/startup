@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './site.css';
+import './builder.css';
 import { Layout } from '../src/components/SiteLayout.jsx';
 import useScryfallImages from '../src/hooks/useScryfallImages.js';
 

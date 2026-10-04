@@ -1,6 +1,6 @@
-import '../../index/index.css';
+import './index.css';
 import { Link } from 'react-router-dom';
-import { Layout } from '../components/SiteLayout.jsx';
+import { Layout } from '../src/components/SiteLayout.jsx';
 
 function NewsItem({ date, title, text }) { return <article className="news-item"><div className="news-date">{date}</div><div><h4>{title}</h4><p>{text}</p></div></article>; }
 
