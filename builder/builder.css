@@ -622,7 +622,7 @@ section h3 {
 	background: var(--cream);
 	box-shadow: 0 3px 8px rgba(18, 51, 59, 0.14);
 	transition: transform 160ms ease, box-shadow 160ms ease;
-	z-index: 1;
+	z-index: auto;
 }
 
 .builder-workspace .card-list li:first-child {
@@ -631,9 +631,7 @@ section h3 {
 
 .builder-workspace .card-list li:hover,
 .builder-workspace .card-list li:focus-within {
-	transform: translateY(-12px) scale(1.04);
-	box-shadow: 0 14px 24px rgba(18, 51, 59, 0.24);
-	z-index: 10;
+	z-index: auto;
 }
 
 .builder-workspace .card-summary {
@@ -679,6 +677,42 @@ section h3 {
 	display: block;
 	width: 100%;
 	height: auto;
+}
+
+.builder-workspace .card-preview {
+	position: absolute;
+	top: 50%;
+	left: calc(100% + 18px);
+	width: 220px;
+	max-width: none;
+	height: auto;
+	opacity: 0;
+	pointer-events: none;
+	transform: translateY(-50%) scale(0.96);
+	transform-origin: left center;
+	box-shadow: 0 14px 28px rgba(18, 51, 59, 0.32);
+	transition: opacity 160ms ease, transform 160ms ease;
+	z-index: 1000;
+}
+
+.builder-workspace .card-list li:hover .card-preview,
+.builder-workspace .card-list li:focus-within .card-preview {
+	opacity: 1;
+	transform: translateY(-50%) scale(1);
+}
+
+.builder-workspace .card-group-2 .card-preview,
+.builder-workspace .card-group-3 .card-preview {
+	right: calc(100% + 18px);
+	left: auto;
+	transform-origin: right center;
+}
+
+.builder-workspace .card-group-2 .card-list li:hover .card-preview,
+.builder-workspace .card-group-2 .card-list li:focus-within .card-preview,
+.builder-workspace .card-group-3 .card-list li:hover .card-preview,
+.builder-workspace .card-group-3 .card-list li:focus-within .card-preview {
+	transform: translateY(-50%) scale(1);
 }
 
 main a {

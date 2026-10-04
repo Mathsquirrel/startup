@@ -68,14 +68,17 @@ export default function BuilderPage() {
       <section className="builder-workspace" aria-labelledby="deck-editor-title">
         <h3 id="deck-editor-title">Deck editor: Izzet Spellcraft</h3>
         <div className="card-groups">
-          {['creature', 'instant', 'land'].map((group) => <section className="card-group" key={group}>
+          {['creature', 'instant', 'land'].map((group, groupIndex) => <section className={`card-group card-group-${groupIndex + 1}`} key={group}>
             <h4>{group === 'creature' ? 'Creatures' : group === 'instant' ? 'Instants & Sorceries' : 'Lands'}</h4>
             <ul className="card-list">
               {filtered.filter((card) => card.type === group).map((card) => {
                 const cardData = cards[card.name];
                 const imageUrl = cardData?.image_uris?.normal || cardData?.card_faces?.[0]?.image_uris?.normal;
                 return <li key={card.name}>
-                  {imageUrl && <img className="card-image" src={imageUrl} alt={`${card.name} card image`} loading="lazy" />}
+                  {imageUrl && <>
+                    <img className="card-image" src={imageUrl} alt={`${card.name} card image`} loading="lazy" />
+                    <img className="card-preview" src={imageUrl} alt="" aria-hidden="true" loading="lazy" />
+                  </>}
                 </li>;
               })}
             </ul>
