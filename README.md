@@ -93,10 +93,10 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] I completed the prerequisites for this deliverable (Simon deployed, GitHub link, Git commits)
-- [ ] **Bundled using Vite** - I did not complete this part of the deliverable.
-- [ ] **Components** - I did not complete this part of the deliverable.
-- [ ] **Router** - I did not complete this part of the deliverable.
+- [x] I completed the prerequisites for this deliverable (Simon deployed, GitHub link, Git commits)
+- [x] **Bundled using Vite** - I set up Vite and bundled the files in the same way as the Simon CSS version with subfolders and jsx.
+- [x] **Components** - I ported all of the html and css files using stubs to the new jsx files using react in order to correctly utilize react components instead of actually changing urls.
+- [x] **Router** - I set this up properly
 
 ## 🚀 React part 2: Reactivity deliverable
 
