@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../../builder/site.css';
-import { Layout } from '../components/SiteLayout.jsx';
-import useScryfallImages from '../hooks/useScryfallImages.js';
+import './site.css';
+import { Layout } from '../src/components/SiteLayout.jsx';
+import useScryfallImages from '../src/hooks/useScryfallImages.js';
 
 const builderCards = [{ name: 'Snapcaster Mage', count: 2, mana: 2, color: 'blue', type: 'creature' }, { name: 'Delver of Secrets', count: 4, mana: 1, color: 'blue', type: 'creature' }, { name: 'Lightning Bolt', count: 4, mana: 1, color: 'red', type: 'instant' }, { name: 'Opt', count: 4, mana: 1, color: 'blue', type: 'instant' }, { name: 'Counterspell', count: 3, mana: 2, color: 'blue', type: 'instant' }, { name: 'Island', count: 12, mana: 0, color: 'blue', type: 'land' }, { name: 'Mountain', count: 12, mana: 0, color: 'red', type: 'land' }];
 
 export default function BuilderPage() {
   const navigate = useNavigate();
-  const allowed = new URLSearchParams(window.location.search).has('fromDecks') && sessionStorage.getItem('builderAccess') === 'true';
+  const allowed = new URLSearchParams(window.location.search).has('fromDecks');
   const [mana, setMana] = useState('none'); const [color, setColor] = useState('all'); const [type, setType] = useState('all');
   const images = useScryfallImages(builderCards.map((card) => card.name));
   useEffect(() => { sessionStorage.removeItem('builderAccess'); if (!allowed) navigate('/personal-decks', { replace: true }); }, [allowed, navigate]);

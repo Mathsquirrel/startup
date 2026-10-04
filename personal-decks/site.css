@@ -682,6 +682,7 @@ main a {
 	align-items: center;
 	justify-content: center;
 	background: var(--teal-dark);
+	text-decoration: none;
 	text-align: center;
 }
 

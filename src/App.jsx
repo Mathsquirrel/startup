@@ -1,5 +1,5 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
-import BuilderPage from './pages/BuilderPage.jsx';
+import BuilderPage from '../builder/BuilderPage.jsx';
 import HomePage from './pages/HomePage.jsx';
 import PersonalDecksPage from '../personal-decks/PersonalDecksPage.jsx';
 import PublicDecksPage from '../public-decks/PublicDecksPage.jsx';
