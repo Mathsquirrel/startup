@@ -618,6 +618,18 @@ section h3 {
 	background: var(--cream);
 }
 
+.card-summary {
+	display: flex;
+	align-items: baseline;
+	gap: 8px;
+	margin-bottom: 10px;
+}
+
+.card-count {
+	color: var(--teal);
+	font-weight: 700;
+}
+
 .card-groups {
 	display: grid;
 	gap: 22px;
