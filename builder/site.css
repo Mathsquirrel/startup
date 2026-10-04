@@ -499,27 +499,27 @@ section h3 {
 }
 
 .public-deck-list article:nth-child(1) {
-	background-image: url('images/cardsOnTable.png');
+	background-image: url('../images/cardsOnTable.png');
 }
 
 .public-deck-list article:nth-child(2) {
-	background-image: url('images/mtg-card-table.svg');
+	background-image: url('../images/mtg-card-table.svg');
 }
 
 .public-deck-list article:nth-child(3) {
-	background-image: url('images/deck-box.svg');
+	background-image: url('../images/deck-box.svg');
 }
 
 .public-deck-list article:nth-child(4) {
-	background-image: url('images/cardsOnTable.png');
+	background-image: url('../images/cardsOnTable.png');
 }
 
 .public-deck-list article:nth-child(5) {
-	background-image: url('images/mtg-card-table.svg');
+	background-image: url('../images/mtg-card-table.svg');
 }
 
 .public-deck-list article:nth-child(6) {
-	background-image: url('images/deck-box.svg');
+	background-image: url('../images/deck-box.svg');
 }
 
 .public-deck-list article > * {
@@ -724,15 +724,15 @@ main a {
 }
 
 .deck-grid .deck:nth-child(1) {
-	background-image: url('images/cardsOnTable.png');
+	background-image: url('../images/cardsOnTable.png');
 }
 
 .deck-grid .deck:nth-child(2) {
-	background-image: url('images/mtg-card-table.svg');
+	background-image: url('../images/mtg-card-table.svg');
 }
 
 .deck-grid .deck:nth-child(3) {
-	background-image: url('images/deck-box.svg');
+	background-image: url('../images/deck-box.svg');
 }
 
 .deck-grid .meta {
