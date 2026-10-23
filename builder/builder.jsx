@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import './builder.css';
 import { Layout } from '../src/components/SiteLayout.jsx';
 import useScryfallCards from '../src/hooks/useScryfallCards.js';
@@ -12,11 +12,12 @@ function countCards(cards, name) {
 
 export default function BuilderPage() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [params] = useSearchParams();
   const { getDeck, saveDeck } = useDecks();
   const deckId = params.get('deckId');
   const existingDeck = deckId ? getDeck(deckId) : null;
-  const [deck, setDeck] = useState(() => existingDeck || { id: `deck-${Date.now()}`, name: 'Untitled deck', cards: [] });
+  const [deck, setDeck] = useState(() => existingDeck || location.state?.deck || { id: `deck-${Date.now()}`, name: 'Untitled deck', cards: [] });
   const [search, setSearch] = useState('');
   const [mana, setMana] = useState('none');
   const [color, setColor] = useState('all');

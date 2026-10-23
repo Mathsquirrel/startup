@@ -766,6 +766,8 @@ dialog {
 	box-shadow: 0 18px 60px rgba(18, 51, 59, 0.35);
 	transform: translateX(100%);
 	transition: transform 240ms ease;
+	overflow-y: auto;
+	isolation: isolate;
 }
 
 dialog[open] {
@@ -780,6 +782,13 @@ dialog h2 {
 	margin: 0 0 24px;
 	color: var(--teal);
 	font-family: 'Fraunces', Georgia, serif;
+}
+
+.deck-dialog-content {
+	position: relative;
+	min-height: 100%;
+	padding-bottom: 20px;
+	background: var(--paper);
 }
 
 .modal-close {
@@ -819,6 +828,23 @@ dialog h2 {
 	color: var(--teal);
 	font-size: 1.35rem;
 	font-weight: 700;
+}
+
+.public-card-list {
+	display: grid;
+	gap: 4px;
+	margin: 0 0 26px;
+	padding: 0;
+	list-style: none;
+}
+
+.public-card-list li {
+	display: flex;
+	justify-content: space-between;
+	padding: 7px 10px;
+	background: rgba(184, 213, 197, 0.45);
+	color: var(--teal-dark);
+	font-weight: 600;
 }
 
 .modal-action {
