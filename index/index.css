@@ -308,6 +308,28 @@ main > section:first-child a:hover {
 	background: #b44747;
 }
 
+.login-prompt-overlay {
+	position: fixed;
+	inset: 0;
+	display: grid;
+	place-items: center;
+	background: rgba(18, 51, 59, 0.5);
+	z-index: 12000;
+}
+
+.login-prompt {
+	width: min(90vw, 420px);
+	padding: 34px;
+	border-radius: 6px;
+	background: var(--paper);
+	box-shadow: 0 18px 60px rgba(18, 51, 59, 0.35);
+	text-align: center;
+}
+
+.login-prompt button {
+	padding: 10px 24px;
+}
+
 .friend-login-note {
 	margin: 6px 0 0;
 	color: var(--burgundy-dark);
