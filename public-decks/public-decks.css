@@ -767,6 +767,8 @@ dialog {
 	z-index: 10000;
 	transform: translateX(100%);
 	transition: transform 240ms ease;
+	overflow-y: auto;
+	overscroll-behavior: contain;
 }
 
 dialog[open] {
