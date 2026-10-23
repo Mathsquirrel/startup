@@ -6,6 +6,8 @@ const imageUrl = (name) => `/images/${name}`;
 
 export function Header({ builder = false }) {
   const [collapsed, setCollapsed] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [username, setUsername] = useState('');
   const location = useLocation();
 
   useEffect(() => {
@@ -18,12 +20,12 @@ export function Header({ builder = false }) {
       <div className="brand">
         <img className="brand-logo" src={poisonDartLogo} alt="Poison dart frog logo" />
         <h1>PDF DECKS</h1>
-        <form className="login-form" onSubmit={(event) => event.preventDefault()}>
+        <form className="login-form" onSubmit={(event) => { event.preventDefault(); setLoggedIn(true); }}>
           <label htmlFor={`${builder ? 'builder' : location.pathname.slice(1) || 'index'}-username`}>Username</label>
-          <input id={`${builder ? 'builder' : location.pathname.slice(1) || 'index'}-username`} name="username" type="text" placeholder="Username" autoComplete="username" />
+          <input id={`${builder ? 'builder' : location.pathname.slice(1) || 'index'}-username`} name="username" type="text" placeholder="Username" autoComplete="username" value={username} onChange={(event) => setUsername(event.target.value)} disabled={loggedIn} />
           <label htmlFor={`${builder ? 'builder' : location.pathname.slice(1) || 'index'}-password`}>Password</label>
-          <input id={`${builder ? 'builder' : location.pathname.slice(1) || 'index'}-password`} name="password" type="password" placeholder="Password" autoComplete="current-password" />
-          <button type="submit">Log in</button>
+          <input id={`${builder ? 'builder' : location.pathname.slice(1) || 'index'}-password`} name="password" type="password" placeholder="Password" autoComplete="current-password" disabled={loggedIn} />
+          <button type={loggedIn ? 'button' : 'submit'} onClick={loggedIn ? () => setLoggedIn(false) : undefined}>{loggedIn ? `Log out ${username || 'guest'}` : 'Log in'}</button>
         </form>
       </div>
       <section className="friend-list" aria-labelledby="friends-title"><h2 id="friends-title">Friends</h2><ul /><p className="friend-login-note">No Friends Have Been Added Yet</p></section>
