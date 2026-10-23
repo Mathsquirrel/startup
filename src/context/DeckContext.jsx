@@ -2,7 +2,6 @@ import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 
 export const cardPool = [
   { name: 'Snapcaster Mage', mana: 2, color: 'blue', type: 'creature' },
-  { name: 'Delver of Secrets', mana: 1, color: 'blue', type: 'creature' },
   { name: 'Lightning Bolt', mana: 1, color: 'red', type: 'instant' },
   { name: 'Opt', mana: 1, color: 'blue', type: 'instant' },
   { name: 'Counterspell', mana: 2, color: 'blue', type: 'instant' },
@@ -19,7 +18,6 @@ export const cardPool = [
 
 const starterCards = [
   { name: 'Snapcaster Mage', count: 2 },
-  { name: 'Delver of Secrets', count: 4 },
   { name: 'Lightning Bolt', count: 4 },
   { name: 'Opt', count: 4 },
   { name: 'Counterspell', count: 3 },
@@ -40,7 +38,11 @@ export function DeckProvider({ children }) {
   const [decks, setDecks] = useState(() => {
     try {
       const stored = localStorage.getItem(storageKey);
-      return stored ? JSON.parse(stored) : initialDecks;
+      const savedDecks = stored ? JSON.parse(stored) : initialDecks;
+      return savedDecks.map((deck) => ({
+        ...deck,
+        cards: deck.cards.filter((card) => card.name !== 'Delver of Secrets'),
+      }));
     } catch {
       return initialDecks;
     }
