@@ -49,6 +49,7 @@ export default function BuilderPage() {
   const updateCount = (name, change) => setDeck((current) => {
     const cards = current.cards.map((card) => card.name === name ? { ...card, count: card.count + change } : card).filter((card) => card.count > 0);
     if (change > 0 && !current.cards.some((card) => card.name === name)) cards.push({ name, count: 1 });
+    if (change < 0 && !cards.some((card) => card.name === name)) setSelectedCard(null);
     return { ...current, cards };
   });
 
@@ -82,7 +83,7 @@ export default function BuilderPage() {
   const save = (event) => {
     event.preventDefault();
     saveDeck(deck);
-    setNotice(`${deck.name} saved locally.`);
+    navigate('/personal-decks');
   };
 
   const selectCard = (cardKey, groupIndex, element) => {
@@ -110,6 +111,12 @@ export default function BuilderPage() {
 
   if (!params.has('fromDecks')) return null;
   const stats = getDeckStats(deck);
+  const cardTypeCounts = ['creature', 'instant', 'sorcery', 'artifact', 'enchantment', 'land'].reduce((counts, cardType) => ({
+    ...counts,
+    [cardType]: deck.cards
+      .filter((deckCard) => availableCards.find((card) => card.name === deckCard.name)?.type === cardType)
+      .reduce((total, card) => total + card.count, 0),
+  }), {});
 
   return <Layout builder footerText="PDF Decks helps you turn ideas into playable lists.">
     <main className="builder-main">
@@ -133,22 +140,20 @@ export default function BuilderPage() {
         <form className="deck-editor-heading" onSubmit={save}>
           <div><label htmlFor="deck-name">Deck name</label><input id="deck-name" value={deck.name} onChange={(event) => setDeck((current) => ({ ...current, name: event.target.value }))} /></div>
           <p className="deck-total">{stats.total} cards</p>
-          <button type="submit">Save deck</button>
+          <button type="submit">Save Deck</button>
           <button type="button" onClick={() => setDeck((current) => ({ ...current, cards: [] }))}>Clear cards</button>
-          <button type="button" onClick={() => navigate('/personal-decks')}>Done</button>
         </form>
         <h3 id="deck-editor-title">Choose cards for {deck.name}</h3>
         <div className="card-groups">
           {['creature', 'instant', 'sorcery', 'artifact', 'enchantment', 'land'].map((group, groupIndex) => {
             const groupCards = filtered.filter((card) => card.type === group);
             if (!groupCards.length) return null;
-            return <section className={`card-group card-group-${groupIndex + 1}`} key={group}><h4>{group[0].toUpperCase() + group.slice(1)}</h4><ul className="card-list">
+            return <section className={`card-group card-group-${groupIndex + 1}`} key={group}><h4>{group[0].toUpperCase() + group.slice(1)} ({cardTypeCounts[group]})</h4><ul className="card-list">
               {groupCards.flatMap((card) => {
                 const cardData = cards[card.name];
                 const imageUrl = cardData?.image_uris?.normal || cardData?.card_faces?.[0]?.image_uris?.normal;
                 const count = countCards(deck.cards, card.name);
-                const copies = count > 0 ? count : 1;
-                return Array.from({ length: copies }, (_, copyIndex) => {
+                return Array.from({ length: count }, (_, copyIndex) => {
                   const cardKey = `${card.name}-${copyIndex}`;
                   const isSelected = selectedCard === cardKey;
                   return <li key={cardKey} className={`${count ? 'in-deck' : ''}${isSelected ? ' selected' : ''}`} onClick={(event) => selectCard(cardKey, groupIndex, event.currentTarget)} aria-label={`${card.name}, ${count} in deck`} aria-pressed={isSelected} tabIndex="0" onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); selectCard(cardKey, groupIndex, event.currentTarget); } }}>
@@ -160,7 +165,7 @@ export default function BuilderPage() {
             </ul></section>;
           })}
         </div>
-        <p className="status" aria-live="polite">{notice || `${stats.creatures} creatures · ${stats.spells} spells · ${stats.lands} lands${Object.keys(cards).length === availableCards.length ? ' · Card images loaded.' : ' · Loading card images...'}`}</p>
+        <p className="status" aria-live="polite">Creatures: {cardTypeCounts.creature} · Instants: {cardTypeCounts.instant} · Sorceries: {cardTypeCounts.sorcery} · Artifacts: {cardTypeCounts.artifact} · Enchantments: {cardTypeCounts.enchantment} · Lands: {cardTypeCounts.land} · Total: {stats.total}</p>
       </section>
     </main>
   </Layout>;
