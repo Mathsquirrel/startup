@@ -22,11 +22,20 @@ export default function BuilderPage() {
   const [type, setType] = useState('all');
   const [notice, setNotice] = useState('');
   const [selectedCard, setSelectedCard] = useState(null);
+  const [menuPlacement, setMenuPlacement] = useState('same');
   const cards = useScryfallCards(cardPool.map((card) => card.name));
 
   useEffect(() => {
     if (!params.has('fromDecks')) navigate('/personal-decks', { replace: true });
   }, [navigate, params]);
+
+  useEffect(() => {
+    const closeMenu = (event) => {
+      if (!event.target.closest('.card-list li')) setSelectedCard(null);
+    };
+    document.addEventListener('pointerdown', closeMenu);
+    return () => document.removeEventListener('pointerdown', closeMenu);
+  }, []);
 
   const filtered = useMemo(() => cardPool
     .filter((card) => card.name.toLowerCase().includes(search.toLowerCase()))
@@ -44,6 +53,29 @@ export default function BuilderPage() {
     event.preventDefault();
     saveDeck(deck);
     setNotice(`${deck.name} saved locally.`);
+  };
+
+  const selectCard = (cardKey, groupIndex, element) => {
+    if (selectedCard === cardKey) {
+      setSelectedCard(null);
+      return;
+    }
+    const cardRect = element.getBoundingClientRect();
+    const menuWidth = 164;
+    const menuHeight = 180;
+    const gap = 12;
+    const previewOffset = 250;
+    const previewOnLeft = groupIndex === 1 || groupIndex === 2 || groupIndex === 4 || groupIndex === 5;
+    const navigationRight = document.querySelector('header')?.getBoundingClientRect().right || 0;
+    const sameLeft = previewOnLeft ? cardRect.left - previewOffset - menuWidth : cardRect.right + previewOffset;
+    const oppositeLeft = previewOnLeft ? cardRect.right + gap : cardRect.left - menuWidth - gap;
+    const fitsHorizontally = (left) => left >= navigationRight && left + menuWidth <= window.innerWidth;
+    const menuTop = cardRect.top + (cardRect.height - menuHeight) / 2;
+    const fitsVertically = menuTop >= 0 && menuTop + menuHeight <= window.innerHeight;
+    const sameFits = fitsHorizontally(sameLeft) && fitsVertically;
+    const oppositeFits = fitsHorizontally(oppositeLeft) && fitsVertically;
+    setMenuPlacement(sameFits ? 'same' : oppositeFits ? 'opposite' : 'contained');
+    setSelectedCard(cardKey);
   };
 
   if (!params.has('fromDecks')) return null;
@@ -83,9 +115,9 @@ export default function BuilderPage() {
                 return Array.from({ length: copies }, (_, copyIndex) => {
                   const cardKey = `${card.name}-${copyIndex}`;
                   const isSelected = selectedCard === cardKey;
-                  return <li key={cardKey} className={`${count ? 'in-deck' : ''}${isSelected ? ' selected' : ''}`} onClick={() => setSelectedCard((current) => current === cardKey ? null : cardKey)} aria-label={`${card.name}, ${count} in deck`} aria-pressed={isSelected} tabIndex="0" onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); setSelectedCard((current) => current === cardKey ? null : cardKey); } }}>
+                  return <li key={cardKey} className={`${count ? 'in-deck' : ''}${isSelected ? ' selected' : ''}`} onClick={(event) => selectCard(cardKey, groupIndex, event.currentTarget)} aria-label={`${card.name}, ${count} in deck`} aria-pressed={isSelected} tabIndex="0" onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); selectCard(cardKey, groupIndex, event.currentTarget); } }}>
                   {imageUrl && <><img className="card-image" src={imageUrl} alt={`${card.name} card image`} loading="lazy" /><img className="card-preview" src={imageUrl} alt="" aria-hidden="true" loading="lazy" /></>}
-                  <div className="card-controls" aria-label={`${card.name} actions`} onClick={(event) => event.stopPropagation()}><strong>{card.name}</strong><span>{count} in deck</span><button className="remove-one-button" type="button" onClick={() => updateCount(card.name, -1)} disabled={!count}>Remove one</button><button className="add-one-button" type="button" onClick={() => updateCount(card.name, 1)}>Add one</button><button className="remove-all-button" type="button" onClick={() => { updateCount(card.name, -count); setSelectedCard(null); }} disabled={!count}>Remove all</button></div>
+                  <div className={`card-controls ${menuPlacement}-menu`} aria-label={`${card.name} actions`} onClick={(event) => event.stopPropagation()}><strong>{card.name}</strong><span>{count} in deck</span><button className="remove-one-button" type="button" onClick={() => updateCount(card.name, -1)} disabled={!count}>Remove one</button><button className="add-one-button" type="button" onClick={() => updateCount(card.name, 1)}>Add one</button><button className="remove-all-button" type="button" onClick={() => { updateCount(card.name, -count); setSelectedCard(null); }} disabled={!count}>Remove all</button></div>
                   </li>;
                 });
               })}
