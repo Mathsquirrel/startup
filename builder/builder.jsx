@@ -75,14 +75,19 @@ export default function BuilderPage() {
             const groupCards = filtered.filter((card) => card.type === group);
             if (!groupCards.length) return null;
             return <section className={`card-group card-group-${groupIndex + 1}`} key={group}><h4>{group[0].toUpperCase() + group.slice(1)}</h4><ul className="card-list">
-              {groupCards.map((card) => {
+              {groupCards.flatMap((card) => {
                 const cardData = cards[card.name];
                 const imageUrl = cardData?.image_uris?.normal || cardData?.card_faces?.[0]?.image_uris?.normal;
                 const count = countCards(deck.cards, card.name);
-                return <li key={card.name} className={`${count ? 'in-deck' : ''}${selectedCard === card.name ? ' selected' : ''}`} onClick={() => setSelectedCard((current) => current === card.name ? null : card.name)} aria-label={`${card.name}, ${count} in deck`} aria-pressed={selectedCard === card.name} tabIndex="0" onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); setSelectedCard((current) => current === card.name ? null : card.name); } }}>
+                const copies = count > 0 ? count : 1;
+                return Array.from({ length: copies }, (_, copyIndex) => {
+                  const cardKey = `${card.name}-${copyIndex}`;
+                  const isSelected = selectedCard === cardKey;
+                  return <li key={cardKey} className={`${count ? 'in-deck' : ''}${isSelected ? ' selected' : ''}`} onClick={() => setSelectedCard((current) => current === cardKey ? null : cardKey)} aria-label={`${card.name}, ${count} in deck`} aria-pressed={isSelected} tabIndex="0" onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); setSelectedCard((current) => current === cardKey ? null : cardKey); } }}>
                   {imageUrl && <><img className="card-image" src={imageUrl} alt={`${card.name} card image`} loading="lazy" /><img className="card-preview" src={imageUrl} alt="" aria-hidden="true" loading="lazy" /></>}
-                  <div className="card-controls" aria-label={`${card.name} actions`} onClick={(event) => event.stopPropagation()}><strong>{card.name}</strong><span>{count} in deck</span><button type="button" onClick={() => updateCount(card.name, -1)} disabled={!count}>Remove one</button><button type="button" onClick={() => updateCount(card.name, 1)}>Add one</button><button type="button" onClick={() => { updateCount(card.name, -count); setSelectedCard(null); }} disabled={!count}>Remove card</button></div>
-                </li>;
+                  <div className="card-controls" aria-label={`${card.name} actions`} onClick={(event) => event.stopPropagation()}><strong>{card.name}</strong><span>{count} in deck</span><button className="remove-one-button" type="button" onClick={() => updateCount(card.name, -1)} disabled={!count}>Remove one</button><button className="add-one-button" type="button" onClick={() => updateCount(card.name, 1)}>Add one</button><button className="remove-all-button" type="button" onClick={() => { updateCount(card.name, -count); setSelectedCard(null); }} disabled={!count}>Remove all</button></div>
+                  </li>;
+                });
               })}
             </ul></section>;
           })}

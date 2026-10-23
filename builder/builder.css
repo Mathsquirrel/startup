@@ -638,7 +638,7 @@ section h3 {
 .builder-workspace .card-list li:focus-within {
 	z-index: 4;
 	transform: translateY(-4px);
-	box-shadow: 0 8px 18px rgba(18, 51, 59, 0.24);
+	box-shadow: none;
 }
 
 .builder-workspace .card-summary {
@@ -750,17 +750,19 @@ section h3 {
 	padding: 10px;
 	background: rgba(255, 250, 244, 0.96);
 	box-shadow: 0 2px 8px rgba(18, 51, 59, 0.24);
-	z-index: 2;
+	z-index: 3000;
 }
 
 .builder-workspace .card-list li.selected .card-controls {
 	display: grid;
 }
 
-.builder-workspace .card-group-2 .card-controls,
-.builder-workspace .card-group-3 .card-controls,
-.builder-workspace .card-group-5 .card-controls,
-.builder-workspace .card-group-6 .card-controls {
+.builder-workspace .card-list li.selected {
+	z-index: 2000;
+}
+
+.builder-workspace .card-group-1 .card-controls,
+.builder-workspace .card-group-4 .card-controls {
 	right: calc(100% + 12px);
 	left: auto;
 }
@@ -779,9 +781,27 @@ section h3 {
 	font-size: 0.78rem;
 }
 
+.card-controls button.add-one-button,
+.card-controls button.add-one-button:hover {
+	background: #24545a;
+	color: var(--cream);
+}
+
+.card-controls button.remove-one-button,
+.card-controls button.remove-one-button:hover {
+	background: #d99a9d;
+	color: #2f2020;
+}
+
+.card-controls button.remove-all-button,
+.card-controls button.remove-all-button:hover {
+	background: #b86f73;
+	color: #fffaf4;
+}
+
 .card-controls button:disabled {
 	cursor: not-allowed;
-	opacity: 0.4;
+	opacity: 0.7;
 }
 
 .builder-workspace .card-preview {
