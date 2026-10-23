@@ -103,7 +103,7 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
 - [x] I completed the prerequisites for this deliverable (Simon deployed, GitHub link, Git commits)
-- [x] **All functionality implemented or mocked out** - I stubbed out anything that would need to be implemented fully in the future (such as authentication checking for logging in), however, everything else should functionally work. I may add some small things in the future for ease of use or navigation, but the core functionality of the website is working now!
+- [x] **All functionality implemented or mocked out** - I stubbed out anything that would need to be implemented fully in the future (such as authentication checking for logging in), however, everything else should functionally work. I made sure that decks could actually add and remove cards (instead of just having placeholder images) and I also made sure that you could "save" those decks (pseudo-stubbed before database implementation). I may add some small things in the future for ease of use or navigation, but the core functionality of the website is working now!
 - [x] **Hooks** - I did complete this part of the deliverable.
 
 ## 🚀 Service deliverable
