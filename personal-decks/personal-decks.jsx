@@ -1,9 +1,11 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import './personal-decks.css';
 import { Layout } from '../src/components/SiteLayout.jsx';
 import useScryfallImages from '../src/hooks/useScryfallImages.js';
 import { getDeckStats, useDecks } from '../src/context/DeckContext.jsx';
+
+const publishedDecksStorageKey = 'pdf-published-decks';
 
 function DeckDialog({ deck, image, onClose, onShare, onDelete }) {
   const stats = getDeckStats(deck);
@@ -13,10 +15,40 @@ function DeckDialog({ deck, image, onClose, onShare, onDelete }) {
 export default function PersonalDecksPage() {
   const { decks, deleteDeck } = useDecks();
   const [selected, setSelected] = useState(null);
+  const [shareCandidate, setShareCandidate] = useState(null);
   const images = useScryfallImages(decks.flatMap((deck) => deck.cards[0] ? [{ cardName: deck.cards[0].name }] : []));
-  const share = async () => {
-    const text = `${selected.name} on PDF Decks - ${window.location.href}`;
-    try { await navigator.clipboard.writeText(text); } catch { window.prompt('Copy this deck link:', text); }
+  useEffect(() => {
+    if (!shareCandidate) return undefined;
+    const originalOverflow = document.body.style.overflow;
+    const originalPaddingRight = document.body.style.paddingRight;
+    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+    document.body.style.overflow = 'hidden';
+    if (scrollbarWidth > 0) document.body.style.paddingRight = `calc(${originalPaddingRight || '0px'} + ${scrollbarWidth}px)`;
+    return () => {
+      document.body.style.overflow = originalOverflow;
+      document.body.style.paddingRight = originalPaddingRight;
+    };
+  }, [shareCandidate]);
+  const share = () => setShareCandidate(selected);
+  const publishDeck = () => {
+    const username = localStorage.getItem('pdf-username') || 'guest';
+    const publishedDeck = {
+      id: shareCandidate.id,
+      name: shareCandidate.name,
+      author: username,
+      date: new Date().toISOString(),
+      cards: shareCandidate.cards,
+    };
+    try {
+      const stored = localStorage.getItem(publishedDecksStorageKey);
+      const publishedDecks = stored ? JSON.parse(stored) : [];
+      const nextDecks = publishedDecks.filter((deck) => deck.id !== publishedDeck.id);
+      localStorage.setItem(publishedDecksStorageKey, JSON.stringify([...nextDecks, publishedDeck]));
+      setShareCandidate(null);
+      setSelected(null);
+    } catch {
+      setShareCandidate(null);
+    }
   };
-  return <Layout footerText="Your decks, your experiments, your next great game."><main><div className="intro"><div><p className="eyebrow">Your private vault</p><h2>Keep every brew close at hand.</h2><p>Review your saved lists, return to unfinished ideas, and share a deck when it is ready for the table.</p></div></div><section aria-labelledby="saved-title"><h3 id="saved-title">Saved decklists</h3><div className="deck-grid saved-deck-grid">{decks.map((deck) => { const stats = getDeckStats(deck); return <button className="deck" key={deck.id} style={images[deck.cards[0]?.name] ? { backgroundImage: `url('${images[deck.cards[0].name]}')` } : undefined} onClick={() => setSelected(deck)}><h4>{deck.name}</h4><p className="meta">{stats.total} cards · {stats.creatures} creatures · {stats.lands} lands</p></button>; })}<Link className="deck create-deck" to="/builder?fromDecks=1"><span aria-hidden="true">+</span><h4>Create deck</h4><p className="meta">Start with a blank list</p></Link></div></section></main>{selected && <DeckDialog deck={selected} image={images[selected.cards[0]?.name]} onClose={() => setSelected(null)} onShare={share} onDelete={() => { deleteDeck(selected.id); setSelected(null); }} />}</Layout>;
+  return <Layout footerText="Your decks, your experiments, your next great game."><main><div className="intro"><div><p className="eyebrow">Your private vault</p><h2>Keep every brew close at hand.</h2><p>Review your saved lists, return to unfinished ideas, and share a deck when it is ready for the table.</p></div></div><section aria-labelledby="saved-title"><h3 id="saved-title">Saved decklists</h3><div className="deck-grid saved-deck-grid">{decks.map((deck) => { const stats = getDeckStats(deck); return <button className="deck" key={deck.id} style={images[deck.cards[0]?.name] ? { backgroundImage: `url('${images[deck.cards[0].name]}')` } : undefined} onClick={() => setSelected(deck)}><h4>{deck.name}</h4><p className="meta">{stats.total} cards · {stats.creatures} creatures · {stats.lands} lands</p></button>; })}<Link className="deck create-deck" to="/builder?fromDecks=1"><span aria-hidden="true">+</span><h4>Create deck</h4><p className="meta">Start with a blank list</p></Link></div></section></main>{selected && <DeckDialog deck={selected} image={images[selected.cards[0]?.name]} onClose={() => setSelected(null)} onShare={share} onDelete={() => { deleteDeck(selected.id); setSelected(null); }} />}{shareCandidate && <dialog open className="deck-dialog share-confirmation"><p>Are you sure you want to publish this deck?</p><div className="modal-actions"><button className="modal-action" type="button" onClick={publishDeck}>Yes</button><button className="modal-action" type="button" onClick={() => setShareCandidate(null)}>No</button></div></dialog>}</Layout>;
 }

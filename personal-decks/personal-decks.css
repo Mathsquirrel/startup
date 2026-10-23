@@ -858,11 +858,40 @@ dialog h2 {
 	display: none;
 }
 
+.share-confirmation {
+	top: 50%;
+	right: auto;
+	left: 50%;
+	width: min(90vw, 420px);
+	height: auto;
+	max-height: none;
+	margin: 0;
+	padding: 34px;
+	border: 0;
+	border-radius: 6px;
+	text-align: center;
+	transform: translate(-50%, -50%);
+	z-index: 11000;
+}
+
+.share-confirmation[open] {
+	transform: translate(-50%, -50%);
+}
+
+.share-confirmation::backdrop {
+	background: rgba(18, 51, 59, 0.38);
+	z-index: 10999;
+}
+
 @media (max-width: 520px) {
 	dialog {
 	width: 100vw;
 	border-left: 0;
 	border-top: 6px solid var(--teal);
+	}
+
+	.share-confirmation {
+		width: calc(100vw - 36px);
 	}
 }
 
