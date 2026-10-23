@@ -278,14 +278,36 @@ nav.btn-group .btn:hover {
 .login-prompt {
 	width: min(90vw, 420px);
 	padding: 34px;
-	border-radius: 6px;
+	border: 2px solid var(--mint);
+	border-radius: 10px;
 	background: var(--paper);
 	box-shadow: 0 18px 60px rgba(18, 51, 59, 0.35);
+	color: var(--ink);
 	text-align: center;
+}
+
+.login-prompt p {
+	margin: 0 0 24px;
+	color: var(--teal-dark);
+	font-family: 'Fraunces', Georgia, serif;
+	font-size: 1.2rem;
+	font-weight: 700;
+	line-height: 1.35;
 }
 
 .login-prompt button {
 	padding: 10px 24px;
+	border: 0;
+	background: var(--teal);
+	color: var(--cream);
+	font: inherit;
+	font-weight: 700;
+	box-shadow: none;
+	cursor: pointer;
+}
+
+.login-prompt button:hover {
+	background: var(--teal-soft);
 }
 
 main,
