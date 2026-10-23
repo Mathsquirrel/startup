@@ -343,7 +343,7 @@ section {
 	background: transparent;
 }
 
-.builder-page main {
+.builder-main {
 	max-width: none;
 	min-height: 100vh;
 	background-color: var(--cream);
@@ -616,11 +616,12 @@ section h3 {
 .builder-workspace .card-list li {
 	position: relative;
 	width: min(100%, 170px);
-	margin-top: 12px;
+	min-height: 214px;
+	margin-top: -180px;
 	padding: 0;
-	border: 1px solid var(--line);
-	background: var(--cream);
-	box-shadow: 0 3px 8px rgba(18, 51, 59, 0.14);
+	border: 0;
+	background: transparent;
+	box-shadow: none;
 	transition: transform 160ms ease, box-shadow 160ms ease;
 	z-index: auto;
 }
@@ -631,7 +632,9 @@ section h3 {
 
 .builder-workspace .card-list li:hover,
 .builder-workspace .card-list li:focus-within {
-	z-index: auto;
+	z-index: 4;
+	transform: translateY(-4px);
+	box-shadow: 0 8px 18px rgba(18, 51, 59, 0.24);
 }
 
 .builder-workspace .card-summary {
@@ -680,6 +683,11 @@ section h3 {
 	pointer-events: none;
 }
 
+.builder-workspace .card-list li:focus-visible {
+	outline: 3px solid var(--mint-light);
+	outline-offset: 2px;
+}
+
 .deck-editor-heading {
 	display: flex;
 	align-items: end;
@@ -725,15 +733,33 @@ section h3 {
 }
 
 .card-controls {
-	display: grid;
-	grid-template-columns: 1fr auto auto auto;
+	position: absolute;
+	top: 8px;
+	left: calc(100% + 12px);
+	width: 164px;
+	display: none;
+	grid-template-columns: 1fr;
 	align-items: center;
 	gap: 5px;
-	padding-top: 6px;
+	padding: 10px;
+	background: rgba(255, 250, 244, 0.96);
+	box-shadow: 0 2px 8px rgba(18, 51, 59, 0.24);
+	z-index: 2;
 }
 
-.card-controls strong,
-.card-controls span {
+.builder-workspace .card-list li.selected .card-controls {
+	display: grid;
+}
+
+.builder-workspace .card-group-2 .card-controls,
+.builder-workspace .card-group-3 .card-controls,
+.builder-workspace .card-group-5 .card-controls,
+.builder-workspace .card-group-6 .card-controls {
+	right: calc(100% + 12px);
+	left: auto;
+}
+
+.card-controls strong {
 	grid-column: 1 / -1;
 }
 
@@ -775,7 +801,9 @@ section h3 {
 }
 
 .builder-workspace .card-group-2 .card-preview,
-.builder-workspace .card-group-3 .card-preview {
+.builder-workspace .card-group-3 .card-preview,
+.builder-workspace .card-group-5 .card-preview,
+.builder-workspace .card-group-6 .card-preview {
 	right: calc(100% + 18px);
 	left: auto;
 	transform-origin: right center;
@@ -785,6 +813,13 @@ section h3 {
 .builder-workspace .card-group-2 .card-list li:focus-within .card-preview,
 .builder-workspace .card-group-3 .card-list li:hover .card-preview,
 .builder-workspace .card-group-3 .card-list li:focus-within .card-preview {
+	transform: translateY(-50%) scale(1);
+}
+
+.builder-workspace .card-group-5 .card-list li:hover .card-preview,
+.builder-workspace .card-group-5 .card-list li:focus-within .card-preview,
+.builder-workspace .card-group-6 .card-list li:hover .card-preview,
+.builder-workspace .card-group-6 .card-list li:focus-within .card-preview {
 	transform: translateY(-50%) scale(1);
 }
 

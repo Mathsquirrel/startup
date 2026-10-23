@@ -21,6 +21,7 @@ export default function BuilderPage() {
   const [color, setColor] = useState('all');
   const [type, setType] = useState('all');
   const [notice, setNotice] = useState('');
+  const [selectedCard, setSelectedCard] = useState(null);
   const cards = useScryfallCards(cardPool.map((card) => card.name));
 
   useEffect(() => {
@@ -78,9 +79,9 @@ export default function BuilderPage() {
                 const cardData = cards[card.name];
                 const imageUrl = cardData?.image_uris?.normal || cardData?.card_faces?.[0]?.image_uris?.normal;
                 const count = countCards(deck.cards, card.name);
-                return <li key={card.name} className={count ? 'in-deck' : ''}>
-                  {imageUrl && <img className="card-image" src={imageUrl} alt={`${card.name} card image`} loading="lazy" />}
-                  <div className="card-controls"><strong>{card.name}</strong><span>{count} in deck</span><button type="button" onClick={() => updateCount(card.name, -1)} disabled={!count}>−</button><button type="button" onClick={() => updateCount(card.name, 1)}>+</button></div>
+                return <li key={card.name} className={`${count ? 'in-deck' : ''}${selectedCard === card.name ? ' selected' : ''}`} onClick={() => setSelectedCard((current) => current === card.name ? null : card.name)} aria-label={`${card.name}, ${count} in deck`} aria-pressed={selectedCard === card.name} tabIndex="0" onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); setSelectedCard((current) => current === card.name ? null : card.name); } }}>
+                  {imageUrl && <><img className="card-image" src={imageUrl} alt={`${card.name} card image`} loading="lazy" /><img className="card-preview" src={imageUrl} alt="" aria-hidden="true" loading="lazy" /></>}
+                  <div className="card-controls" aria-label={`${card.name} actions`} onClick={(event) => event.stopPropagation()}><strong>{card.name}</strong><span>{count} in deck</span><button type="button" onClick={() => updateCount(card.name, -1)} disabled={!count}>Remove one</button><button type="button" onClick={() => updateCount(card.name, 1)}>Add one</button><button type="button" onClick={() => { updateCount(card.name, -count); setSelectedCard(null); }} disabled={!count}>Remove card</button></div>
                 </li>;
               })}
             </ul></section>;
