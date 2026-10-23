@@ -381,6 +381,48 @@ section {
 	font: inherit;
 }
 
+.card-search-field {
+	position: relative;
+	min-width: 0;
+}
+
+.card-suggestions {
+	position: absolute;
+	top: calc(100% + 4px);
+	right: 0;
+	left: 0;
+	z-index: 4000;
+	margin: 0;
+	padding: 4px;
+	border: 1px solid var(--line);
+	background: var(--paper);
+	box-shadow: 0 8px 18px rgba(18, 51, 59, 0.2);
+	list-style: none;
+}
+
+.card-suggestions button {
+	display: block;
+	width: 100%;
+	padding: 7px 9px;
+	border: 0;
+	background: transparent;
+	color: var(--teal-dark);
+	font: inherit;
+	text-align: left;
+	cursor: pointer;
+}
+
+.card-suggestions button:hover,
+.card-suggestions button:focus-visible {
+	background: var(--mint-light);
+}
+
+.suggestions-status {
+	padding: 7px 9px;
+	color: var(--muted);
+	font-size: 0.85rem;
+}
+
 .builder-toolbar select {
 	overflow: hidden;
 	text-overflow: ellipsis;

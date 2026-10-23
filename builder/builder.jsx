@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import './builder.css';
 import { Layout } from '../src/components/SiteLayout.jsx';
 import useScryfallCards from '../src/hooks/useScryfallCards.js';
+import useScryfallSearch from '../src/hooks/useScryfallSearch.js';
 import { cardPool, getDeckStats, useDecks } from '../src/context/DeckContext.jsx';
 
 function countCards(cards, name) {
@@ -23,7 +24,9 @@ export default function BuilderPage() {
   const [notice, setNotice] = useState('');
   const [selectedCard, setSelectedCard] = useState(null);
   const [menuPlacement, setMenuPlacement] = useState('same');
-  const cards = useScryfallCards(cardPool.map((card) => card.name));
+  const [availableCards, setAvailableCards] = useState(cardPool);
+  const { suggestions, loading: suggestionsLoading } = useScryfallSearch(search);
+  const cards = useScryfallCards(availableCards.map((card) => card.name));
 
   useEffect(() => {
     if (!params.has('fromDecks')) navigate('/personal-decks', { replace: true });
@@ -37,17 +40,44 @@ export default function BuilderPage() {
     return () => document.removeEventListener('pointerdown', closeMenu);
   }, []);
 
-  const filtered = useMemo(() => cardPool
+  const filtered = useMemo(() => availableCards
     .filter((card) => card.name.toLowerCase().includes(search.toLowerCase()))
     .filter((card) => color === 'all' || card.color === color)
     .filter((card) => type === 'all' || card.type === type)
-    .sort((first, second) => mana === 'high' ? second.mana - first.mana : mana === 'low' ? first.mana - second.mana : 0), [search, color, type, mana]);
+    .sort((first, second) => mana === 'high' ? second.mana - first.mana : mana === 'low' ? first.mana - second.mana : 0), [availableCards, search, color, type, mana]);
 
   const updateCount = (name, change) => setDeck((current) => {
     const cards = current.cards.map((card) => card.name === name ? { ...card, count: card.count + change } : card).filter((card) => card.count > 0);
     if (change > 0 && !current.cards.some((card) => card.name === name)) cards.push({ name, count: 1 });
     return { ...current, cards };
   });
+
+  const addScryfallCard = async (name) => {
+    try {
+      const response = await fetch(`https://api.scryfall.com/cards/named?exact=${encodeURIComponent(name)}`);
+      if (!response.ok) throw new Error(`Scryfall card lookup returned ${response.status}`);
+      const result = await response.json();
+      const typeLine = result.type_line || '';
+      const type = typeLine.includes('Land') ? 'land'
+        : typeLine.includes('Creature') ? 'creature'
+          : typeLine.includes('Instant') ? 'instant'
+            : typeLine.includes('Sorcery') ? 'sorcery'
+              : typeLine.includes('Artifact') ? 'artifact'
+                : typeLine.includes('Enchantment') ? 'enchantment' : 'instant';
+      const card = {
+        name: result.name,
+        mana: result.cmc || 0,
+        color: result.colors?.[0]?.toLowerCase() || 'colorless',
+        type,
+      };
+      setAvailableCards((current) => current.some((item) => item.name === card.name) ? current : [...current, card]);
+      updateCount(card.name, 1);
+      setSearch('');
+      setNotice(`${card.name} added to the deck.`);
+    } catch {
+      setNotice(`Unable to load ${name} from Scryfall.`);
+    }
+  };
 
   const save = (event) => {
     event.preventDefault();
@@ -85,7 +115,13 @@ export default function BuilderPage() {
     <main className="builder-main">
       <form className="builder-toolbar" role="search" onSubmit={(event) => event.preventDefault()}>
         <label htmlFor="card-search">Search cards</label>
-        <input id="card-search" type="search" placeholder="Search by card name" value={search} onChange={(event) => setSearch(event.target.value)} />
+        <div className="card-search-field">
+          <input id="card-search" type="search" placeholder="Search by card name" value={search} onChange={(event) => setSearch(event.target.value)} />
+          {(suggestions.length > 0 || suggestionsLoading) && <ul className="card-suggestions" aria-label="Card suggestions">
+            {suggestionsLoading && <li className="suggestions-status">Searching Scryfall...</li>}
+            {suggestions.map((suggestion) => <li key={suggestion}><button type="button" onClick={() => addScryfallCard(suggestion)}>{suggestion}</button></li>)}
+          </ul>}
+        </div>
         <label htmlFor="sort-mana">Mana value</label>
         <select id="sort-mana" value={mana} onChange={(event) => setMana(event.target.value)}><option value="none">Any</option><option value="low">Low to high</option><option value="high">High to low</option></select>
         <label htmlFor="sort-color">Color</label>
@@ -124,7 +160,7 @@ export default function BuilderPage() {
             </ul></section>;
           })}
         </div>
-        <p className="status" aria-live="polite">{notice || `${stats.creatures} creatures · ${stats.spells} spells · ${stats.lands} lands${Object.keys(cards).length === cardPool.length ? ' · Card images loaded.' : ' · Loading card images...'}`}</p>
+        <p className="status" aria-live="polite">{notice || `${stats.creatures} creatures · ${stats.spells} spells · ${stats.lands} lands${Object.keys(cards).length === availableCards.length ? ' · Card images loaded.' : ' · Loading card images...'}`}</p>
       </section>
     </main>
   </Layout>;
