@@ -3,6 +3,11 @@ import { NavLink, useLocation } from 'react-router-dom';
 import poisonDartLogo from '../../images/poisonDart.png';
 
 const imageUrl = (name) => `/images/${name}`;
+const exampleFriends = [
+  { name: 'MiraVex', status: 'online' },
+  { name: 'RootAndRuin', status: 'offline' },
+  { name: 'NikoPrime', status: 'online' },
+];
 
 export function Header({ builder = false }) {
   const [collapsed, setCollapsed] = useState(false);
@@ -29,7 +34,7 @@ export function Header({ builder = false }) {
           <button type="submit">Log In/Create</button>
         </form>}
       </div>
-      <section className="friend-list" aria-labelledby="friends-title"><h2 id="friends-title">Friends</h2><ul /><p className="friend-login-note">No Friends Have Been Added Yet</p></section>
+      <section className="friend-list" aria-labelledby="friends-title"><h2 id="friends-title">Friends</h2>{loggedIn ? <ul>{exampleFriends.map((friend) => <li key={friend.name}><span className={`status-dot ${friend.status}`} aria-label={friend.status} />{friend.name}</li>)}</ul> : <><ul /><p className="friend-login-note">No Friends Have Been Added Yet</p></>}</section>
       <nav className="btn-group" aria-label="Primary navigation">
         <NavLink className="btn btn-primary" to="/">Home</NavLink>
         <NavLink className="btn btn-primary" to="/public-decks">Public Decks</NavLink>
