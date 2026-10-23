@@ -6,8 +6,9 @@ const imageUrl = (name) => `/images/${name}`;
 
 export function Header({ builder = false }) {
   const [collapsed, setCollapsed] = useState(false);
-  const [loggedIn, setLoggedIn] = useState(false);
-  const [username, setUsername] = useState('');
+  const [username, setUsername] = useState(() => localStorage.getItem('pdf-username') || '');
+  const [loggedIn, setLoggedIn] = useState(() => Boolean(localStorage.getItem('pdf-username')));
+  const [password, setPassword] = useState('');
   const location = useLocation();
 
   useEffect(() => {
@@ -20,13 +21,13 @@ export function Header({ builder = false }) {
       <div className="brand">
         <img className="brand-logo" src={poisonDartLogo} alt="Poison dart frog logo" />
         <h1>PDF DECKS</h1>
-        <form className="login-form" onSubmit={(event) => { event.preventDefault(); setLoggedIn(true); }}>
+        {loggedIn ? <div className="login-form"><strong>Welcome {username}</strong><button type="button" onClick={() => { localStorage.removeItem('pdf-username'); setLoggedIn(false); setUsername(''); setPassword(''); }}>Log Out</button></div> : <form className="login-form" onSubmit={(event) => { event.preventDefault(); if (username.trim() && password) { localStorage.setItem('pdf-username', username.trim()); setUsername(username.trim()); setLoggedIn(true); } }}>
           <label htmlFor={`${builder ? 'builder' : location.pathname.slice(1) || 'index'}-username`}>Username</label>
-          <input id={`${builder ? 'builder' : location.pathname.slice(1) || 'index'}-username`} name="username" type="text" placeholder="Username" autoComplete="username" value={username} onChange={(event) => setUsername(event.target.value)} disabled={loggedIn} />
+          <input id={`${builder ? 'builder' : location.pathname.slice(1) || 'index'}-username`} name="username" type="text" placeholder="Username" autoComplete="username" value={username} onChange={(event) => setUsername(event.target.value)} />
           <label htmlFor={`${builder ? 'builder' : location.pathname.slice(1) || 'index'}-password`}>Password</label>
-          <input id={`${builder ? 'builder' : location.pathname.slice(1) || 'index'}-password`} name="password" type="password" placeholder="Password" autoComplete="current-password" disabled={loggedIn} />
-          <button type={loggedIn ? 'button' : 'submit'} onClick={loggedIn ? () => setLoggedIn(false) : undefined}>{loggedIn ? `Log out ${username || 'guest'}` : 'Log in'}</button>
-        </form>
+          <input id={`${builder ? 'builder' : location.pathname.slice(1) || 'index'}-password`} name="password" type="password" placeholder="Password" autoComplete="current-password" value={password} onChange={(event) => setPassword(event.target.value)} />
+          <button type="submit">Log In/Create</button>
+        </form>}
       </div>
       <section className="friend-list" aria-labelledby="friends-title"><h2 id="friends-title">Friends</h2><ul /><p className="friend-login-note">No Friends Have Been Added Yet</p></section>
       <nav className="btn-group" aria-label="Primary navigation">
