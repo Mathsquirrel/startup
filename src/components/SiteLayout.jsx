@@ -9,6 +9,13 @@ const exampleFriends = [
   { name: 'NikoPrime', status: 'online' },
 ];
 
+export function handlePersonalDecksClick(event) {
+  if (!localStorage.getItem('pdf-username')) {
+    event.preventDefault();
+    window.dispatchEvent(new Event('open-login-prompt'));
+  }
+}
+
 export function Header({ builder = false }) {
   const [collapsed, setCollapsed] = useState(false);
   const [username, setUsername] = useState(() => localStorage.getItem('pdf-username') || '');
@@ -30,6 +37,12 @@ export function Header({ builder = false }) {
       document.body.style.overflow = originalOverflow;
     };
   }, [loginPromptOpen]);
+
+  useEffect(() => {
+    const openPrompt = () => setLoginPromptOpen(true);
+    window.addEventListener('open-login-prompt', openPrompt);
+    return () => window.removeEventListener('open-login-prompt', openPrompt);
+  }, []);
 
   return <header className={builder ? `collapsible-sidebar${collapsed ? ' nav-collapsed' : ''}` : ''}>
     <div className="header-inner">
