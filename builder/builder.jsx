@@ -74,7 +74,7 @@ export default function BuilderPage() {
           {['creature', 'instant', 'sorcery', 'artifact', 'enchantment', 'land'].map((group, groupIndex) => {
             const groupCards = filtered.filter((card) => card.type === group);
             if (!groupCards.length) return null;
-            return <section className={`card-group card-group-${groupIndex + 1}`} key={group}><h4>{group}</h4><ul className="card-list">
+            return <section className={`card-group card-group-${groupIndex + 1}`} key={group}><h4>{group[0].toUpperCase() + group.slice(1)}</h4><ul className="card-list">
               {groupCards.map((card) => {
                 const cardData = cards[card.name];
                 const imageUrl = cardData?.image_uris?.normal || cardData?.card_faces?.[0]?.image_uris?.normal;
