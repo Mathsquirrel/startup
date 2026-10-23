@@ -20,16 +20,14 @@ export default function PersonalDecksPage() {
   useEffect(() => {
     if (!shareCandidate) return undefined;
     const originalOverflow = document.body.style.overflow;
-    const originalPaddingRight = document.body.style.paddingRight;
-    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
     document.body.style.overflow = 'hidden';
-    if (scrollbarWidth > 0) document.body.style.paddingRight = `calc(${originalPaddingRight || '0px'} + ${scrollbarWidth}px)`;
     return () => {
       document.body.style.overflow = originalOverflow;
-      document.body.style.paddingRight = originalPaddingRight;
     };
   }, [shareCandidate]);
-  const share = () => setShareCandidate(selected);
+  const share = () => {
+    setShareCandidate(selected);
+  };
   const publishDeck = () => {
     const username = localStorage.getItem('pdf-username') || 'guest';
     const publishedDeck = {
@@ -50,5 +48,5 @@ export default function PersonalDecksPage() {
       setShareCandidate(null);
     }
   };
-  return <Layout footerText="Your decks, your experiments, your next great game."><main><div className="intro"><div><p className="eyebrow">Your private vault</p><h2>Keep every brew close at hand.</h2><p>Review your saved lists, return to unfinished ideas, and share a deck when it is ready for the table.</p></div></div><section aria-labelledby="saved-title"><h3 id="saved-title">Saved decklists</h3><div className="deck-grid saved-deck-grid">{decks.map((deck) => { const stats = getDeckStats(deck); return <button className="deck" key={deck.id} style={images[deck.cards[0]?.name] ? { backgroundImage: `url('${images[deck.cards[0].name]}')` } : undefined} onClick={() => setSelected(deck)}><h4>{deck.name}</h4><p className="meta">{stats.total} cards · {stats.creatures} creatures · {stats.lands} lands</p></button>; })}<Link className="deck create-deck" to="/builder?fromDecks=1"><span aria-hidden="true">+</span><h4>Create deck</h4><p className="meta">Start with a blank list</p></Link></div></section></main>{selected && <DeckDialog deck={selected} image={images[selected.cards[0]?.name]} onClose={() => setSelected(null)} onShare={share} onDelete={() => { deleteDeck(selected.id); setSelected(null); }} />}{shareCandidate && <dialog open className="deck-dialog share-confirmation"><p>Are you sure you want to publish this deck?</p><div className="modal-actions"><button className="modal-action" type="button" onClick={publishDeck}>Yes</button><button className="modal-action" type="button" onClick={() => setShareCandidate(null)}>No</button></div></dialog>}</Layout>;
+  return <Layout footerText="Your decks, your experiments, your next great game."><main><div className="intro"><div><p className="eyebrow">Your private vault</p><h2>Keep every brew close at hand.</h2><p>Review your saved lists, return to unfinished ideas, and share a deck when it is ready for the table.</p></div></div><section aria-labelledby="saved-title"><h3 id="saved-title">Saved decklists</h3><div className="deck-grid saved-deck-grid">{decks.map((deck) => { const stats = getDeckStats(deck); return <button className="deck" key={deck.id} style={images[deck.cards[0]?.name] ? { backgroundImage: `url('${images[deck.cards[0].name]}')` } : undefined} onClick={() => setSelected(deck)}><h4>{deck.name}</h4><p className="meta">{stats.total} cards · {stats.creatures} creatures · {stats.lands} lands</p></button>; })}<Link className="deck create-deck" to="/builder?fromDecks=1"><span aria-hidden="true">+</span><h4>Create deck</h4><p className="meta">Start with a blank list</p></Link></div></section></main>{selected && <DeckDialog deck={selected} image={images[selected.cards[0]?.name]} onClose={() => setSelected(null)} onShare={share} onDelete={() => { deleteDeck(selected.id); setSelected(null); }} />}{shareCandidate && <div className="share-confirmation-overlay" role="dialog" aria-modal="true" aria-labelledby="share-confirmation-title"><div className="share-confirmation"><p id="share-confirmation-title">Are you sure you want to publish this deck?</p><div className="modal-actions"><button className="modal-action" type="button" onClick={publishDeck}>Yes</button><button className="modal-action" type="button" onClick={() => setShareCandidate(null)}>No</button></div></div></div>}</Layout>;
 }

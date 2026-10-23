@@ -19,6 +19,7 @@
 
 html {
 	min-width: 320px;
+	scrollbar-gutter: stable;
 }
 
 body {
@@ -858,10 +859,17 @@ dialog h2 {
 	display: none;
 }
 
+.share-confirmation-overlay {
+	position: fixed;
+	inset: 0;
+	display: grid;
+	place-items: center;
+	background: rgba(18, 51, 59, 0.38);
+	z-index: 11000;
+}
+
 .share-confirmation {
 	top: 50%;
-	right: auto;
-	left: 50%;
 	width: min(90vw, 420px);
 	height: auto;
 	max-height: none;
@@ -869,18 +877,9 @@ dialog h2 {
 	padding: 34px;
 	border: 0;
 	border-radius: 6px;
+	background: var(--paper);
+	box-shadow: 0 18px 60px rgba(18, 51, 59, 0.35);
 	text-align: center;
-	transform: translate(-50%, -50%);
-	z-index: 11000;
-}
-
-.share-confirmation[open] {
-	transform: translate(-50%, -50%);
-}
-
-.share-confirmation::backdrop {
-	background: rgba(18, 51, 59, 0.38);
-	z-index: 10999;
 }
 
 @media (max-width: 520px) {
