@@ -85,7 +85,7 @@ header {
 .login-form input {
 	width: 100%;
 	padding: 8px 10px;
-	border: 1px solid rgba(247, 240, 232, 0.28);
+	border: 1px solid rgba(247, 240, 232, 0.65);
 	border-radius: 3px;
 	background: rgba(255, 250, 244, 0.28);
 	color: var(--burgundy-dark);
@@ -350,6 +350,44 @@ main > section:first-child a:hover {
 
 .login-prompt button:hover {
 	background: var(--teal-soft);
+}
+
+.registration-prompt {
+	text-align: left;
+}
+
+.registration-prompt h2 {
+	margin: 0 0 24px;
+	color: var(--teal-dark);
+	font-family: 'Fraunces', Georgia, serif;
+	text-align: center;
+}
+
+.registration-field {
+	display: grid;
+	grid-template-columns: 90px minmax(0, 1fr);
+	align-items: center;
+	gap: 12px;
+	margin-bottom: 14px;
+}
+
+.registration-field label {
+	font-weight: 700;
+}
+
+.registration-field input {
+	width: 100%;
+	padding: 8px 10px;
+	border: 1px solid var(--burgundy-soft);
+	border-radius: 3px;
+	background: var(--paper);
+	color: var(--ink);
+	font: inherit;
+}
+
+.registration-prompt > button[type='submit'] {
+	display: block;
+	margin: 8px auto 0;
 }
 
 .friend-login-note {

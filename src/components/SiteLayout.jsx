@@ -22,8 +22,8 @@ export function Header({ builder = false }) {
   const [username, setUsername] = useState(() => localStorage.getItem('pdf-username') || '');
   const [loggedIn, setLoggedIn] = useState(() => Boolean(localStorage.getItem('pdf-username')));
   const [password, setPassword] = useState('');
-  const [authMode, setAuthMode] = useState('login');
   const [authError, setAuthError] = useState('');
+  const [registerPromptOpen, setRegisterPromptOpen] = useState(false);
   const [loginPromptOpen, setLoginPromptOpen] = useState(false);
   const location = useLocation();
 
@@ -60,20 +60,34 @@ export function Header({ builder = false }) {
     return undefined;
   }, []);
 
+  const completeLogin = (result) => {
+    setAuthToken(result.token);
+    localStorage.setItem('pdf-username', result.username);
+    setUsername(result.username);
+    setPassword('');
+    setLoggedIn(true);
+    window.dispatchEvent(new Event('auth-changed'));
+  };
+
   const submitAuth = async (event) => {
     event.preventDefault();
     setAuthError('');
     try {
-      if (authMode === 'register') {
-        await authRequest('/auth/register', { username, password });
-      }
       const result = await authRequest('/auth/login', { username, password });
-      setAuthToken(result.token);
-      localStorage.setItem('pdf-username', result.username);
-      setUsername(result.username);
-      setPassword('');
-      setLoggedIn(true);
-      window.dispatchEvent(new Event('auth-changed'));
+      completeLogin(result);
+    } catch (error) {
+      setAuthError(error.message);
+    }
+  };
+
+  const submitRegistration = async (event) => {
+    event.preventDefault();
+    setAuthError('');
+    try {
+      await authRequest('/auth/register', { username, password });
+      const result = await authRequest('/auth/login', { username, password });
+      completeLogin(result);
+      setRegisterPromptOpen(false);
     } catch (error) {
       setAuthError(error.message);
     }
@@ -113,8 +127,8 @@ export function Header({ builder = false }) {
           <input id={`${builder ? 'builder' : location.pathname.slice(1) || 'index'}-username`} name="username" type="text" placeholder="Username" autoComplete="username" value={username} onChange={(event) => setUsername(event.target.value)} />
           <label htmlFor={`${builder ? 'builder' : location.pathname.slice(1) || 'index'}-password`}>Password</label>
           <input id={`${builder ? 'builder' : location.pathname.slice(1) || 'index'}-password`} name="password" type="password" placeholder="Password" autoComplete="current-password" value={password} onChange={(event) => setPassword(event.target.value)} />
-          <button type="submit">{authMode === 'login' ? 'Log In' : 'Create Account'}</button>
-          <button type="button" onClick={() => { setAuthMode((mode) => mode === 'login' ? 'register' : 'login'); setAuthError(''); }}>{authMode === 'login' ? 'Need an account?' : 'Have an account?'}</button>
+          <button type="submit">Log In</button>
+          <button type="button" onClick={() => { setRegisterPromptOpen(true); setAuthError(''); }}>Need an account?</button>
           {authError && <p role="alert">{authError}</p>}
         </form>}
       </div>
@@ -127,6 +141,7 @@ export function Header({ builder = false }) {
       {builder && <button className="nav-toggle" type="button" aria-expanded={!collapsed} aria-label={collapsed ? 'Open navigation' : 'Close navigation'} onClick={() => setCollapsed((value) => !value)} />}
     </div>
     {loginPromptOpen && <div className="login-prompt-overlay" role="dialog" aria-modal="true" aria-labelledby="login-prompt-title"><div className="login-prompt"><p id="login-prompt-title">Please log in or create an account to save personal decks!</p><button type="button" onClick={() => setLoginPromptOpen(false)}>Ok</button></div></div>}
+    {registerPromptOpen && <div className="login-prompt-overlay" role="dialog" aria-modal="true" aria-labelledby="register-title"><form className="login-prompt registration-prompt" onSubmit={submitRegistration}><button className="modal-close" type="button" aria-label="Close registration" onClick={() => setRegisterPromptOpen(false)}>×</button><h2 id="register-title">Create an account</h2><div className="registration-field"><label htmlFor="register-username">Username</label><input id="register-username" type="text" autoComplete="username" value={username} onChange={(event) => setUsername(event.target.value)} required /></div><div className="registration-field"><label htmlFor="register-password">Password</label><input id="register-password" type="password" autoComplete="new-password" value={password} onChange={(event) => setPassword(event.target.value)} required /></div><button type="submit">Register</button>{authError && <p role="alert">{authError}</p>}</form></div>}
   </header>;
 }
 
