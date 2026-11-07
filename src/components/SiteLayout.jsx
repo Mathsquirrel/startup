@@ -20,7 +20,7 @@ export function handlePersonalDecksClick(event) {
 export function Header({ builder = false }) {
   const [collapsed, setCollapsed] = useState(false);
   const [username, setUsername] = useState(() => localStorage.getItem('pdf-username') || '');
-  const [loggedIn, setLoggedIn] = useState(() => Boolean(localStorage.getItem('pdf-username')));
+  const [loggedIn, setLoggedIn] = useState(() => Boolean(getAuthToken()));
   const [password, setPassword] = useState('');
   const [authError, setAuthError] = useState('');
   const [registerPromptOpen, setRegisterPromptOpen] = useState(false);
