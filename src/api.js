@@ -29,6 +29,13 @@ export async function getCurrentUser(token) {
   return response.json();
 }
 
+export async function getFriends(token) {
+  const response = await fetch('/api/friends', { headers: { Authorization: `Bearer ${token}` } });
+  const result = await response.json();
+  if (!response.ok) throw new Error(result?.error || 'Unable to load friends.');
+  return result.friends;
+}
+
 export function setAuthToken(token) {
   if (token) localStorage.setItem(tokenKey, token);
   else localStorage.removeItem(tokenKey);

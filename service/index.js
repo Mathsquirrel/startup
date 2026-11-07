@@ -6,6 +6,7 @@ const app = express();
 const port = process.argv.length > 2 ? process.argv[2] : 4000;
 const users = new Map();
 const sessions = new Map();
+const friends = new Map();
 
 app.use(express.json());
 
@@ -38,6 +39,7 @@ app.post('/api/auth/register', async (request, response) => {
   }
   const passwordHash = await bcrypt.hash(password, 10);
   users.set(username.toLowerCase(), { username, passwordHash });
+  friends.set(username.toLowerCase(), new Set());
   response.status(201).json({ message: 'Account created.' });
 });
 
@@ -65,6 +67,32 @@ app.get('/api/me', requireAuth, (request, response) => {
 
 app.get('/api/decks', requireAuth, (request, response) => {
   response.json({ username: request.username, decks: [] });
+});
+
+app.get('/api/friends', requireAuth, (request, response) => {
+  const userFriends = friends.get(request.username.toLowerCase()) || new Set();
+  response.json({ friends: [...userFriends].map((username) => ({ name: username, status: 'online' })) });
+});
+
+app.post('/api/friends', requireAuth, (request, response) => {
+  const friendName = typeof request.body.username === 'string' ? request.body.username.trim() : '';
+  const friend = users.get(friendName.toLowerCase());
+  if (!friend) {
+    response.status(404).json({ error: 'That player does not exist.' });
+    return;
+  }
+  if (friend.username.toLowerCase() === request.username.toLowerCase()) {
+    response.status(400).json({ error: 'You cannot add yourself as a friend.' });
+    return;
+  }
+  const userFriends = friends.get(request.username.toLowerCase()) || new Set();
+  if (userFriends.has(friend.username)) {
+    response.status(409).json({ error: 'That player is already your friend.' });
+    return;
+  }
+  userFriends.add(friend.username);
+  friends.set(request.username.toLowerCase(), userFriends);
+  response.status(201).json({ name: friend.username, status: 'online' });
 });
 
 app.use(express.static('public'));
