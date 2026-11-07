@@ -47,7 +47,7 @@ export default function PublicDecksPage() {
       return defaults;
     }
   });
-  const publishedDeckRows = publishedDecks.map((deck) => [deck.name, deck.author, deck.date, new Date(deck.date).toLocaleDateString(), '0 views', deck.cards[0]?.name, deck.cards]);
+  const publishedDeckRows = publishedDecks.map((deck) => [deck.name, deck.author, deck.date, new Date(deck.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }), '0 views', deck.cards[0]?.name, deck.cards]);
   const allPublicDecks = [...publicDecks, ...publishedDeckRows];
   const images = useScryfallImages(allPublicDecks.map((deck) => ({ cardName: deck[5] })));
   const visibleDecks = allPublicDecks.filter((deck) => deck.join(' ').toLowerCase().includes(query.toLowerCase()));
