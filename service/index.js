@@ -10,6 +10,27 @@ const friends = new Map();
 
 app.use(express.json());
 
+function validateUsername(value) {
+  return typeof value === 'string' && /^[A-Za-z0-9_]{3,24}$/.test(value.trim());
+}
+
+function validatePassword(value) {
+  return typeof value === 'string' && value.length >= 8 && value.length <= 128;
+}
+
+function validateDeck(value) {
+  if (!value || typeof value !== 'object' || typeof value.name !== 'string' || value.name.trim().length < 1 || value.name.trim().length > 80) {
+    return 'Deck name must be between 1 and 80 characters.';
+  }
+  if (!Array.isArray(value.cards) || value.cards.length > 500) {
+    return 'A deck must contain a valid card list.';
+  }
+  if (value.cards.some((card) => !card || typeof card.name !== 'string' || card.name.trim().length < 1 || card.name.trim().length > 120 || !Number.isInteger(card.count) || card.count < 1 || card.count > 99)) {
+    return 'Each card must have a name and an integer count from 1 to 99.';
+  }
+  return null;
+}
+
 async function proxyScryfall(path, response) {
   try {
     const scryfallResponse = await fetch(`https://api.scryfall.com${path}`, {
@@ -60,8 +81,12 @@ function requireAuth(request, response, next) {
 app.post('/api/auth/register', async (request, response) => {
   const username = typeof request.body.username === 'string' ? request.body.username.trim() : '';
   const password = typeof request.body.password === 'string' ? request.body.password : '';
-  if (username.length < 3 || password.length < 8) {
-    response.status(400).json({ error: 'Username must be at least 3 characters and password at least 8 characters.' });
+  if (!validateUsername(username)) {
+    response.status(400).json({ error: 'Username must be 3-24 characters using only letters, numbers, or underscores.' });
+    return;
+  }
+  if (!validatePassword(password)) {
+    response.status(400).json({ error: 'Password must be between 8 and 128 characters.' });
     return;
   }
   if (users.has(username.toLowerCase())) {
@@ -77,6 +102,10 @@ app.post('/api/auth/register', async (request, response) => {
 app.post('/api/auth/login', async (request, response) => {
   const username = typeof request.body.username === 'string' ? request.body.username.trim() : '';
   const password = typeof request.body.password === 'string' ? request.body.password : '';
+  if (!validateUsername(username) || !validatePassword(password)) {
+    response.status(400).json({ error: 'Enter a valid username and password.' });
+    return;
+  }
   const user = users.get(username.toLowerCase());
   if (!user || !(await bcrypt.compare(password, user.passwordHash))) {
     response.status(401).json({ error: 'Invalid username or password.' });
@@ -100,6 +129,16 @@ app.get('/api/decks', requireAuth, (request, response) => {
   response.json({ username: request.username, decks: [] });
 });
 
+app.post('/api/decks/validate', requireAuth, (request, response) => {
+  const validationError = validateDeck(request.body);
+  if (validationError) {
+    response.status(400).json({ error: validationError });
+    return;
+  }
+  const totalCards = request.body.cards.reduce((total, card) => total + card.count, 0);
+  response.json({ valid: true, totalCards });
+});
+
 app.get('/api/friends', requireAuth, (request, response) => {
   const userFriends = friends.get(request.username.toLowerCase()) || new Set();
   response.json({ friends: [...userFriends].map((username) => ({ name: username, status: 'online' })) });
@@ -107,6 +146,10 @@ app.get('/api/friends', requireAuth, (request, response) => {
 
 app.post('/api/friends', requireAuth, (request, response) => {
   const friendName = typeof request.body.username === 'string' ? request.body.username.trim() : '';
+  if (!validateUsername(friendName)) {
+    response.status(400).json({ error: 'Friend usernames must be 3-24 characters using only letters, numbers, or underscores.' });
+    return;
+  }
   const friend = users.get(friendName.toLowerCase());
   if (!friend) {
     response.status(404).json({ error: 'That player does not exist.' });

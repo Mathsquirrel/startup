@@ -4,7 +4,7 @@ import './builder.css';
 import { Layout } from '../src/components/SiteLayout.jsx';
 import useScryfallCards from '../src/hooks/useScryfallCards.js';
 import useScryfallSearch from '../src/hooks/useScryfallSearch.js';
-import { getAuthToken } from '../src/api.js';
+import { getAuthToken, validateDeck } from '../src/api.js';
 import { cardPool, getDeckStats, useDecks } from '../src/context/DeckContext.jsx';
 
 function countCards(cards, name) {
@@ -82,14 +82,20 @@ export default function BuilderPage() {
     }
   };
 
-  const save = (event) => {
+  const save = async (event) => {
     event.preventDefault();
-    if (!getAuthToken()) {
+    const token = getAuthToken();
+    if (!token) {
       window.dispatchEvent(new Event('open-login-prompt'));
       return;
     }
-    saveDeck(deck);
-    navigate('/personal-decks');
+    try {
+      await validateDeck(deck, token);
+      saveDeck(deck);
+      navigate('/personal-decks');
+    } catch (error) {
+      setNotice(error.message);
+    }
   };
 
   const selectCard = (cardKey, groupIndex, element) => {
@@ -149,6 +155,7 @@ export default function BuilderPage() {
           <button type="submit">Save Deck</button>
           <button type="button" onClick={() => setDeck((current) => ({ ...current, cards: [] }))}>Clear cards</button>
         </form>
+        {notice && <p className="status" role="alert">{notice}</p>}
         <h3 id="deck-editor-title">Choose cards for {deck.name}</h3>
         <div className="card-groups">
           {['creature', 'instant', 'sorcery', 'artifact', 'enchantment', 'land'].map((group, groupIndex) => {

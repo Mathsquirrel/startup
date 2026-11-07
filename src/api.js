@@ -36,6 +36,10 @@ export async function getFriends(token) {
   return result.friends;
 }
 
+export async function validateDeck(deck, token) {
+  return authRequest('/decks/validate', deck, token);
+}
+
 export function setAuthToken(token) {
   if (token) localStorage.setItem(tokenKey, token);
   else localStorage.removeItem(tokenKey);
