@@ -4,6 +4,7 @@ import './builder.css';
 import { Layout } from '../src/components/SiteLayout.jsx';
 import useScryfallCards from '../src/hooks/useScryfallCards.js';
 import useScryfallSearch from '../src/hooks/useScryfallSearch.js';
+import { getAuthToken } from '../src/api.js';
 import { cardPool, getDeckStats, useDecks } from '../src/context/DeckContext.jsx';
 
 function countCards(cards, name) {
@@ -83,6 +84,10 @@ export default function BuilderPage() {
 
   const save = (event) => {
     event.preventDefault();
+    if (!getAuthToken()) {
+      window.dispatchEvent(new Event('open-login-prompt'));
+      return;
+    }
     saveDeck(deck);
     navigate('/personal-decks');
   };

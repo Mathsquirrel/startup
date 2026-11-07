@@ -10,7 +10,15 @@ export async function authRequest(path, body, token = null) {
     headers: { 'Content-Type': 'application/json', ...(token ? { Authorization: `Bearer ${token}` } : {}) },
     body: JSON.stringify(body),
   });
-  const result = response.status === 204 ? null : await response.json();
+  const text = response.status === 204 ? '' : await response.text();
+  let result = null;
+  if (text) {
+    try {
+      result = JSON.parse(text);
+    } catch {
+      throw new Error('The service returned an invalid response. Is the backend running on port 4000?');
+    }
+  }
   if (!response.ok) throw new Error(result?.error || 'The service request failed.');
   return result;
 }
