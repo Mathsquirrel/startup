@@ -10,6 +10,37 @@ const friends = new Map();
 
 app.use(express.json());
 
+async function proxyScryfall(path, response) {
+  try {
+    const scryfallResponse = await fetch(`https://api.scryfall.com${path}`, {
+      headers: { Accept: 'application/json', 'User-Agent': 'PDFDecks/1.0' },
+    });
+    const body = await scryfallResponse.text();
+    response.status(scryfallResponse.status);
+    response.type('application/json').send(body);
+  } catch {
+    response.status(502).json({ error: 'Scryfall is currently unavailable.' });
+  }
+}
+
+app.get('/api/cards/search', (request, response) => {
+  const query = typeof request.query.q === 'string' ? request.query.q.trim() : '';
+  if (query.length < 2) {
+    response.status(400).json({ error: 'A search query of at least two characters is required.' });
+    return;
+  }
+  proxyScryfall(`/cards/autocomplete?q=${encodeURIComponent(query)}`, response);
+});
+
+app.get('/api/cards/named', (request, response) => {
+  const name = typeof request.query.exact === 'string' ? request.query.exact.trim() : '';
+  if (!name) {
+    response.status(400).json({ error: 'A card name is required.' });
+    return;
+  }
+  proxyScryfall(`/cards/named?exact=${encodeURIComponent(name)}`, response);
+});
+
 function getToken(request) {
   const authorization = request.get('authorization') || '';
   return authorization.startsWith('Bearer ') ? authorization.slice(7) : null;

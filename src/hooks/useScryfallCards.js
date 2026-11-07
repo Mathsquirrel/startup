@@ -8,7 +8,7 @@ export default function useScryfallCards(names) {
     let active = true;
     Promise.all(names.map(async (name) => {
       try {
-        const response = await fetch(`https://api.scryfall.com/cards/named?exact=${encodeURIComponent(name)}`);
+        const response = await fetch(`/api/cards/named?exact=${encodeURIComponent(name)}`);
         if (!response.ok) return null;
         return await response.json();
       } catch { return null; }

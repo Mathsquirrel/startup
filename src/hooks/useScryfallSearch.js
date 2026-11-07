@@ -15,7 +15,7 @@ export default function useScryfallSearch(query) {
     const timer = setTimeout(async () => {
       setLoading(true);
       try {
-        const response = await fetch(`https://api.scryfall.com/cards/autocomplete?q=${encodeURIComponent(trimmedQuery)}`);
+        const response = await fetch(`/api/cards/search?q=${encodeURIComponent(trimmedQuery)}`);
         if (!response.ok) throw new Error(`Scryfall autocomplete returned ${response.status}`);
         const result = await response.json();
         if (active) setSuggestions(result.data || []);

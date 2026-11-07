@@ -57,7 +57,7 @@ export default function BuilderPage() {
 
   const addScryfallCard = async (name) => {
     try {
-      const response = await fetch(`https://api.scryfall.com/cards/named?exact=${encodeURIComponent(name)}`);
+      const response = await fetch(`/api/cards/named?exact=${encodeURIComponent(name)}`);
       if (!response.ok) throw new Error(`Scryfall card lookup returned ${response.status}`);
       const result = await response.json();
       const typeLine = result.type_line || '';

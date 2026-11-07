@@ -9,7 +9,7 @@ export default function useScryfallImages(items, nameKey = 'cardName') {
     Promise.all(items.map(async (item) => {
       const name = typeof item === 'string' ? item : item[nameKey];
       try {
-        const response = await fetch(`https://api.scryfall.com/cards/named?exact=${encodeURIComponent(name)}`);
+        const response = await fetch(`/api/cards/named?exact=${encodeURIComponent(name)}`);
         if (!response.ok) return null;
         const card = await response.json();
         return [name, card.image_uris?.art_crop || card.image_uris?.normal];
