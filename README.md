@@ -118,8 +118,6 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 - [x] **Supports registration, login, logout, and restricted endpoint** - Auth tokens are required for session and deck API requests.
 - [x] **Uses BCrypt to hash passwords** - User passwords are hashed with `bcryptjs` before being stored.
 
-The protected deck service currently provides in-memory `GET /api/decks`, `POST /api/decks`, `POST /api/decks/validate`, and `POST /api/decks/stats` endpoints. Deck data will move to persistent storage in a later deliverable. Express serves deployed frontend files with `express.static('public')`, and Vite proxies local `/api` requests to port 4000.
-
 ## 🚀 DB deliverable
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
