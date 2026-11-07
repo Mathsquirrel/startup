@@ -112,13 +112,13 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 - [x] **Node.js/Express HTTP service** - Added the Express service, listening on port 4000 by default.
 - [x] **Static middleware for frontend** - Express serves the frontend from the `public` directory.
-- [x] **Calls to third party endpoints** - The React card search and card image hooks call the Scryfall API.
-- [x] **Backend service endpoints** - Added authentication endpoints, card proxy endpoints, and protected `/api/me`, `/api/friends`, and deck endpoints.
-- [x] **Frontend calls service endpoints** - The login, registration, logout, and session restoration flows use the `/api` service.
+- [x] **Calls to third party endpoints** - The Express service proxies Scryfall card search, card details, and card image requests.
+- [x] **Backend service endpoints** - Added authentication, Scryfall proxy, friends, validation, statistics, and protected in-memory deck endpoints.
+- [x] **Frontend calls service endpoints** - The frontend uses `/api` for authentication, friends, Scryfall card data, deck validation, and deck saving.
 - [x] **Supports registration, login, logout, and restricted endpoint** - Auth tokens are required for session and deck API requests.
 - [x] **Uses BCrypt to hash passwords** - User passwords are hashed with `bcryptjs` before being stored.
 
-The protected deck service currently provides in-memory `GET /api/decks`, `POST /api/decks`, `POST /api/decks/validate`, and `POST /api/decks/stats` endpoints. Deck data will move to persistent storage in a later deliverable.
+The protected deck service currently provides in-memory `GET /api/decks`, `POST /api/decks`, `POST /api/decks/validate`, and `POST /api/decks/stats` endpoints. Deck data will move to persistent storage in a later deliverable. Express serves deployed frontend files with `express.static('public')`, and Vite proxies local `/api` requests to port 4000.
 
 ## 🚀 DB deliverable
 
