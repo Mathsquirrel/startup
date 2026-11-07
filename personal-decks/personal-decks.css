@@ -329,7 +329,24 @@ nav.btn-group .btn:hover {
 }
 
 .registration-prompt {
+	position: relative;
 	text-align: left;
+}
+
+.registration-close {
+	position: absolute;
+	top: 10px;
+	right: 12px;
+	padding: 2px 8px !important;
+	background: transparent !important;
+	color: var(--teal-dark) !important;
+	font-size: 1.5rem !important;
+	line-height: 1;
+}
+
+.registration-close:hover {
+	background: transparent !important;
+	color: var(--teal-soft) !important;
 }
 
 .registration-prompt h2 {
@@ -337,6 +354,16 @@ nav.btn-group .btn:hover {
 	color: var(--teal-dark);
 	font-family: 'Fraunces', Georgia, serif;
 	text-align: center;
+}
+
+.registration-prompt p[role='alert'] {
+	text-align: center;
+}
+
+.friend-prompt-actions {
+	display: flex;
+	justify-content: center;
+	gap: 10px;
 }
 
 .registration-field {
