@@ -7,6 +7,7 @@ const port = process.argv.length > 2 ? process.argv[2] : 4000;
 const users = new Map();
 const sessions = new Map();
 const friends = new Map();
+const decks = new Map();
 
 app.use(express.json());
 
@@ -96,6 +97,7 @@ app.post('/api/auth/register', async (request, response) => {
   const passwordHash = await bcrypt.hash(password, 10);
   users.set(username.toLowerCase(), { username, passwordHash });
   friends.set(username.toLowerCase(), new Set());
+  decks.set(username.toLowerCase(), new Map());
   response.status(201).json({ message: 'Account created.' });
 });
 
@@ -126,7 +128,25 @@ app.get('/api/me', requireAuth, (request, response) => {
 });
 
 app.get('/api/decks', requireAuth, (request, response) => {
-  response.json({ username: request.username, decks: [] });
+  const userDecks = decks.get(request.username.toLowerCase()) || new Map();
+  response.json({ username: request.username, decks: [...userDecks.values()] });
+});
+
+app.post('/api/decks', requireAuth, (request, response) => {
+  const validationError = validateDeck(request.body);
+  if (validationError) {
+    response.status(400).json({ error: validationError });
+    return;
+  }
+  const userDecks = decks.get(request.username.toLowerCase()) || new Map();
+  const deck = {
+    id: typeof request.body.id === 'string' && request.body.id.trim() ? request.body.id : randomUUID(),
+    name: request.body.name.trim(),
+    cards: request.body.cards.map((card) => ({ name: card.name.trim(), count: card.count })),
+  };
+  userDecks.set(deck.id, deck);
+  decks.set(request.username.toLowerCase(), userDecks);
+  response.status(201).json(deck);
 });
 
 app.post('/api/decks/validate', requireAuth, (request, response) => {
@@ -137,6 +157,16 @@ app.post('/api/decks/validate', requireAuth, (request, response) => {
   }
   const totalCards = request.body.cards.reduce((total, card) => total + card.count, 0);
   response.json({ valid: true, totalCards });
+});
+
+app.post('/api/decks/stats', requireAuth, (request, response) => {
+  const validationError = validateDeck(request.body);
+  if (validationError) {
+    response.status(400).json({ error: validationError });
+    return;
+  }
+  const totalCards = request.body.cards.reduce((total, card) => total + card.count, 0);
+  response.json({ totalCards, uniqueCards: request.body.cards.length });
 });
 
 app.get('/api/friends', requireAuth, (request, response) => {

@@ -40,6 +40,10 @@ export async function validateDeck(deck, token) {
   return authRequest('/decks/validate', deck, token);
 }
 
+export async function saveDeckToService(deck, token) {
+  return authRequest('/decks', deck, token);
+}
+
 export function setAuthToken(token) {
   if (token) localStorage.setItem(tokenKey, token);
   else localStorage.removeItem(tokenKey);
