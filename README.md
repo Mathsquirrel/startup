@@ -110,14 +110,13 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] I completed the prerequisites for this deliverable (Simon deployed, GitHub link, Git commits)
-- [ ] **Node.js/Express HTTP service** - I did not complete this part of the deliverable.
-- [ ] **Static middleware for frontend** - I did not complete this part of the deliverable.
-- [ ] **Calls to third party endpoints** - I did not complete this part of the deliverable.
-- [ ] **Backend service endpoints** - I did not complete this part of the deliverable.
-- [ ] **Frontend calls service endpoints** - I did not complete this part of the deliverable.
-- [ ] **Supports registration, login, logout, and restricted endpoint** - I did not complete this part of the deliverable.
-- [ ] **Uses BCrypt to hash passwords** - I did not complete this part of the deliverable.
+- [x] **Node.js/Express HTTP service** - Added the Express service, listening on port 4000 by default.
+- [x] **Static middleware for frontend** - Express serves the frontend from the `public` directory.
+- [x] **Calls to third party endpoints** - The React card search and card image hooks call the Scryfall API.
+- [x] **Backend service endpoints** - Added authentication endpoints and `/api/me` and `/api/decks` endpoints.
+- [x] **Frontend calls service endpoints** - The login, registration, logout, and session restoration flows use the `/api` service.
+- [x] **Supports registration, login, logout, and restricted endpoint** - Auth tokens are required for session and deck API requests.
+- [x] **Uses BCrypt to hash passwords** - User passwords are hashed with `bcryptjs` before being stored.
 
 ## 🚀 DB deliverable
 
