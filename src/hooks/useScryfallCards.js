@@ -2,19 +2,21 @@ import { useEffect, useState } from 'react';
 
 export default function useScryfallCards(names) {
   const [cards, setCards] = useState({});
-  const cardNames = names.join('|');
+  const uniqueNames = [...new Set(names)];
+  const cardNames = uniqueNames.join('|');
 
   useEffect(() => {
     let active = true;
-    Promise.all(names.map(async (name) => {
-      try {
-        const response = await fetch(`/api/cards/named?exact=${encodeURIComponent(name)}`);
-        if (!response.ok) return null;
-        return await response.json();
-      } catch { return null; }
-    })).then((results) => {
-      if (active) setCards(Object.fromEntries(results.filter(Boolean).map((card) => [card.name, card])));
-    });
+    fetch('/api/cards/collection', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ names: uniqueNames }),
+    }).then(async (response) => {
+      if (!response.ok) return null;
+      return response.json();
+    }).then((result) => {
+      if (active && result) setCards(Object.fromEntries(result.data.map((card) => [card.name, card])));
+    }).catch(() => {});
     return () => { active = false; };
   }, [cardNames]);
 

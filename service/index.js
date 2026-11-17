@@ -33,15 +33,24 @@ function validateDeck(value) {
 }
 
 async function proxyScryfall(path, response) {
-  try {
-    const scryfallResponse = await fetch(`https://api.scryfall.com${path}`, {
-      headers: { Accept: 'application/json', 'User-Agent': 'PDFDecks/1.0' },
-    });
-    const body = await scryfallResponse.text();
-    response.status(scryfallResponse.status);
-    response.type('application/json').send(body);
-  } catch {
-    response.status(502).json({ error: 'Scryfall is currently unavailable.' });
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    try {
+      const scryfallResponse = await fetch(`https://api.scryfall.com${path}`, {
+        headers: { Accept: 'application/json', 'User-Agent': 'PDFDecks/1.0' },
+      });
+      const body = await scryfallResponse.text();
+      if (scryfallResponse.ok || (scryfallResponse.status < 500 && scryfallResponse.status !== 429) || attempt === 2) {
+        response.status(scryfallResponse.status);
+        response.type('application/json').send(body);
+        return;
+      }
+    } catch (error) {
+      if (attempt === 2) {
+        response.status(502).json({ error: 'Scryfall is currently unavailable.' });
+        return;
+      }
+    }
+    await new Promise((resolve) => setTimeout(resolve, 250 * (attempt + 1)));
   }
 }
 
@@ -61,6 +70,40 @@ app.get('/api/cards/named', (request, response) => {
     return;
   }
   proxyScryfall(`/cards/named?exact=${encodeURIComponent(name)}`, response);
+});
+
+app.post('/api/cards/collection', async (request, response) => {
+  const names = Array.isArray(request.body?.names)
+    ? [...new Set(request.body.names.filter((name) => typeof name === 'string').map((name) => name.trim()).filter(Boolean))]
+    : [];
+  if (!names.length || names.length > 75) {
+    response.status(400).json({ error: 'Between one and 75 card names are required.' });
+    return;
+  }
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    try {
+      const scryfallResponse = await fetch('https://api.scryfall.com/cards/collection', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          'User-Agent': 'PDFDecks/1.0',
+        },
+        body: JSON.stringify({ identifiers: names.map((name) => ({ name })) }),
+      });
+      const body = await scryfallResponse.text();
+      if (scryfallResponse.ok || (scryfallResponse.status < 500 && scryfallResponse.status !== 429) || attempt === 2) {
+        response.status(scryfallResponse.status).type('application/json').send(body);
+        return;
+      }
+    } catch (error) {
+      if (attempt === 2) {
+        response.status(502).json({ error: 'Scryfall is currently unavailable.' });
+        return;
+      }
+    }
+    await new Promise((resolve) => setTimeout(resolve, 1000 * (attempt + 1)));
+  }
 });
 
 function getToken(request) {
@@ -200,6 +243,10 @@ app.post('/api/friends', requireAuth, (request, response) => {
 });
 
 app.use(express.static('public'));
+
+app.use((request, response) => {
+  response.status(404).json({ error: 'Route not found.' });
+});
 
 app.listen(port, () => {
   console.log(`Listening on port ${port}`);

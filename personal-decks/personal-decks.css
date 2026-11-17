@@ -949,6 +949,23 @@ dialog h2 {
 	font-weight: 700;
 }
 
+.saved-card-list {
+	display: grid;
+	gap: 6px;
+	margin: 0 0 26px;
+	padding: 0;
+	list-style: none;
+}
+
+.saved-card-list li {
+	display: flex;
+	justify-content: space-between;
+	padding: 8px 10px;
+	background: var(--mint-light);
+	color: var(--teal-dark);
+	font-weight: 600;
+}
+
 .modal-action {
 	display: inline-block;
 	padding: 11px 16px;

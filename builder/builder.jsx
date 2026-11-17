@@ -28,7 +28,26 @@ export default function BuilderPage() {
   const [menuPlacement, setMenuPlacement] = useState('same');
   const [availableCards, setAvailableCards] = useState(cardPool);
   const { suggestions, loading: suggestionsLoading } = useScryfallSearch(search);
-  const cards = useScryfallCards(availableCards.map((card) => card.name));
+  const cards = useScryfallCards([...availableCards.map((card) => card.name), ...deck.cards.map((card) => card.name)]);
+
+  const cardsForDisplay = useMemo(() => {
+    const knownCards = new Map(availableCards.map((card) => [card.name, card]));
+    deck.cards.forEach((deckCard) => {
+      if (!knownCards.has(deckCard.name)) knownCards.set(deckCard.name, { name: deckCard.name });
+    });
+    return [...knownCards.values()];
+  }, [availableCards, deck.cards]);
+
+  const getCardType = (card) => {
+    if (card.type) return card.type;
+    const typeLine = cards[card.name]?.type_line || '';
+    return typeLine.includes('Land') ? 'land'
+      : typeLine.includes('Creature') ? 'creature'
+        : typeLine.includes('Instant') ? 'instant'
+          : typeLine.includes('Sorcery') ? 'sorcery'
+            : typeLine.includes('Artifact') ? 'artifact'
+              : typeLine.includes('Enchantment') ? 'enchantment' : null;
+  };
 
   useEffect(() => {
     if (!params.has('fromDecks')) navigate('/personal-decks', { replace: true });
@@ -42,11 +61,10 @@ export default function BuilderPage() {
     return () => document.removeEventListener('pointerdown', closeMenu);
   }, []);
 
-  const filtered = useMemo(() => availableCards
-    .filter((card) => card.name.toLowerCase().includes(search.toLowerCase()))
+  const filtered = useMemo(() => cardsForDisplay
     .filter((card) => color === 'all' || card.color === color)
-    .filter((card) => type === 'all' || card.type === type)
-    .sort((first, second) => mana === 'high' ? second.mana - first.mana : mana === 'low' ? first.mana - second.mana : 0), [availableCards, search, color, type, mana]);
+    .filter((card) => type === 'all' || getCardType(card) === type)
+    .sort((first, second) => mana === 'high' ? (second.mana || 0) - (first.mana || 0) : mana === 'low' ? (first.mana || 0) - (second.mana || 0) : 0), [cardsForDisplay, cards, search, color, type, mana]);
 
   const updateCount = (name, change) => setDeck((current) => {
     const cards = current.cards.map((card) => card.name === name ? { ...card, count: card.count + change } : card).filter((card) => card.count > 0);
@@ -127,7 +145,7 @@ export default function BuilderPage() {
   const cardTypeCounts = ['creature', 'instant', 'sorcery', 'artifact', 'enchantment', 'land'].reduce((counts, cardType) => ({
     ...counts,
     [cardType]: deck.cards
-      .filter((deckCard) => availableCards.find((card) => card.name === deckCard.name)?.type === cardType)
+      .filter((deckCard) => getCardType(cardsForDisplay.find((card) => card.name === deckCard.name) || {}) === cardType)
       .reduce((total, card) => total + card.count, 0),
   }), {});
 
