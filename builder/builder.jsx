@@ -33,7 +33,7 @@ export default function BuilderPage() {
   const cardsForDisplay = useMemo(() => {
     const knownCards = new Map(availableCards.map((card) => [card.name, card]));
     deck.cards.forEach((deckCard) => {
-      if (!knownCards.has(deckCard.name)) knownCards.set(deckCard.name, { name: deckCard.name });
+      if (!knownCards.has(deckCard.name)) knownCards.set(deckCard.name, deckCard);
     });
     return [...knownCards.values()];
   }, [availableCards, deck.cards]);
@@ -66,9 +66,9 @@ export default function BuilderPage() {
     .filter((card) => type === 'all' || getCardType(card) === type)
     .sort((first, second) => mana === 'high' ? (second.mana || 0) - (first.mana || 0) : mana === 'low' ? (first.mana || 0) - (second.mana || 0) : 0), [cardsForDisplay, cards, color, type, mana]);
 
-  const updateCount = (name, change) => setDeck((current) => {
-    const cards = current.cards.map((card) => card.name === name ? { ...card, count: card.count + change } : card).filter((card) => card.count > 0);
-    if (change > 0 && !current.cards.some((card) => card.name === name)) cards.push({ name, count: 1 });
+  const updateCount = (name, change, metadata = {}) => setDeck((current) => {
+    const cards = current.cards.map((card) => card.name === name ? { ...card, ...metadata, count: card.count + change } : card).filter((card) => card.count > 0);
+    if (change > 0 && !current.cards.some((card) => card.name === name)) cards.push({ name, ...metadata, count: 1 });
     if (change < 0 && !cards.some((card) => card.name === name)) setSelectedCard(null);
     return { ...current, cards };
   });
@@ -92,7 +92,7 @@ export default function BuilderPage() {
         type,
       };
       setAvailableCards((current) => current.some((item) => item.name === card.name) ? current : [...current, card]);
-      updateCount(card.name, 1);
+      updateCount(card.name, 1, card);
       setSearch('');
       setNotice(`${card.name} added to the deck.`);
     } catch {
@@ -108,9 +108,23 @@ export default function BuilderPage() {
       return;
     }
     try {
-      await validateDeck(deck, token);
-      await saveDeckToService(deck, token);
-      saveDeck(deck);
+      const savedDeck = {
+        ...deck,
+        cards: deck.cards.map((deckCard) => {
+          const metadata = cardsForDisplay.find((card) => card.name === deckCard.name);
+          return {
+            ...deckCard,
+            ...(metadata?.type || getCardType(metadata || {}) ? {
+              type: metadata?.type || getCardType(metadata),
+              mana: metadata?.mana ?? cards[deckCard.name]?.cmc ?? 0,
+              color: metadata?.color || cards[deckCard.name]?.colors?.[0]?.toLowerCase() || 'colorless',
+            } : {}),
+          };
+        }),
+      };
+      await validateDeck(savedDeck, token);
+      await saveDeckToService(savedDeck, token);
+      saveDeck(savedDeck);
       navigate('/personal-decks');
     } catch (error) {
       setNotice(error.message);
@@ -178,7 +192,7 @@ export default function BuilderPage() {
         <h3 id="deck-editor-title">Choose cards for {deck.name}</h3>
         <div className="card-groups">
           {['creature', 'instant', 'sorcery', 'artifact', 'enchantment', 'land'].map((group, groupIndex) => {
-            const groupCards = filtered.filter((card) => card.type === group);
+            const groupCards = filtered.filter((card) => getCardType(card) === group);
             if (!groupCards.length) return null;
             return <section className={`card-group card-group-${groupIndex + 1}`} key={group}><h4>{group[0].toUpperCase() + group.slice(1)} ({cardTypeCounts[group]})</h4><ul className="card-list">
               {groupCards.flatMap((card) => {

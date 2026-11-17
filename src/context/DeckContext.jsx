@@ -73,12 +73,24 @@ export function useDecks() {
   return context;
 }
 
-export function getDeckStats(deck) {
+export function getDeckStats(deck, cardDetails = {}) {
   const cards = deck?.cards || [];
+  const getType = (card) => {
+    if (card.type) return card.type;
+    const knownType = cardPool.find((item) => item.name === card.name)?.type;
+    if (knownType) return knownType;
+    const typeLine = cardDetails[card.name]?.type_line || '';
+    return typeLine.includes('Land') ? 'land'
+      : typeLine.includes('Creature') ? 'creature'
+        : typeLine.includes('Instant') ? 'instant'
+          : typeLine.includes('Sorcery') ? 'sorcery'
+            : typeLine.includes('Artifact') ? 'artifact'
+              : typeLine.includes('Enchantment') ? 'enchantment' : null;
+  };
   return {
     total: cards.reduce((sum, card) => sum + card.count, 0),
-    creatures: cards.filter((card) => cardPool.find((item) => item.name === card.name)?.type === 'creature').reduce((sum, card) => sum + card.count, 0),
-    lands: cards.filter((card) => cardPool.find((item) => item.name === card.name)?.type === 'land').reduce((sum, card) => sum + card.count, 0),
-    spells: cards.filter((card) => !['creature', 'land'].includes(cardPool.find((item) => item.name === card.name)?.type)).reduce((sum, card) => sum + card.count, 0),
+    creatures: cards.filter((card) => getType(card) === 'creature').reduce((sum, card) => sum + card.count, 0),
+    lands: cards.filter((card) => getType(card) === 'land').reduce((sum, card) => sum + card.count, 0),
+    spells: cards.filter((card) => !['creature', 'land'].includes(getType(card))).reduce((sum, card) => sum + card.count, 0),
   };
 }

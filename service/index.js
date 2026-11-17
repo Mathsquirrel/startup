@@ -185,7 +185,13 @@ app.post('/api/decks', requireAuth, (request, response) => {
   const deck = {
     id: typeof request.body.id === 'string' && request.body.id.trim() ? request.body.id : randomUUID(),
     name: request.body.name.trim(),
-    cards: request.body.cards.map((card) => ({ name: card.name.trim(), count: card.count })),
+    cards: request.body.cards.map((card) => ({
+      name: card.name.trim(),
+      count: card.count,
+      ...(typeof card.type === 'string' ? { type: card.type } : {}),
+      ...(typeof card.mana === 'number' ? { mana: card.mana } : {}),
+      ...(typeof card.color === 'string' ? { color: card.color } : {}),
+    })),
   };
   userDecks.set(deck.id, deck);
   decks.set(request.username.toLowerCase(), userDecks);

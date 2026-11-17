@@ -3,14 +3,15 @@ import { Link } from 'react-router-dom';
 import './personal-decks.css';
 import { Layout } from '../src/components/SiteLayout.jsx';
 import useScryfallImages from '../src/hooks/useScryfallImages.js';
+import useScryfallCards from '../src/hooks/useScryfallCards.js';
 import { getDeckStats, useDecks } from '../src/context/DeckContext.jsx';
 import { getAuthToken } from '../src/api.js';
 import { handlePersonalDecksClick } from '../src/components/SiteLayout.jsx';
 
 const publishedDecksStorageKey = 'pdf-published-decks';
 
-function DeckDialog({ deck, image, onClose, onEdit, onShare, onDelete }) {
-  const stats = getDeckStats(deck);
+function DeckDialog({ deck, image, cardDetails, onClose, onEdit, onShare, onDelete }) {
+  const stats = getDeckStats(deck, cardDetails);
   return <dialog open className="deck-dialog"><button className="modal-close" type="button" aria-label="Close deck details" onClick={onClose}>×</button>{image && <img className="deck-preview-image" src={image} alt={`${deck.name} featured card`} />}<p className="eyebrow">Deck details</p><h2>{deck.name}</h2><dl className="deck-stats"><div><dt>Total</dt><dd>{stats.total}</dd></div><div><dt>Creatures</dt><dd>{stats.creatures}</dd></div><div><dt>Lands</dt><dd>{stats.lands}</dd></div><div><dt>Spells</dt><dd>{stats.spells}</dd></div></dl><ul className="saved-card-list">{deck.cards.map((card) => <li key={card.name}>{card.name}<span>{card.count}</span></li>)}</ul><div className="modal-actions"><Link className="modal-action" to={`/builder?fromDecks=1&deckId=${deck.id}`} onClick={onEdit}>Edit deck</Link><button className="modal-action" type="button" onClick={onShare}>Share</button><button className="modal-action delete-action" type="button" onClick={onDelete}>Delete</button></div></dialog>;
 }
 
@@ -19,6 +20,7 @@ export default function PersonalDecksPage() {
   const [selected, setSelected] = useState(null);
   const [shareCandidate, setShareCandidate] = useState(null);
   const images = useScryfallImages(decks.flatMap((deck) => deck.cards[0] ? [{ cardName: deck.cards[0].name }] : []));
+  const cardDetails = useScryfallCards(decks.flatMap((deck) => deck.cards.map((card) => card.name)));
   useEffect(() => {
     if (!shareCandidate) return undefined;
     const originalOverflow = document.body.style.overflow;
@@ -64,5 +66,5 @@ export default function PersonalDecksPage() {
       setShareCandidate(null);
     }
   };
-  return <Layout footerText="Your decks, your experiments, your next great game."><main><div className="intro"><div><p className="eyebrow">Your private vault</p><h2>Keep every brew close at hand.</h2><p>Review your saved lists, return to unfinished ideas, and share a deck when it is ready for the table.</p></div></div><section aria-labelledby="saved-title"><h3 id="saved-title">Saved decklists</h3><div className="deck-grid saved-deck-grid">{decks.map((deck) => { const stats = getDeckStats(deck); return <button className="deck" key={deck.id} style={images[deck.cards[0]?.name] ? { backgroundImage: `url('${images[deck.cards[0].name]}')` } : undefined} onClick={() => setSelected(deck)}><h4>{deck.name}</h4><p className="meta">{stats.total} cards · {stats.creatures} creatures · {stats.lands} lands</p></button>; })}<Link className="deck create-deck" to="/builder?fromDecks=1" onClick={handlePersonalDecksClick}><span aria-hidden="true">+</span><h4>Create deck</h4><p className="meta">Start with a blank list</p></Link></div></section></main>{selected && <DeckDialog deck={selected} image={images[selected.cards[0]?.name]} onClose={() => setSelected(null)} onEdit={edit} onShare={share} onDelete={() => { if (!getAuthToken()) { window.dispatchEvent(new Event('open-login-prompt')); return; } deleteDeck(selected.id); setSelected(null); }} />}{shareCandidate && <div className="share-confirmation-overlay" role="dialog" aria-modal="true" aria-labelledby="share-confirmation-title"><div className="share-confirmation"><p id="share-confirmation-title">Are you sure you want to publish this deck?</p><div className="modal-actions"><button className="modal-action" type="button" onClick={publishDeck}>Yes</button><button className="modal-action" type="button" onClick={() => setShareCandidate(null)}>No</button></div></div></div>}</Layout>;
+  return <Layout footerText="Your decks, your experiments, your next great game."><main><div className="intro"><div><p className="eyebrow">Your private vault</p><h2>Keep every brew close at hand.</h2><p>Review your saved lists, return to unfinished ideas, and share a deck when it is ready for the table.</p></div></div><section aria-labelledby="saved-title"><h3 id="saved-title">Saved decklists</h3><div className="deck-grid saved-deck-grid">{decks.map((deck) => { const stats = getDeckStats(deck, cardDetails); return <button className="deck" key={deck.id} style={images[deck.cards[0]?.name] ? { backgroundImage: `url('${images[deck.cards[0].name]}')` } : undefined} onClick={() => setSelected(deck)}><h4>{deck.name}</h4><p className="meta">{stats.total} cards · {stats.creatures} creatures · {stats.lands} lands</p></button>; })}<Link className="deck create-deck" to="/builder?fromDecks=1" onClick={handlePersonalDecksClick}><span aria-hidden="true">+</span><h4>Create deck</h4><p className="meta">Start with a blank list</p></Link></div></section></main>{selected && <DeckDialog deck={selected} image={images[selected.cards[0]?.name]} cardDetails={cardDetails} onClose={() => setSelected(null)} onEdit={edit} onShare={share} onDelete={() => { if (!getAuthToken()) { window.dispatchEvent(new Event('open-login-prompt')); return; } deleteDeck(selected.id); setSelected(null); }} />}{shareCandidate && <div className="share-confirmation-overlay" role="dialog" aria-modal="true" aria-labelledby="share-confirmation-title"><div className="share-confirmation"><p id="share-confirmation-title">Are you sure you want to publish this deck?</p><div className="modal-actions"><button className="modal-action" type="button" onClick={publishDeck}>Yes</button><button className="modal-action" type="button" onClick={() => setShareCandidate(null)}>No</button></div></div></div>}</Layout>;
 }
