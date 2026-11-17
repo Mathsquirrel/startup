@@ -91,6 +91,8 @@ export function getDeckStats(deck, cardDetails = {}) {
     total: cards.reduce((sum, card) => sum + card.count, 0),
     creatures: cards.filter((card) => getType(card) === 'creature').reduce((sum, card) => sum + card.count, 0),
     lands: cards.filter((card) => getType(card) === 'land').reduce((sum, card) => sum + card.count, 0),
-    spells: cards.filter((card) => !['creature', 'land'].includes(getType(card))).reduce((sum, card) => sum + card.count, 0),
+    sorceries: cards.filter((card) => getType(card) === 'sorcery').reduce((sum, card) => sum + card.count, 0),
+    enchantments: cards.filter((card) => getType(card) === 'enchantment').reduce((sum, card) => sum + card.count, 0),
+    instants: cards.filter((card) => getType(card) === 'instant').reduce((sum, card) => sum + card.count, 0),
   };
 }
