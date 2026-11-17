@@ -64,7 +64,7 @@ export default function BuilderPage() {
   const filtered = useMemo(() => cardsForDisplay
     .filter((card) => color === 'all' || card.color === color)
     .filter((card) => type === 'all' || getCardType(card) === type)
-    .sort((first, second) => mana === 'high' ? (second.mana || 0) - (first.mana || 0) : mana === 'low' ? (first.mana || 0) - (second.mana || 0) : 0), [cardsForDisplay, cards, search, color, type, mana]);
+    .sort((first, second) => mana === 'high' ? (second.mana || 0) - (first.mana || 0) : mana === 'low' ? (first.mana || 0) - (second.mana || 0) : 0), [cardsForDisplay, cards, color, type, mana]);
 
   const updateCount = (name, change) => setDeck((current) => {
     const cards = current.cards.map((card) => card.name === name ? { ...card, count: card.count + change } : card).filter((card) => card.count > 0);
