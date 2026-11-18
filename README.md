@@ -122,9 +122,9 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] I completed the prerequisites for this deliverable (Simon deployed, GitHub link, Git commits)
-- [ ] **Stores data in MongoDB** - I did not complete this part of the deliverable.
-- [ ] **Stores credentials in MongoDB** - I did not complete this part of the deliverable.
+- [x] I completed the prerequisites for this deliverable (Simon deployed, GitHub link, Git commits)
+- [x] **Stores data in MongoDB** - All decklists, including public and private, are stored in my database. Additionally, outgoing and incoming friend requests are stored in the database, alongside active friends
+- [x] **Stores credentials in MongoDB** - All usernames and hashed passwords are stored in my database
 
 ## 🚀 WebSocket deliverable
 
