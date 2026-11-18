@@ -36,6 +36,17 @@ export async function getFriends(token) {
   return result;
 }
 
+export async function removeFriend(friendName, token) {
+  const response = await fetch(`/api/friends/${encodeURIComponent(friendName)}`, {
+    method: 'DELETE',
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!response.ok) {
+    const result = await response.json();
+    throw new Error(result?.error || 'Unable to remove friend.');
+  }
+}
+
 export async function validateDeck(deck, token) {
   return authRequest('/decks/validate', deck, token);
 }

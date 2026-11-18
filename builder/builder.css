@@ -245,6 +245,7 @@ nav.btn-group .btn:hover {
 .friend-list li {
 	display: flex;
 	align-items: center;
+	justify-content: space-between;
 	gap: 8px;
 	padding: 5px 0;
 	color: var(--teal-dark);
@@ -281,6 +282,37 @@ nav.btn-group .btn:hover {
 
 .status-dot.offline {
 	background: #b44747;
+}
+
+.friend-remove-dot {
+	width: 12px;
+	height: 12px;
+	flex: 0 0 12px;
+	padding: 0;
+	border: 0;
+	background: transparent;
+	color: var(--burgundy);
+	cursor: pointer;
+}
+
+.friend-remove-dot .status-dot {
+	display: block;
+}
+
+.friend-remove-x {
+	display: none;
+	font-size: 1rem;
+	line-height: 12px;
+}
+
+.friend-remove-dot:hover .status-dot,
+.friend-remove-dot:focus-visible .status-dot {
+	display: none;
+}
+
+.friend-remove-dot:hover .friend-remove-x,
+.friend-remove-dot:focus-visible .friend-remove-x {
+	display: block;
 }
 
 .login-prompt-overlay {

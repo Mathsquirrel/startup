@@ -352,6 +352,29 @@ app.post('/api/friends/respond', requireAuth, async (request, response) => {
   response.json({ action, username: requester.username });
 });
 
+app.delete('/api/friends/:username', requireAuth, async (request, response) => {
+  const friendName = request.params.username;
+  if (!validateUsername(friendName)) {
+    response.status(400).json({ error: 'A valid friend username is required.' });
+    return;
+  }
+  const users = await getCollection('users');
+  const friend = await users.findOne({ usernameLower: friendName.toLowerCase() });
+  if (!friend) {
+    response.status(404).json({ error: 'That player does not exist.' });
+    return;
+  }
+  await users.updateOne(
+    { usernameLower: request.username.toLowerCase() },
+    { $pull: { friends: friend.username, incomingFriendRequests: friend.username, outgoingFriendRequests: friend.username } },
+  );
+  await users.updateOne(
+    { usernameLower: friend.username.toLowerCase() },
+    { $pull: { friends: request.username, incomingFriendRequests: request.username, outgoingFriendRequests: request.username } },
+  );
+  response.status(204).end();
+});
+
 app.get('/api/public-decks', async (request, response) => {
   const publishedDecks = await getCollection('publishedDecks');
   const deckRows = await publishedDecks.find({}).sort({ date: -1 }).toArray();
