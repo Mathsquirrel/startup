@@ -13,7 +13,7 @@ export function handlePersonalDecksClick(event) {
 
 export function Header({ builder = false }) {
   const [collapsed, setCollapsed] = useState(false);
-  const [username, setUsername] = useState(() => localStorage.getItem('pdf-username') || '');
+  const [username, setUsername] = useState('');
   const [loggedIn, setLoggedIn] = useState(() => Boolean(getAuthToken()));
   const [password, setPassword] = useState('');
   const [authError, setAuthError] = useState('');
@@ -62,7 +62,6 @@ export function Header({ builder = false }) {
 
   const completeLogin = (result) => {
     setAuthToken(result.token);
-    localStorage.setItem('pdf-username', result.username);
     setUsername(result.username);
     setPassword('');
     setLoggedIn(true);
@@ -102,7 +101,6 @@ export function Header({ builder = false }) {
       // The local session is cleared even if the server session already expired.
     }
     setAuthToken(null);
-    localStorage.removeItem('pdf-username');
     setLoggedIn(false);
     setUsername('');
     setPassword('');

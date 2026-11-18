@@ -44,6 +44,49 @@ export async function saveDeckToService(deck, token) {
   return authRequest('/decks', deck, token);
 }
 
+export async function getDecks(token) {
+  const response = await fetch('/api/decks', { headers: { Authorization: `Bearer ${token}` } });
+  const result = await response.json();
+  if (!response.ok) throw new Error(result?.error || 'Unable to load decks.');
+  return result.decks;
+}
+
+export async function deleteDeckFromService(deckId, token) {
+  const response = await fetch(`/api/decks/${encodeURIComponent(deckId)}`, {
+    method: 'DELETE',
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!response.ok) {
+    const result = await response.json();
+    throw new Error(result?.error || 'Unable to delete deck.');
+  }
+}
+
+export async function publishDeckToService(deck, token) {
+  return authRequest('/public-decks', deck, token);
+}
+
+export async function getPublishedDecks() {
+  const response = await fetch('/api/public-decks');
+  const result = await response.json();
+  if (!response.ok) throw new Error(result?.error || 'Unable to load published decks.');
+  return result.decks;
+}
+
+export async function getPublicDeckViews() {
+  const response = await fetch('/api/public-deck-views');
+  const result = await response.json();
+  if (!response.ok) throw new Error(result?.error || 'Unable to load deck views.');
+  return result.counts;
+}
+
+export async function incrementPublicDeckView(deckName) {
+  const response = await fetch(`/api/public-deck-views/${encodeURIComponent(deckName)}`, { method: 'POST' });
+  const result = await response.json();
+  if (!response.ok) throw new Error(result?.error || 'Unable to record deck view.');
+  return result.count;
+}
+
 export function setAuthToken(token) {
   if (token) localStorage.setItem(tokenKey, token);
   else localStorage.removeItem(tokenKey);

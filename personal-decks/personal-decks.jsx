@@ -5,10 +5,8 @@ import { Layout } from '../src/components/SiteLayout.jsx';
 import useScryfallImages from '../src/hooks/useScryfallImages.js';
 import useScryfallCards from '../src/hooks/useScryfallCards.js';
 import { getDeckStats, useDecks } from '../src/context/DeckContext.jsx';
-import { getAuthToken } from '../src/api.js';
+import { getAuthToken, publishDeckToService } from '../src/api.js';
 import { handlePersonalDecksClick } from '../src/components/SiteLayout.jsx';
-
-const publishedDecksStorageKey = 'pdf-published-decks';
 
 function DeckDialog({ deck, image, cardDetails, onClose, onEdit, onShare, onDelete }) {
   const stats = getDeckStats(deck, cardDetails);
@@ -42,29 +40,36 @@ export default function PersonalDecksPage() {
       window.dispatchEvent(new Event('open-login-prompt'));
     }
   };
-  const publishDeck = () => {
+  const deleteSelected = async () => {
     if (!getAuthToken()) {
       window.dispatchEvent(new Event('open-login-prompt'));
       return;
     }
-    const username = localStorage.getItem('pdf-username') || 'guest';
+    try {
+      await deleteDeck(selected.id);
+      setSelected(null);
+    } catch (error) {
+      window.alert(error.message);
+    }
+  };
+  const publishDeck = async () => {
+    const token = getAuthToken();
+    if (!token) {
+      window.dispatchEvent(new Event('open-login-prompt'));
+      return;
+    }
     const publishedDeck = {
       id: shareCandidate.id,
       name: shareCandidate.name,
-      author: username,
-      date: new Date().toISOString(),
       cards: shareCandidate.cards,
     };
     try {
-      const stored = localStorage.getItem(publishedDecksStorageKey);
-      const publishedDecks = stored ? JSON.parse(stored) : [];
-      const nextDecks = publishedDecks.filter((deck) => deck.id !== publishedDeck.id);
-      localStorage.setItem(publishedDecksStorageKey, JSON.stringify([...nextDecks, publishedDeck]));
+      await publishDeckToService(publishedDeck, token);
       setShareCandidate(null);
       setSelected(null);
     } catch {
       setShareCandidate(null);
     }
   };
-  return <Layout footerText="Your decks, your experiments, your next great game."><main><div className="intro"><div><p className="eyebrow">Your private vault</p><h2>Keep every brew close at hand.</h2><p>Review your saved lists, return to unfinished ideas, and share a deck when it is ready for the table.</p></div></div><section aria-labelledby="saved-title"><h3 id="saved-title">Saved decklists</h3><div className="deck-grid saved-deck-grid">{decks.map((deck) => { const stats = getDeckStats(deck, cardDetails); return <button className="deck" key={deck.id} style={images[deck.cards[0]?.name] ? { backgroundImage: `url('${images[deck.cards[0].name]}')` } : undefined} onClick={() => setSelected(deck)}><h4>{deck.name}</h4><p className="meta">{stats.total} cards · {stats.creatures} creatures · {stats.lands} lands</p></button>; })}<Link className="deck create-deck" to="/builder?fromDecks=1" onClick={handlePersonalDecksClick}><span aria-hidden="true">+</span><h4>Create deck</h4><p className="meta">Start with a blank list</p></Link></div></section></main>{selected && <DeckDialog deck={selected} image={images[selected.cards[0]?.name]} cardDetails={cardDetails} onClose={() => setSelected(null)} onEdit={edit} onShare={share} onDelete={() => { if (!getAuthToken()) { window.dispatchEvent(new Event('open-login-prompt')); return; } deleteDeck(selected.id); setSelected(null); }} />}{shareCandidate && <div className="share-confirmation-overlay" role="dialog" aria-modal="true" aria-labelledby="share-confirmation-title"><div className="share-confirmation"><p id="share-confirmation-title">Are you sure you want to publish this deck?</p><div className="modal-actions"><button className="modal-action" type="button" onClick={publishDeck}>Yes</button><button className="modal-action" type="button" onClick={() => setShareCandidate(null)}>No</button></div></div></div>}</Layout>;
+  return <Layout footerText="Your decks, your experiments, your next great game."><main><div className="intro"><div><p className="eyebrow">Your private vault</p><h2>Keep every brew close at hand.</h2><p>Review your saved lists, return to unfinished ideas, and share a deck when it is ready for the table.</p></div></div><section aria-labelledby="saved-title"><h3 id="saved-title">Saved decklists</h3><div className="deck-grid saved-deck-grid">{decks.map((deck) => { const stats = getDeckStats(deck, cardDetails); return <button className="deck" key={deck.id} style={images[deck.cards[0]?.name] ? { backgroundImage: `url('${images[deck.cards[0].name]}')` } : undefined} onClick={() => setSelected(deck)}><h4>{deck.name}</h4><p className="meta">{stats.total} cards · {stats.creatures} creatures · {stats.lands} lands</p></button>; })}<Link className="deck create-deck" to="/builder?fromDecks=1" onClick={handlePersonalDecksClick}><span aria-hidden="true">+</span><h4>Create deck</h4><p className="meta">Start with a blank list</p></Link></div></section>  </main>{selected && <DeckDialog deck={selected} image={images[selected.cards[0]?.name]} cardDetails={cardDetails} onClose={() => setSelected(null)} onEdit={edit} onShare={share} onDelete={deleteSelected} />}{shareCandidate && <div className="share-confirmation-overlay" role="dialog" aria-modal="true" aria-labelledby="share-confirmation-title"><div className="share-confirmation"><p id="share-confirmation-title">Are you sure you want to publish this deck?</p><div className="modal-actions"><button className="modal-action" type="button" onClick={publishDeck}>Yes</button><button className="modal-action" type="button" onClick={() => setShareCandidate(null)}>No</button></div></div></div>}</Layout>;
 }

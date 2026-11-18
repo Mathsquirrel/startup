@@ -1,13 +1,10 @@
 import express from 'express';
 import bcrypt from 'bcryptjs';
 import { randomUUID } from 'node:crypto';
+import { getCollection } from './database.js';
 
 const app = express();
 const port = process.argv.length > 2 ? process.argv[2] : 4000;
-const users = new Map();
-const sessions = new Map();
-const friends = new Map();
-const decks = new Map();
 
 app.use(express.json());
 
@@ -111,9 +108,15 @@ function getToken(request) {
   return authorization.startsWith('Bearer ') ? authorization.slice(7) : null;
 }
 
-function requireAuth(request, response, next) {
+async function requireAuth(request, response, next) {
   const token = getToken(request);
-  const username = token ? sessions.get(token) : null;
+  if (!token) {
+    response.status(401).json({ error: 'A valid auth token is required.' });
+    return;
+  }
+  const sessions = await getCollection('sessions');
+  const session = await sessions.findOne({ token });
+  const username = session?.username || null;
   if (!username) {
     response.status(401).json({ error: 'A valid auth token is required.' });
     return;
@@ -133,14 +136,19 @@ app.post('/api/auth/register', async (request, response) => {
     response.status(400).json({ error: 'Password must be between 8 and 128 characters.' });
     return;
   }
-  if (users.has(username.toLowerCase())) {
+  const users = await getCollection('users');
+  if (await users.findOne({ usernameLower: username.toLowerCase() })) {
     response.status(409).json({ error: 'That username is already registered.' });
     return;
   }
   const passwordHash = await bcrypt.hash(password, 10);
-  users.set(username.toLowerCase(), { username, passwordHash });
-  friends.set(username.toLowerCase(), new Set());
-  decks.set(username.toLowerCase(), new Map());
+  await users.insertOne({
+    username,
+    usernameLower: username.toLowerCase(),
+    passwordHash,
+    friends: [],
+    createdAt: new Date(),
+  });
   response.status(201).json({ message: 'Account created.' });
 });
 
@@ -151,18 +159,21 @@ app.post('/api/auth/login', async (request, response) => {
     response.status(400).json({ error: 'Enter a valid username and password.' });
     return;
   }
-  const user = users.get(username.toLowerCase());
+  const users = await getCollection('users');
+  const user = await users.findOne({ usernameLower: username.toLowerCase() });
   if (!user || !(await bcrypt.compare(password, user.passwordHash))) {
     response.status(401).json({ error: 'Invalid username or password.' });
     return;
   }
   const token = randomUUID();
-  sessions.set(token, user.username);
+  const sessions = await getCollection('sessions');
+  await sessions.insertOne({ token, username: user.username, createdAt: new Date() });
   response.json({ token, username: user.username });
 });
 
-app.post('/api/auth/logout', requireAuth, (request, response) => {
-  sessions.delete(getToken(request));
+app.post('/api/auth/logout', requireAuth, async (request, response) => {
+  const sessions = await getCollection('sessions');
+  await sessions.deleteOne({ token: getToken(request) });
   response.status(204).end();
 });
 
@@ -170,18 +181,24 @@ app.get('/api/me', requireAuth, (request, response) => {
   response.json({ username: request.username });
 });
 
-app.get('/api/decks', requireAuth, (request, response) => {
-  const userDecks = decks.get(request.username.toLowerCase()) || new Map();
-  response.json({ username: request.username, decks: [...userDecks.values()] });
+app.get('/api/decks', requireAuth, async (request, response) => {
+  const deckCollection = await getCollection('decks');
+  const savedDecks = await deckCollection
+    .find({ usernameLower: request.username.toLowerCase() })
+    .sort({ updatedAt: -1 })
+    .toArray();
+  response.json({
+    username: request.username,
+    decks: savedDecks.map(({ id, name, cards }) => ({ id, name, cards })),
+  });
 });
 
-app.post('/api/decks', requireAuth, (request, response) => {
+app.post('/api/decks', requireAuth, async (request, response) => {
   const validationError = validateDeck(request.body);
   if (validationError) {
     response.status(400).json({ error: validationError });
     return;
   }
-  const userDecks = decks.get(request.username.toLowerCase()) || new Map();
   const deck = {
     id: typeof request.body.id === 'string' && request.body.id.trim() ? request.body.id : randomUUID(),
     name: request.body.name.trim(),
@@ -193,9 +210,36 @@ app.post('/api/decks', requireAuth, (request, response) => {
       ...(typeof card.color === 'string' ? { color: card.color } : {}),
     })),
   };
-  userDecks.set(deck.id, deck);
-  decks.set(request.username.toLowerCase(), userDecks);
+  const deckCollection = await getCollection('decks');
+  await deckCollection.updateOne(
+    { usernameLower: request.username.toLowerCase(), id: deck.id },
+    {
+      $set: {
+        username: request.username,
+        usernameLower: request.username.toLowerCase(),
+        id: deck.id,
+        name: deck.name,
+        cards: deck.cards,
+        updatedAt: new Date(),
+      },
+      $setOnInsert: { createdAt: new Date() },
+    },
+    { upsert: true },
+  );
   response.status(201).json(deck);
+});
+
+app.delete('/api/decks/:id', requireAuth, async (request, response) => {
+  const deckCollection = await getCollection('decks');
+  const result = await deckCollection.deleteOne({
+    usernameLower: request.username.toLowerCase(),
+    id: request.params.id,
+  });
+  if (!result.deletedCount) {
+    response.status(404).json({ error: 'Deck not found.' });
+    return;
+  }
+  response.status(204).end();
 });
 
 app.post('/api/decks/validate', requireAuth, (request, response) => {
@@ -218,18 +262,20 @@ app.post('/api/decks/stats', requireAuth, (request, response) => {
   response.json({ totalCards, uniqueCards: request.body.cards.length });
 });
 
-app.get('/api/friends', requireAuth, (request, response) => {
-  const userFriends = friends.get(request.username.toLowerCase()) || new Set();
-  response.json({ friends: [...userFriends].map((username) => ({ name: username, status: 'online' })) });
+app.get('/api/friends', requireAuth, async (request, response) => {
+  const users = await getCollection('users');
+  const user = await users.findOne({ usernameLower: request.username.toLowerCase() });
+  response.json({ friends: (user?.friends || []).map((username) => ({ name: username, status: 'online' })) });
 });
 
-app.post('/api/friends', requireAuth, (request, response) => {
+app.post('/api/friends', requireAuth, async (request, response) => {
   const friendName = typeof request.body.username === 'string' ? request.body.username.trim() : '';
   if (!validateUsername(friendName)) {
     response.status(400).json({ error: 'Friend usernames must be 3-24 characters using only letters, numbers, or underscores.' });
     return;
   }
-  const friend = users.get(friendName.toLowerCase());
+  const users = await getCollection('users');
+  const friend = await users.findOne({ usernameLower: friendName.toLowerCase() });
   if (!friend) {
     response.status(404).json({ error: 'That player does not exist.' });
     return;
@@ -238,14 +284,70 @@ app.post('/api/friends', requireAuth, (request, response) => {
     response.status(400).json({ error: 'You cannot add yourself as a friend.' });
     return;
   }
-  const userFriends = friends.get(request.username.toLowerCase()) || new Set();
-  if (userFriends.has(friend.username)) {
+  const user = await users.findOne({ usernameLower: request.username.toLowerCase() });
+  const userFriends = user?.friends || [];
+  if (userFriends.includes(friend.username)) {
     response.status(409).json({ error: 'That player is already your friend.' });
     return;
   }
-  userFriends.add(friend.username);
-  friends.set(request.username.toLowerCase(), userFriends);
+  await users.updateOne(
+    { usernameLower: request.username.toLowerCase() },
+    { $push: { friends: friend.username } },
+  );
   response.status(201).json({ name: friend.username, status: 'online' });
+});
+
+app.get('/api/public-decks', async (request, response) => {
+  const publishedDecks = await getCollection('publishedDecks');
+  const deckRows = await publishedDecks.find({}).sort({ date: -1 }).toArray();
+  response.json({
+    decks: deckRows.map(({ id, name, author, date, cards }) => ({ id, name, author, date, cards })),
+  });
+});
+
+app.post('/api/public-decks', requireAuth, async (request, response) => {
+  const validationError = validateDeck(request.body);
+  if (validationError) {
+    response.status(400).json({ error: validationError });
+    return;
+  }
+  const deck = {
+    id: typeof request.body.id === 'string' && request.body.id.trim() ? request.body.id : randomUUID(),
+    name: request.body.name.trim(),
+    author: request.username,
+    date: new Date().toISOString(),
+    cards: request.body.cards.map((card) => ({
+      name: card.name.trim(),
+      count: card.count,
+    })),
+  };
+  const publishedDecks = await getCollection('publishedDecks');
+  await publishedDecks.updateOne(
+    { id: deck.id },
+    { $set: deck },
+    { upsert: true },
+  );
+  response.status(201).json(deck);
+});
+
+app.get('/api/public-deck-views', async (request, response) => {
+  const views = await getCollection('deckViewCounts');
+  const counts = await views.find({}).toArray();
+  response.json({
+    counts: Object.fromEntries(counts.map((item) => [item.deckName, item.count])),
+  });
+});
+
+app.post('/api/public-deck-views/:name', async (request, response) => {
+  const deckName = request.params.name;
+  const views = await getCollection('deckViewCounts');
+  await views.updateOne(
+    { deckName },
+    { $inc: { count: 1 }, $set: { updatedAt: new Date() } },
+    { upsert: true },
+  );
+  const result = await views.findOne({ deckName });
+  response.json({ deckName, count: result?.count || 1 });
 });
 
 app.use(express.static('public'));

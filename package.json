@@ -21,6 +21,7 @@
   "homepage": "https://github.com/Mathsquirrel/startup#readme",
   "dependencies": {
     "bootstrap": "^5.3.8",
+    "mongodb": "^7.9.0",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
     "react-router-dom": "^7.18.4"
@@ -28,5 +29,6 @@
   "devDependencies": {
     "@vitejs/plugin-react": "^6.1.1",
     "vite": "^8.3.2"
-  }
+  },
+  "main": "vite.config.js"
 }

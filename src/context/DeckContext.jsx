@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import { deleteDeckFromService, getAuthToken, getDecks, saveDeckToService } from '../api.js';
 
 export const cardPool = [
   { name: 'Snapcaster Mage', mana: 2, color: 'blue', type: 'creature' },
@@ -16,52 +17,46 @@ export const cardPool = [
   { name: 'Forest', mana: 0, color: 'green', type: 'land' },
 ];
 
-const starterCards = [
-  { name: 'Snapcaster Mage', count: 2 },
-  { name: 'Lightning Bolt', count: 4 },
-  { name: 'Opt', count: 4 },
-  { name: 'Counterspell', count: 3 },
-  { name: 'Island', count: 12 },
-  { name: 'Mountain', count: 12 },
-];
-
-const initialDecks = [
-  { id: 'izzet-spellcraft', name: 'Izzet Spellcraft', cards: starterCards },
-  { id: 'forest-floor', name: 'Forest Floor', cards: [{ name: 'Forest', count: 18 }, { name: 'Llanowar Elves', count: 4 }, { name: 'Cultivate', count: 4 }] },
-  { id: 'draft-collection', name: 'Draft Collection', cards: [{ name: 'Counterspell', count: 8 }, { name: 'Island', count: 12 }] },
-];
-
 const DeckContext = createContext(null);
-const storageKey = 'pdf-decks';
 
 export function DeckProvider({ children }) {
-  const [decks, setDecks] = useState(() => {
-    try {
-      const stored = localStorage.getItem(storageKey);
-      const savedDecks = stored ? JSON.parse(stored) : initialDecks;
-      return savedDecks.map((deck) => ({
-        ...deck,
-        cards: deck.cards.filter((card) => card.name !== 'Delver of Secrets'),
-      }));
-    } catch {
-      return initialDecks;
-    }
-  });
-
+  const [decks, setDecks] = useState([]);
   useEffect(() => {
-    localStorage.setItem(storageKey, JSON.stringify(decks));
-  }, [decks]);
+    const loadDecks = async () => {
+      const token = getAuthToken();
+      if (!token) {
+        setDecks([]);
+        return;
+      }
+      try {
+        setDecks(await getDecks(token));
+      } catch {
+        setDecks([]);
+      }
+    };
+    loadDecks();
+    window.addEventListener('auth-changed', loadDecks);
+    return () => window.removeEventListener('auth-changed', loadDecks);
+  }, []);
 
   const value = useMemo(() => ({
     decks,
     getDeck: (id) => decks.find((deck) => deck.id === id),
-    saveDeck: (deck) => {
+    saveDeck: async (deck) => {
+      const token = getAuthToken();
+      if (!token) throw new Error('Please log in before saving a deck.');
+      const savedDeck = await saveDeckToService(deck, token);
       setDecks((current) => {
-        const existing = current.some((item) => item.id === deck.id);
-        return existing ? current.map((item) => item.id === deck.id ? deck : item) : [...current, deck];
+        const existing = current.some((item) => item.id === savedDeck.id);
+        return existing ? current.map((item) => item.id === savedDeck.id ? savedDeck : item) : [...current, savedDeck];
       });
     },
-    deleteDeck: (id) => setDecks((current) => current.filter((deck) => deck.id !== id)),
+    deleteDeck: async (id) => {
+      const token = getAuthToken();
+      if (!token) throw new Error('Please log in before deleting a deck.');
+      await deleteDeckFromService(id, token);
+      setDecks((current) => current.filter((deck) => deck.id !== id));
+    },
   }), [decks]);
 
   return <DeckContext.Provider value={value}>{children}</DeckContext.Provider>;
