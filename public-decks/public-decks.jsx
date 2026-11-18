@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import './public-decks.css';
 import { imageUrl, Layout } from '../src/components/SiteLayout.jsx';
 import useScryfallImages from '../src/hooks/useScryfallImages.js';
+import useScryfallCards from '../src/hooks/useScryfallCards.js';
 import { cardPool } from '../src/context/DeckContext.jsx';
 import { getPublishedDecks, getPublicDeckViews, incrementPublicDeckView } from '../src/api.js';
 
@@ -21,7 +22,13 @@ export default function PublicDecksPage() {
   const [selected, setSelected] = useState(null);
   const [publishedDecks, setPublishedDecks] = useState([]);
   const [viewCounts, setViewCounts] = useState({});
-  const publishedDeckRows = publishedDecks.map((deck) => [deck.name, deck.author, deck.date, new Date(deck.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }), '0 views', deck.cards[0]?.name, deck.cards]);
+  const cardDetails = useScryfallCards(publishedDecks.flatMap((deck) => deck.cards.map((card) => card.name)));
+  const publishedDeckRows = publishedDecks.map((deck) => {
+    const creatureCard = deck.cards.find((card) =>
+      cardDetails[card.name]?.type_line?.toLowerCase().includes('creature'));
+    const backgroundCard = creatureCard?.name || deck.cards[0]?.name;
+    return [deck.name, deck.author, deck.date, new Date(deck.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }), '0 views', backgroundCard, deck.cards];
+  });
   const allPublicDecks = publishedDeckRows;
   const images = useScryfallImages(allPublicDecks.map((deck) => ({ cardName: deck[5] })));
   const visibleDecks = allPublicDecks.filter((deck) => deck.join(' ').toLowerCase().includes(query.toLowerCase()));
