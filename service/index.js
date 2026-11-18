@@ -147,6 +147,8 @@ app.post('/api/auth/register', async (request, response) => {
     usernameLower: username.toLowerCase(),
     passwordHash,
     friends: [],
+    incomingFriendRequests: [],
+    outgoingFriendRequests: [],
     createdAt: new Date(),
   });
   response.status(201).json({ message: 'Account created.' });
@@ -265,7 +267,11 @@ app.post('/api/decks/stats', requireAuth, (request, response) => {
 app.get('/api/friends', requireAuth, async (request, response) => {
   const users = await getCollection('users');
   const user = await users.findOne({ usernameLower: request.username.toLowerCase() });
-  response.json({ friends: (user?.friends || []).map((username) => ({ name: username, status: 'online' })) });
+  response.json({
+    friends: (user?.friends || []).map((username) => ({ name: username, status: 'online' })),
+    incomingRequests: user?.incomingFriendRequests || [],
+    outgoingRequests: user?.outgoingFriendRequests || [],
+  });
 });
 
 app.post('/api/friends', requireAuth, async (request, response) => {
@@ -290,11 +296,60 @@ app.post('/api/friends', requireAuth, async (request, response) => {
     response.status(409).json({ error: 'That player is already your friend.' });
     return;
   }
+  const incomingRequests = user?.incomingFriendRequests || [];
+  const outgoingRequests = user?.outgoingFriendRequests || [];
+  if (incomingRequests.includes(friend.username)) {
+    response.status(409).json({ error: 'This player has already sent you a friend request.' });
+    return;
+  }
+  if (outgoingRequests.includes(friend.username)) {
+    response.status(409).json({ error: 'A friend request is already pending.' });
+    return;
+  }
   await users.updateOne(
     { usernameLower: request.username.toLowerCase() },
-    { $push: { friends: friend.username } },
+    { $addToSet: { outgoingFriendRequests: friend.username } },
   );
-  response.status(201).json({ name: friend.username, status: 'online' });
+  await users.updateOne(
+    { usernameLower: friend.username.toLowerCase() },
+    { $addToSet: { incomingFriendRequests: request.username } },
+  );
+  response.status(201).json({ name: friend.username, status: 'pending' });
+});
+
+app.post('/api/friends/respond', requireAuth, async (request, response) => {
+  const requesterName = typeof request.body.username === 'string' ? request.body.username.trim() : '';
+  const action = request.body.action;
+  if (!validateUsername(requesterName) || !['accept', 'deny'].includes(action)) {
+    response.status(400).json({ error: 'A valid username and friend request action are required.' });
+    return;
+  }
+  const users = await getCollection('users');
+  const user = await users.findOne({ usernameLower: request.username.toLowerCase() });
+  if (!(user?.incomingFriendRequests || []).includes(requesterName)) {
+    response.status(404).json({ error: 'That friend request was not found.' });
+    return;
+  }
+  const requester = await users.findOne({ usernameLower: requesterName.toLowerCase() });
+  if (!requester) {
+    response.status(404).json({ error: 'That player does not exist.' });
+    return;
+  }
+  await users.updateOne(
+    { usernameLower: request.username.toLowerCase() },
+    {
+      $pull: { incomingFriendRequests: requester.username },
+      ...(action === 'accept' ? { $addToSet: { friends: requester.username } } : {}),
+    },
+  );
+  await users.updateOne(
+    { usernameLower: requester.username.toLowerCase() },
+    {
+      $pull: { outgoingFriendRequests: request.username },
+      ...(action === 'accept' ? { $addToSet: { friends: request.username } } : {}),
+    },
+  );
+  response.json({ action, username: requester.username });
 });
 
 app.get('/api/public-decks', async (request, response) => {

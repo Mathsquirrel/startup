@@ -33,7 +33,7 @@ export async function getFriends(token) {
   const response = await fetch('/api/friends', { headers: { Authorization: `Bearer ${token}` } });
   const result = await response.json();
   if (!response.ok) throw new Error(result?.error || 'Unable to load friends.');
-  return result.friends;
+  return result;
 }
 
 export async function validateDeck(deck, token) {

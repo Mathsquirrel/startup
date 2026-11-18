@@ -20,9 +20,12 @@ export function Header({ builder = false }) {
   const [registerPromptOpen, setRegisterPromptOpen] = useState(false);
   const [loginPromptOpen, setLoginPromptOpen] = useState(false);
   const [friends, setFriends] = useState([]);
+  const [incomingFriendRequests, setIncomingFriendRequests] = useState([]);
+  const [outgoingFriendRequests, setOutgoingFriendRequests] = useState([]);
   const [friendName, setFriendName] = useState('');
   const [friendError, setFriendError] = useState('');
   const [addFriendOpen, setAddFriendOpen] = useState(false);
+  const [friendRequestOpen, setFriendRequestOpen] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
@@ -48,10 +51,12 @@ export function Header({ builder = false }) {
   useEffect(() => {
     const token = getAuthToken();
     if (!token) return undefined;
-    Promise.all([getCurrentUser(token), getFriends(token)]).then(([user, userFriends]) => {
+    Promise.all([getCurrentUser(token), getFriends(token)]).then(([user, friendState]) => {
       setUsername(user.username);
       setLoggedIn(true);
-      setFriends(userFriends);
+      setFriends(friendState.friends);
+      setIncomingFriendRequests(friendState.incomingRequests);
+      setOutgoingFriendRequests(friendState.outgoingRequests);
     }).catch(() => {
       setAuthToken(null);
       setLoggedIn(false);
@@ -65,7 +70,15 @@ export function Header({ builder = false }) {
     setUsername(result.username);
     setPassword('');
     setLoggedIn(true);
-    getFriends(result.token).then(setFriends).catch(() => setFriends([]));
+    getFriends(result.token).then((friendState) => {
+      setFriends(friendState.friends);
+      setIncomingFriendRequests(friendState.incomingRequests);
+      setOutgoingFriendRequests(friendState.outgoingRequests);
+    }).catch(() => {
+      setFriends([]);
+      setIncomingFriendRequests([]);
+      setOutgoingFriendRequests([]);
+    });
     window.dispatchEvent(new Event('auth-changed'));
   };
 
@@ -105,6 +118,8 @@ export function Header({ builder = false }) {
     setUsername('');
     setPassword('');
     setFriends([]);
+    setIncomingFriendRequests([]);
+    setOutgoingFriendRequests([]);
     window.dispatchEvent(new Event('auth-changed'));
   };
 
@@ -112,10 +127,27 @@ export function Header({ builder = false }) {
     event.preventDefault();
     setFriendError('');
     try {
-      const friend = await authRequest('/friends', { username: friendName }, getAuthToken());
-      setFriends((current) => [...current, friend]);
+      await authRequest('/friends', { username: friendName }, getAuthToken());
+      const friendState = await getFriends(getAuthToken());
+      setFriends(friendState.friends);
+      setIncomingFriendRequests(friendState.incomingRequests);
+      setOutgoingFriendRequests(friendState.outgoingRequests);
       setFriendName('');
       setAddFriendOpen(false);
+    } catch (error) {
+      setFriendError(error.message);
+    }
+  };
+
+  const respondToFriendRequest = async (requesterName, action) => {
+    setFriendError('');
+    try {
+      await authRequest('/friends/respond', { username: requesterName, action }, getAuthToken());
+      const friendState = await getFriends(getAuthToken());
+      setFriends(friendState.friends);
+      setIncomingFriendRequests(friendState.incomingRequests);
+      setOutgoingFriendRequests(friendState.outgoingRequests);
+      if (!friendState.incomingRequests.length) setFriendRequestOpen(false);
     } catch (error) {
       setFriendError(error.message);
     }
@@ -145,7 +177,7 @@ export function Header({ builder = false }) {
           {authError && <p role="alert">{authError}</p>}
         </form>}
       </div>
-      <section className="friend-list" aria-labelledby="friends-title"><h2 id="friends-title">Friends</h2>{loggedIn ? <><ul>{friends.map((friend) => <li key={friend.name}><span className={`status-dot ${friend.status}`} aria-label={friend.status} />{friend.name}</li>)}</ul><button className="add-friend-button" type="button" onClick={() => { setFriendError(''); setAddFriendOpen(true); }}>Add a Friend</button></> : <><ul /><p className="friend-login-note">No Friends Have Been Added Yet</p></>}</section>
+      <section className="friend-list" aria-labelledby="friends-title"><h2 id="friends-title">Friends</h2>{loggedIn ? <><ul>{friends.map((friend) => <li key={friend.name}><span className={`status-dot ${friend.status}`} aria-label={friend.status} />{friend.name}</li>)}</ul><button className="add-friend-button" type="button" onClick={() => { setFriendError(''); incomingFriendRequests.length ? setFriendRequestOpen(true) : setAddFriendOpen(true); }}>{incomingFriendRequests.length ? 'Incoming Request' : 'Add a Friend'}</button></> : <><ul /><p className="friend-login-note">No Friends Have Been Added Yet</p></>}</section>
       <nav className="btn-group" aria-label="Primary navigation">
         <NavLink className="btn btn-primary" to="/">Home</NavLink>
         <NavLink className="btn btn-primary" to="/public-decks">Public Decks</NavLink>
@@ -155,6 +187,7 @@ export function Header({ builder = false }) {
     </div>
     {loginPromptOpen && <div className="login-prompt-overlay" role="dialog" aria-modal="true" aria-labelledby="login-prompt-title"><div className="login-prompt"><p id="login-prompt-title">Please log in or create an account to save personal decks!</p><button type="button" onClick={() => setLoginPromptOpen(false)}>Ok</button></div></div>}
     {registerPromptOpen && <div className="login-prompt-overlay" role="dialog" aria-modal="true" aria-labelledby="register-title"><form className="login-prompt registration-prompt" onSubmit={submitRegistration}><button className="modal-close registration-close" type="button" aria-label="Close registration" onClick={() => setRegisterPromptOpen(false)}>×</button><h2 id="register-title">Create an account</h2><div className="registration-field"><label htmlFor="register-username">Username</label><input id="register-username" type="text" autoComplete="username" value={username} onChange={(event) => setUsername(event.target.value)} required /></div><div className="registration-field"><label htmlFor="register-password">Password</label><input id="register-password" type="password" autoComplete="new-password" value={password} onChange={(event) => setPassword(event.target.value)} required /></div><button type="submit">Register</button>{authError && <p role="alert">{authError}</p>}</form></div>}
+    {friendRequestOpen && <div className="login-prompt-overlay" role="dialog" aria-modal="true" aria-labelledby="friend-request-title"><div className="login-prompt registration-prompt"><button className="modal-close registration-close" type="button" aria-label="Close friend requests" onClick={() => setFriendRequestOpen(false)}>×</button><h2 id="friend-request-title">Incoming Requests</h2>{incomingFriendRequests.map((requesterName) => <div className="friend-request" key={requesterName}><strong>{requesterName}</strong><div className="friend-prompt-actions"><button type="button" onClick={() => respondToFriendRequest(requesterName, 'accept')}>Accept</button><button type="button" onClick={() => respondToFriendRequest(requesterName, 'deny')}>Deny</button></div></div>)}{friendError && <p role="alert">{friendError}</p>}</div></div>}
     {addFriendOpen && <div className="login-prompt-overlay" role="dialog" aria-modal="true" aria-labelledby="add-friend-title"><form className="login-prompt registration-prompt" onSubmit={submitFriend}><button className="modal-close registration-close" type="button" aria-label="Close add friend dialog" onClick={() => setAddFriendOpen(false)}>×</button><h2 id="add-friend-title">Add a Friend</h2><div className="registration-field"><label htmlFor="friend-name">Username</label><input id="friend-name" type="text" value={friendName} onChange={(event) => setFriendName(event.target.value)} required /></div><div className="friend-prompt-actions"><button type="submit">Add Friend</button></div>{friendError && <p role="alert">{friendError}</p>}</form></div>}
   </header>;
 }
